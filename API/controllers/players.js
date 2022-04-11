@@ -19,7 +19,8 @@ async function main() {
 export const getPlayer = async (req, res) => {
   const client = await main();
   console.log(req.query);
-
+  const foundUser = await client.db("CrossmediaARG").collection("players").findOne({ user: "Ivan" });
+  res.send(foundUser);
   await client.close();
 };
 
