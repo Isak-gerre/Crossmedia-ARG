@@ -16,24 +16,24 @@ async function main() {
   }
 }
 
-export const getPlayer = async (req, res) => {
+export const getSessions = async (req, res) => {
   const client = await main();
   console.log(req.query);
-  const foundUser = await client.db("CrossmediaARG").collection("players").findOne(req.query);
-  res.send(foundUser);
-  console.log(foundUser);
+  const sessions = await client.db("CrossmediaARG").collection("sessions").find({}).toArray();
+  res.send(sessions);
+  console.log(sessions);
   await client.close();
 };
 
-export const createPlayer = async (req, res) => {
+export const createSession = async (req, res) => {
   const client = await main();
   console.log(req);
-  await client.db("CrossmediaARG").collection("players").insertOne(req.body);
+  await client.db("CrossmediaARG").collection("sessions").insertOne(req.body);
   res.send(req.body);
   await client.close();
 };
 
-export const updatePlayer = async (req, res) => {
+export const updateSession = async (req, res) => {
   const client = await main();
 
   await client.close();
