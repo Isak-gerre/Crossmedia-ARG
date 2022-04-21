@@ -1,5 +1,3 @@
-# Crossmedia ARG
-
 # Programmering
 
 # API
@@ -10,10 +8,10 @@
 
 ```json
 {
-  "user": "Ivan",
-  "password": "Node.js",
-  "group": 2,
-  "team": 1
+	"user": "Ivan",
+	"password": "Node.js",
+	"group": 2,
+	"team": 1
 }
 ```
 
