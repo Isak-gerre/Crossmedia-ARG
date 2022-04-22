@@ -6,4 +6,6 @@ const router = express.Router();
 // Starting with /sessions
 router.get("/", getSessions);
 
+router.post("/", createSession);
+
 export default router;

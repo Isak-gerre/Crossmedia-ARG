@@ -1,6 +1,8 @@
 import { createRequire } from "module";
+
 const require = createRequire(import.meta.url);
 const { MongoClient } = require("mongodb");
+const bcrypt = require("bcrypt");
 import { credentials } from "../database_credentials.js";
 
 async function main() {
@@ -27,8 +29,13 @@ export const getPlayer = async (req, res) => {
 
 export const createPlayer = async (req, res) => {
   const client = await main();
+  const player = req.body;
   console.log(req);
-  await client.db("CrossmediaARG").collection("players").insertOne(req.body);
+  try {
+    const hashedPassword = await bcrypt.hash(player.password, 10);
+    player.password = hashedPassword;
+  } catch (error) {}
+  await client.db("CrossmediaARG").collection("players").insertOne(player);
   res.send(req.body);
   await client.close();
 };
