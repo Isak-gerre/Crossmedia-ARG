@@ -1,9 +1,13 @@
 import { createRequire } from "module";
-
 const require = createRequire(import.meta.url);
+
 const { MongoClient } = require("mongodb");
 const bcrypt = require("bcrypt");
+const passport = require("passport");
+
 import { credentials } from "../database_credentials.js";
+import { initializePassport } from "../passport-config.js";
+initializePassport(passport);
 
 async function main() {
   const uri = credentials();
