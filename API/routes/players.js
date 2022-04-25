@@ -1,5 +1,5 @@
 import express from "express";
-import { getPlayer, createPlayer, updatePlayer } from "../controllers/players.js";
+import { getPlayer, createPlayer, updatePlayer, loginPlayer } from "../controllers/players.js";
 
 const router = express.Router();
 
@@ -9,6 +9,7 @@ router.get("/:id", getPlayer);
 router.get("/:name", getPlayer);
 
 router.post("/", createPlayer);
+router.post("/login", loginPlayer);
 
 router.patch("/", updatePlayer);
 

@@ -1,0 +1,40 @@
+GET http://localhost:8000/players?username=sd
+
+### CREATE PLAYER
+POST http://localhost:8000/players
+Content-Type: application/json
+
+{
+  "username": "Isak",
+  "password": "tacos",
+  "group": "0",
+  "team": "0",
+  "session": "0",
+  "points": "0"
+}
+
+
+### RIGHT PASSWORD
+POST http://localhost:8000/players/login
+Content-Type: application/json
+
+{
+  "username": "Isak",
+  "password": "tacos",
+  "group": "0",
+  "team": "0",
+  "session": "0",
+  "points": "0"
+}
+### WRONG PASSWORD
+POST http://localhost:8000/players/login
+Content-Type: application/json
+
+{
+  "username": "Isak",
+  "password": "tacs",
+  "group": "0",
+  "team": "0",
+  "session": "0",
+  "points": "0"
+}

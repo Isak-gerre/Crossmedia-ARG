@@ -5,6 +5,13 @@ function get(category = "") {}
 //LOCALSTORAGE FUNCTIONS
 //--------------------------------------------------
 function logInPlayer(player) {
+  let formData = new FormData(document.getElementById("login-form"));
+    let res = await fetch(localhost + "players", postFormData(formData));
+  if (res.ok) {
+    let data = await res.json();
+    console.log(data);
+    logInPlayer(data["_id"]);
+  }
   localStorage.setItem("loggedInUser", JSON.stringify(`ObjectId("${player}")`));
 }
 async function checkLoggedInPlayer() {
@@ -15,7 +22,7 @@ async function checkLoggedInPlayer() {
 //--------------------------------------------------
 
 async function createPlayer() {
-  let formData = new FormData(document.getElementById("login-form"));
+  let formData = new FormData(document.getElementById("sign-form"));
   formData.append("group", "0");
   formData.append("team", "0");
   formData.append("session", "0");
