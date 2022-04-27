@@ -1,21 +1,25 @@
 "use strict";
 
-function get(category = "") {}
-
 //LOCALSTORAGE FUNCTIONS
 //--------------------------------------------------
-function logInPlayer(player) {
-  let formData = new FormData(document.getElementById("login-form"));
-    let res = await fetch(localhost + "players", postFormData(formData));
-  if (res.ok) {
-    let data = await res.json();
-    console.log(data);
-    logInPlayer(data["_id"]);
+async function saveToLS(getter, setter) {
+  if (typeof setter == "string") {
+    localStorage.setItem(getter, setter);
+  } else {
+    localStorage.setItem(getter, JSON.stringify(setter));
   }
-  localStorage.setItem("loggedInUser", JSON.stringify(`ObjectId("${player}")`));
+}
+async function savePlayer(player) {
+  let JSONplayer = JSON.stringify(player);
+  localStorage.setItem("loggedInUser", JSONplayer);
 }
 async function checkLoggedInPlayer() {
-  await getPlayer("_id", JSON.parse(localStorage.getItem("loggedInUser")));
+  const player = JSON.parse(localStorage.getItem("loggedInUser"));
+  return (await logInPlayer(postData(player))) ? true : false;
+}
+async function logInPlayer(player) {
+  let res = await fetch(`${localhost}players/login`, player);
+  return res.ok ? true : false;
 }
 
 //PLAYERS
@@ -29,10 +33,16 @@ async function createPlayer() {
   formData.append("points", "0");
 
   let res = await fetch(localhost + "players", postFormData(formData));
+  console.log(res);
   if (res.ok) {
     let data = await res.json();
-    console.log(data);
-    logInPlayer(data["_id"]);
+    savePlayer({
+      id: data.player["_id"],
+      username: data.player.username,
+      password: data.player.password,
+    });
+  } else {
+    displayLoginErrorMessage("A user with that username already exits!");
   }
 }
 
@@ -85,11 +95,6 @@ function logFormData(formData) {
 //EVENTLISTENERS
 //--------------------------------------------------
 
-document.getElementById("sign-up").addEventListener("click", async (e) => {
-  e.preventDefault();
-  await createPlayer();
-});
-
 //POST DATA
 //--------------------------------------------------
 
@@ -130,4 +135,7 @@ function makeSessionCode(length) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
+}
+function displayLoginErrorMessage(error) {
+  document.querySelector("#error-messages").textContent = error;
 }

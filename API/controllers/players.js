@@ -32,13 +32,18 @@ export const createPlayer = async (req, res) => {
   const client = await main();
   const player = req.body;
   console.log(req);
-  try {
-    const hashedPassword = await bcrypt.hash(player.password, 10);
-    player.password = hashedPassword;
-    await client.db("CrossmediaARG").collection("players").insertOne(player);
-    res.status(201).send({ message: "Player created" });
-  } catch (error) {
-    res.status(400).send({ message: "Something went wrong", error: error });
+  const foundUser = await client.db("CrossmediaARG").collection("players").findOne({ username: req.body.username });
+  if (foundUser != null) {
+    res.status(400).send({ message: "User already exists" });
+  } else {
+    try {
+      const hashedPassword = await bcrypt.hash(player.password, 10);
+      player.password = hashedPassword;
+      await client.db("CrossmediaARG").collection("players").insertOne(player);
+      res.status(201).send({ message: "Player created", player: player });
+    } catch (error) {
+      res.status(400).send({ message: "Something went wrong", error: error });
+    }
   }
   await client.close();
 };
@@ -48,15 +53,16 @@ export const loginPlayer = async (req, res) => {
   const foundUser = await client.db("CrossmediaARG").collection("players").findOne({ username: req.body.username });
   if (foundUser == null) {
     res.status(404).send({ message: "User not found" });
-  }
-  try {
-    if (await bcrypt.compare(req.body.password, foundUser.password)) {
-      res.status(200).send(true);
-    } else {
-      res.status(500).send(false);
+  } else {
+    try {
+      if (req.body.password === foundUser.password || (await bcrypt.compare(req.body.password, foundUser.password))) {
+        res.status(200).send(true);
+      } else {
+        res.status(400).send(false);
+      }
+    } catch (error) {
+      res.status(500).send();
     }
-  } catch (error) {
-    res.status(500).send();
   }
 
   await client.close();

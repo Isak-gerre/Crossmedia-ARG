@@ -1,10 +1,11 @@
 import express from "express";
-import { getSessions, createSession, updateSession } from "../controllers/sessions.js";
+import { getSessions, getSessionsLive, createSession, updateSession } from "../controllers/sessions.js";
 
 const router = express.Router();
 
 // Starting with /sessions
 router.get("/", getSessions);
+router.get("/live", getSessionsLive);
 
 router.post("/", createSession);
 
