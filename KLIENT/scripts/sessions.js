@@ -1,36 +1,35 @@
-// document.addEventListener("DOMContentLoaded", (event) => {
-//   setTimeout(() => {
-//     const getSessionsLive = new EventSource("http://localhost:8000/sessions/live");
+document.addEventListener("DOMContentLoaded", () => {
+  var test = 0;
+  setTimeout(() => {
+    const getSessionsLive = new EventSource("http://localhost:8000/sessions/live");
 
-//     function updateSessions(message) {
-//       document.getElementById("messages").textContent = message;
-//     }
-
-//     getSessionsLive.onmessage = function (event) {
-//       console.log(event.data);
-//       if (localStorage.getItem("sessions") != null) {
-//         document.getElementById("session-div").innerHTML = "";
-//         makeSessionButton(event.data);
-//       }
-//       if (localStorage.getItem("sessions") != event.data || localStorage.getItem("sessions") == null) {
-//         saveToLS("sessions", event.data);
-//         document.getElementById("session-div").innerHTML = "";
-//         makeSessionButton(event.data);
-//       } else {
-//       }
-//     };
-//     getSessionsLive.onerror = function () {
-//       updateSessions("Server Closed Connection");
-//       getSessionsLive.close();
-//     };
-//   }, 2000);
-// });
+    getSessionsLive.onmessage = function (event) {
+      console.log(event.data);
+      if (test == 0) {
+        document.getElementById("session-div").innerHTML = "";
+        makeSessionButton(event.data);
+        test = 1;
+      }
+      if (localStorage.getItem("sessions") != event.data || localStorage.getItem("sessions") == null) {
+        saveToLS("sessions", event.data);
+        document.getElementById("session-div").innerHTML = "";
+        makeSessionButton(event.data);
+      } else {
+      }
+    };
+    getSessionsLive.onerror = function () {
+      getSessionsLive.close();
+    };
+  }, 2000);
+});
 
 makeSessionPage();
 function makeSessionPage() {
   const sessionDiv = `
     <div id="session-div">
     </div>
+    <button id="join-session" disabled>Join Session
+    </button>
     `;
 }
 
@@ -38,6 +37,18 @@ function makeSessionButton(sessionsJSON) {
   arrayOfSessions = JSON.parse(sessionsJSON);
   console.log(arrayOfSessions);
   arrayOfSessions.forEach((element) => {
-    document.getElementById("session-div").innerHTML += `<p>${element.sessionCode}</p>`;
+    let p = document.createElement("p");
+    p.className = "session-code";
+    p.innerText = element.sessionCode;
+    p.addEventListener("click", () => {
+      p.classList.toggle("selected-session");
+      document.getElementById("join-session").disabled = false;
+    });
+    document.getElementById("session-div").append(p);
   });
 }
+
+document.getElementById("join-session").addEventListener("click", () => {
+  if (document.querySelectorAll(".selected-session").length == 1) {
+  }
+});

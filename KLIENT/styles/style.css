@@ -17,3 +17,7 @@ body {
     height: 300px;
     
 }
+.selected-session{
+    background-color: fuchsia;
+    color: white;
+}
