@@ -175,6 +175,7 @@ function printTerminalText(input){
 
 printTerminalText(textArr);
 
+createTabs(tabGroup)
 
 // Ignore
 document.getElementById("button").addEventListener("click", async(event) =>{
@@ -211,6 +212,8 @@ document.getElementById("button").addEventListener("click", async(event) =>{
     
 
 })
+
+
 
 
 
