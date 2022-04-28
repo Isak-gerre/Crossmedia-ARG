@@ -44,7 +44,7 @@ export const getSessionsLive = async (req, res) => {
     const sessions = await client.db("CrossmediaARG").collection("sessions").find({}).toArray();
     res.write(`data: ${JSON.stringify(sessions)}\n\n`);
     await client.close();
-  }, 5000);
+  }, 2000);
   console.log("send");
 
   // res.on("close", () => {
@@ -56,5 +56,14 @@ export const getSessionsLive = async (req, res) => {
 export const updateSession = async (req, res) => {
   const client = await main();
 
+  const filter = req.body.filter;
+  const updates = { $push: { users: req.body.updates.user } };
+
+  try {
+    await client.db("CrossmediaARG").collection("sessions").updateOne(filter, updates);
+    res.status(202).send({ message: "Updated session" });
+  } catch (error) {
+    console.log(error);
+  }
   await client.close();
 };

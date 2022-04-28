@@ -16,7 +16,7 @@ document.getElementById("sign-up").addEventListener("click", async (e) => {
   }
 });
 
-document.getElementById("login-form").addEventListener("click", async (e) => {
+document.getElementById("login").addEventListener("click", async (e) => {
   e.preventDefault();
   let formData = new FormData(document.getElementById("login-form"));
   if (await logInPlayer(postFormData(formData))) {

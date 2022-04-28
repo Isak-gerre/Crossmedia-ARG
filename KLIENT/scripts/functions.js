@@ -2,16 +2,15 @@
 
 //LOCALSTORAGE FUNCTIONS
 //--------------------------------------------------
-async function saveToLS(getter, setter) {
+function saveToLS(getter, setter) {
   if (typeof setter == "string") {
     localStorage.setItem(getter, setter);
   } else {
     localStorage.setItem(getter, JSON.stringify(setter));
   }
 }
-async function savePlayer(player) {
-  let JSONplayer = JSON.stringify(player);
-  localStorage.setItem("loggedInUser", JSONplayer);
+function getFromLS(getter) {
+  return localStorage.getItem(getter);
 }
 async function checkLoggedInPlayer() {
   const player = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -19,7 +18,10 @@ async function checkLoggedInPlayer() {
 }
 async function logInPlayer(player) {
   let res = await fetch(`${localhost}players/login`, player);
-  return res.ok ? true : false;
+  let loggedin = res.ok ? true : false;
+  let playerData = await res.json();
+  loggedin ? saveToLS("user", playerData) : null;
+  return loggedin;
 }
 
 //PLAYERS
@@ -45,9 +47,13 @@ async function createPlayer() {
     displayLoginErrorMessage("A user with that username already exits!");
   }
 }
+async function updatePlayer(update) {
+  let res = await fetch(localhost + "players", postData(update, "PATCH"));
+  return res.json();
+}
 
-async function getPlayer(query, username) {
-  let res = await fetch(`${localhost}players?${query}=${username}`);
+async function getPlayer(query, value) {
+  let res = await fetch(`${localhost}players?${query}=${value}`);
   if (res.ok) {
     let player = await res.json();
     console.log(player);
@@ -63,6 +69,10 @@ async function getSessions() {
     let data = await res.json();
     console.log(data);
   }
+}
+async function updateSession(update) {
+  let res = await fetch(localhost + "sessions", postData(update, "PATCH"));
+  return res.json();
 }
 async function createSession(userID) {
   let postBody = {
@@ -99,10 +109,10 @@ function logFormData(formData) {
 //--------------------------------------------------
 
 //Använd när du skickar med data from en <form> med FormData
-function postFormData(formData) {
+function postFormData(formData, method = "POST") {
   let postData = JSON.stringify(Object.fromEntries(formData));
   let settings = {
-    method: "POST",
+    method: method,
     body: postData,
     headers: {
       Accept: "application/json",
@@ -113,9 +123,9 @@ function postFormData(formData) {
 }
 
 // Använd när man ska skicka ett vanligt object
-function postData(postData) {
+function postData(postData, method = "POST") {
   let settings = {
-    method: "POST",
+    method: method,
     body: JSON.stringify(postData),
     headers: {
       Accept: "application/json",

@@ -9,4 +9,6 @@ router.get("/live", getSessionsLive);
 
 router.post("/", createSession);
 
+router.patch("/", updateSession);
+
 export default router;

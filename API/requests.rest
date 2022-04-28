@@ -1,4 +1,4 @@
-GET http://localhost:8000/players?username=sd
+GET http://localhost:8000/players?username=Isak11
 
 ### CREATE PLAYER
 POST http://localhost:8000/players
@@ -37,4 +37,18 @@ Content-Type: application/json
   "team": "0",
   "session": "0",
   "points": "0"
+}
+
+### UPDATE PLAYER
+PATCH http://localhost:8000/players
+Content-Type: application/json
+
+{
+  "filter": {
+    "username": "Isak11",
+    "password": "$2b$10$Tft3L1oSCLoH/bawBRmzge2VO6mZ3AT77hzuU2iwwQndrSZ0Wz6zS"
+  },
+  "updates": {
+    "session": "2"
+  }
 }

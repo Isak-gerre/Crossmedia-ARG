@@ -15,6 +15,12 @@
     --xl: 26px;
     --xxl: 100px;
 }
+* {
+    font-family: 'Jetbrains Mono';
+    position: relative;
+    font-weight: normal;
+    box-sizing: border-box;
+}
 
 body {
     background-color: var(--black);
@@ -33,16 +39,11 @@ body {
     
 }
 .selected-session{
-    background-color: fuchsia;
+    text-decoration: underline;
     color: white;
 }
 
-*{
-    font-family: 'Cascadia Code';
-    position: relative;
-    font-weight: normal;
-    box-sizing: border-box;
-}
+
 
 h1{ font-size: var(--xl);}
 h2{ font-size: var(--l);}
