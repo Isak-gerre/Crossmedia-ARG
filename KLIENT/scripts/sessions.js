@@ -1,27 +1,27 @@
-document.addEventListener("DOMContentLoaded", () => {
-  var test = 0;
-  setTimeout(() => {
-    const getSessionsLive = new EventSource("http://localhost:8000/sessions/live");
+// document.addEventListener("DOMContentLoaded", () => {
+//   var test = 0;
+//   setTimeout(() => {
+//     const getSessionsLive = new EventSource("http://localhost:8000/sessions/live");
 
-    getSessionsLive.onmessage = function (event) {
-      console.log(event.data);
-      if (test == 0) {
-        document.getElementById("session-div").innerHTML = "";
-        makeSessionButton(event.data);
-        test = 1;
-      }
-      if (localStorage.getItem("sessions") != event.data || localStorage.getItem("sessions") == null) {
-        saveToLS("sessions", event.data);
-        document.getElementById("session-div").innerHTML = "";
-        makeSessionButton(event.data);
-      } else {
-      }
-    };
-    getSessionsLive.onerror = function () {
-      getSessionsLive.close();
-    };
-  }, 2000);
-});
+//     getSessionsLive.onmessage = function (event) {
+//       console.log(event.data);
+//       if (test == 0) {
+//         document.getElementById("session-div").innerHTML = "";
+//         makeSessionButton(event.data);
+//         test = 1;
+//       }
+//       if (localStorage.getItem("sessions") != event.data || localStorage.getItem("sessions") == null) {
+//         saveToLS("sessions", event.data);
+//         document.getElementById("session-div").innerHTML = "";
+//         makeSessionButton(event.data);
+//       } else {
+//       }
+//     };
+//     getSessionsLive.onerror = function () {
+//       getSessionsLive.close();
+//     };
+//   }, 2000);
+// });
 
 makeSessionPage();
 function makeSessionPage() {
