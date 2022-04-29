@@ -43,10 +43,20 @@ let tabGroup = [create, signIn];
 
 // TEST CALLS
 
+document.body.append( createInput("join lobby", "lobby", "lobby") );
 
-document.body.append(createButton("hello"));
+
+// document.body.append(createButton("hello"));
+document.body.append(createConditionalButton(
+    "Join", 
+    document.getElementById("lobby"), 
+    ()=>{
+        let statement = document.getElementById("lobby").value == "kajsa";
+        return statement}, 
+    ()=>{console.log("next")} ));
+
 document.body.append(createConfirmButton("this button", "next button", ()=>{console.log("next")}, "this is a warning text. Are you sure you want to continue?"));
-document.body.append(createButton("hi", ()=>{console.log("hi")}));
+// document.body.append(createButton("hi", ()=>{console.log("hi")}));
 
 
 function createButton(text, callback){
@@ -66,18 +76,21 @@ function createButton(text, callback){
     return button;
 }
 
-function createConfirmButton(initText, ultText, callback, warningTxt){
+function createConfirmButton(initTxt, ultTxt, callback, warningTxt){
     let wrapper = document.createElement("section");
 
     let warning = document.createElement("div");
     warning.classList.add("fold");
 
-    let initButton = createButton(initText, confirm);
+    let initButton = createButton(initTxt, confirm);
 
     let confirmWrapper = document.createElement("section");
     confirmWrapper.classList.add("button-confirm-wrapper");
 
-    confirmWrapper.append( createButton(ultText, callback), createButton("cancel", close) );
+    confirmWrapper.append( createButton(ultTxt, callback), createButton("cancel", close) );
+
+
+    const time = 200;
 
     async function close(){
         confirmWrapper.classList.remove("button-confirm-gap");
@@ -88,6 +101,8 @@ function createConfirmButton(initText, ultText, callback, warningTxt){
         wrapper.setAttribute("id", "");
         
         warning.classList.remove("unfold");
+
+        const time = 200;
         
         setTimeout(()=>{
             wrapper.setAttribute("id", "");
@@ -95,7 +110,7 @@ function createConfirmButton(initText, ultText, callback, warningTxt){
             wrapper.removeChild(wrapper.lastChild);
             wrapper.append(initButton);
             initButton.setAttribute("id", "");
-        }, 500)
+        }, time)
         
     }
 
@@ -109,18 +124,18 @@ function createConfirmButton(initText, ultText, callback, warningTxt){
             wrapper.removeChild(wrapper.lastChild)
             wrapper.append(confirmWrapper);
             warning.classList.add("unfold")
-        }, 200)
+        }, time)
 
         setTimeout(()=>{
             // Animation
             confirmWrapper.classList.add("button-confirm-gap");
-        }, 700)
+        }, time*2)
 
         setTimeout(()=>{
             // Animation
             wrapper.setAttribute("id", "");
             confirmWrapper.lastChild.classList.add("accent");
-        }, 1000)
+        }, time*3)
 
     }   
 
@@ -129,15 +144,30 @@ function createConfirmButton(initText, ultText, callback, warningTxt){
     return wrapper
 }
 
+function createConditionalButton(initTxt, heardObj, condFunc, callback){
+    let button = createButton(initTxt, callback);
+    button.classList.add("button-disabled")
+    
+    // condFunc should check if condition is met. 
+    //Returns true or false
+    
+    heardObj.addEventListener("keyup", ()=>{
+
+        if( condFunc() ){
+            button.classList.remove("button-disabled")
+            console.log( condFunc )
+        } else {
+            button.classList.add("button-disabled")
+            console.log("no")
+        }
+    });
+
+    return button
+}
+
 function checkClassExistance(item, check){
     return item.classList.contains(check);
 }   
-
-
-
-
-
-
 
 function createInput(labelText, id, name, value = false){
     let wrapper = document.createElement("div");
@@ -256,43 +286,6 @@ function printTerminalText(input){
 // printTerminalText(textArr);
 
 // createTabs(tabGroup)
-
-// Ignore
-document.getElementById("button").addEventListener("click", async(event) =>{
-    let button = event.target
-    button.style.color ="var(--main)";
-    
-    await new Promise( (resolve, reject) =>{
-        setTimeout( ()=>{
-            button.style.color ="";
-            button.classList.add("button-disabled");
-            resolve()
-
-        }, 1000)
-    } )
-
-    //create new buttons
-    let wrap = document.createElement("div");
-    wrap.classList.add("button-confirm"); 
-    let proceed = createButton("Starta", ()=>{
-        console.log("hello")
-    });
-    let cancel = createButton("Avbryt");
-    wrap.append( proceed, cancel);
-        
-    button.append(wrap);
-    
-    await new Promise( (resolve, reject) => {
-        setTimeout( ()=>{
-            wrap.classList.add("button-confirm-gap");
-            cancel.classList.add("accent");
-            resolve();
-        }, 500)
-    })
-    
-
-})
-
 
 
 
