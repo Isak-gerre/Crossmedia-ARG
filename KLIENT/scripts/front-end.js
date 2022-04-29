@@ -218,3 +218,15 @@ document.getElementById("button").addEventListener("click", async(event) =>{
 
 
 
+function reverseString(string) {
+    // Split string till array
+    var splitString = string.split(""); 
+ 
+    // reverse array
+    var reverseArray = splitString.reverse(); 
+ 
+    // array till string
+    var joinArray = reverseArray.join(""); 
+
+    return joinArray; 
+}
