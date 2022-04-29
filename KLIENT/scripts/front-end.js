@@ -298,9 +298,9 @@ function flipString(aString) {
   '\u203F' : '\u2040',
   '\u2045' : '\u2046',
   '\u2234' : '\u2235'
-  }
+}
   
-  Object.keys(flipTable).forEach(i => flipTable[flipTable[i]] = i)
+Object.keys(flipTable).forEach(i => flipTable[flipTable[i]] = i)
 
 
 // text-encryption
