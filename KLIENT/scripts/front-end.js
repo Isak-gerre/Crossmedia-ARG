@@ -90,8 +90,7 @@ let tabGroup = [create, signIn];
 
 // TEST CALLS
 
-// document.body.append( createInput("join lobby", "lobby", "lobby") );
-
+document.body.append( createReadyButton("ready", "20/20 player ready") );
 // printTerminalText(textArr);
 
 createTabs(tabGroup)
@@ -207,8 +206,32 @@ function createConditionalButton(txt, heardObj, condFunc, callback){
     return button
 }
 
-function createReadyButton(initTxt, activeTxt){
-    let button = createButton()
+function createReadyButton(initTxt, id, activeTxt){
+    let button = createButton(initTxt, activate);
+    button.setAttribute("id", id);
+
+    // HUR ÄNDRA KNAPPTEXT?
+
+    function activate(){
+        // deactivate button
+        if(checkClassExistance(button, "ready-button-activated")){
+            button.classList.remove("ready-button-activated", "button-active");
+            button.textContent = initTxt;
+
+            // PING SERVER: PLAYER NOT READY
+
+            return
+        }
+        
+        // activate button
+        button.classList.add("ready-button-activated", "button-active");
+        button.textContent = activeTxt;
+
+        // PING SERVER: PLAYER READY
+    }   
+
+    return button
+
 }
 
 function checkClassExistance(item, check){

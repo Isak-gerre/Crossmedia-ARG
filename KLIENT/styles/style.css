@@ -132,8 +132,9 @@ button{
 }
 
 .button-active{
-    background-color: var(--accent);
-    transition: background-color 0;
+    background-color: var(--sub);
+    color: var(--black);
+    transition: background-color var(--transSlow);
 }
 
 .button-disabled{
