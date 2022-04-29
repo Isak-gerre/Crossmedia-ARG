@@ -19,9 +19,13 @@ async function main() {
 export const getSessions = async (req, res) => {
   const client = await main();
   console.log(req.query);
-  const sessions = await client.db("CrossmediaARG").collection("sessions").find({}).toArray();
-  res.send(sessions);
-  console.log(sessions);
+  try {
+    const sessions = await client.db("CrossmediaARG").collection("sessions").find({}).toArray();
+    res.send(sessions);
+    console.log(sessions);
+  } catch (error) {
+    console.log(error);
+  }
   await client.close();
 };
 

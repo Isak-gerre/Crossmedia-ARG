@@ -48,8 +48,13 @@ async function createPlayer() {
   }
 }
 async function updatePlayer(update) {
-  let res = await fetch(localhost + "players", postData(update, "PATCH"));
-  return res.json();
+  try {
+    let res = await fetch(localhost + "players", postData(update, "PATCH"));
+    if (res.ok) {
+      saveToLS("user", res.json());
+    }
+    return res.json();
+  } catch (error) {}
 }
 
 async function getPlayer(query, value) {
@@ -89,7 +94,29 @@ async function createSession(userID) {
 
 //GROUPS
 //--------------------------------------------------
-
+async function getGroup() {
+  let res = await fetch(`${localhost}groups`);
+  if (res.ok) {
+    let data = await res.json();
+    console.log(data);
+  }
+}
+async function updateGroup(update) {
+  let res = await fetch(localhost + "groups", postData(update, "PATCH"));
+  return res.json();
+}
+async function createGroup(userID) {
+  let postBody = {
+    creator: userID,
+    users: [userID],
+    sessionCode: makeSessionCode(6),
+  };
+  let res = await fetch(`${localhost}groups`, postData(postBody));
+  if (res.ok) {
+    let data = await res.json();
+    console.log(data);
+  }
+}
 //TEAMS
 //--------------------------------------------------
 

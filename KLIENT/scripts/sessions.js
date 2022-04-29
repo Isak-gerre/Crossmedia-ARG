@@ -4,7 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const getSessionsLive = new EventSource("http://localhost:8000/sessions/live");
 
     getSessionsLive.onmessage = function (event) {
-      console.log(event.data);
+      if (checkPlayerInSession(JSON.parse(event.data))) {
+        window.location.href = "lobby.html";
+      }
       if (test == 0) {
         document.getElementById("session-div").innerHTML = "";
         makeSessionButton(event.data);
@@ -31,6 +33,11 @@ function makeSessionPage() {
     <button id="join-session" disabled>Join Session´
     </button>
     `;
+}
+
+function checkPlayerInSession(sessions) {
+  const player = JSON.parse(getFromLS("user")).username;
+  return sessions.find((session) => session.users.includes(player)) ? true : false;
 }
 
 function makeSessionButton(sessionsJSON) {
@@ -60,16 +67,20 @@ document.getElementById("join-session").addEventListener("click", async () => {
   const playerFilter = { username: player.username, password: player.password };
   const playerUpdates = { session: sessionCode };
 
-  const sessionFilter = { sessionCode: sessionCode };
+  const sessionFilter = { session: sessionCode };
   const sessionUpdates = { user: player.username };
 
-  let uPlayer = await updatePlayer({
-    filter: playerFilter,
-    updates: playerUpdates,
-  });
-  let uSession = await updateSession({
-    filter: sessionFilter,
-    updates: sessionUpdates,
-  });
-  console.log(uPlayer);
+  try {
+    await updatePlayer({
+      filter: playerFilter,
+      updates: playerUpdates,
+    });
+    await updateSession({
+      filter: sessionFilter,
+      updates: sessionUpdates,
+    });
+    await updatePlayerinLS();
+  } catch (error) {
+    console.log(error);
+  }
 });

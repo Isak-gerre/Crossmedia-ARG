@@ -7,6 +7,7 @@ import cors from "cors";
 
 import playersRoutes from "./routes/players.js";
 import sessionRoutes from "./routes/sessions.js";
+import groupRoutes from "./routes/groups.js";
 
 const app = express();
 
@@ -27,3 +28,4 @@ app.listen(PORT);
 
 app.use("/players", playersRoutes);
 app.use("/sessions", sessionRoutes);
+app.use("/groups", groupRoutes);
