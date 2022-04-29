@@ -42,11 +42,15 @@ body {
     position: relative;
     font-weight: normal;
     box-sizing: border-box;
+    color: var(--white);
 }
 
 h1{ font-size: var(--xl);}
 h2{ font-size: var(--l);}
 
+#mainCol{
+    color: var(--main);
+}
 
 .flex{
     display: flex;
@@ -65,10 +69,10 @@ form > *:last-child{
     margin-top: var(--l);
 }
 
+/* SECTION ANVÄNDS SOM WRAPPERS. GER INGEN PADDING ELLER MARGIN */
 label, p, span, div, button, input{
     line-height: var(--xl);
     font-size: var(--m);
-    color: var(--white);
     margin: 0;
     margin-bottom: var(--xl);
 }
@@ -119,6 +123,8 @@ button{
     display: block;
     width: 100%;
 
+    color: inherit;
+
     transition: background-color 1s, color 1s;
 }
 
@@ -132,10 +138,9 @@ button{
     color: var(--black);
 }
 
-.button-confirm{
+.button-confirm-wrapper{
     display: flex;
     gap: 0;
-    position: absolute;
     width: 100%;
     top: 0;
     right: 0;
@@ -149,6 +154,21 @@ button{
     color:var(--white);
 }
 
-.button-confirm .accent{
+.button-confirm-wrapper .accent{
     background-color: var(--accent);
 }
+
+.fold{
+    overflow: hidden;
+    height: 0px;
+    margin-bottom: 0;
+    
+
+    transition: 1s;
+}
+.unfold{
+    height: 50px;
+    margin-bottom: var(--xl);
+
+}
+

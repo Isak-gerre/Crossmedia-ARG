@@ -41,23 +41,103 @@ let signIn = {
 let tabGroup = [create, signIn];
 
 
+// TEST CALLS
 
 
+document.body.append(createButton("hello"));
+document.body.append(createConfirmButton("this button", "next button", ()=>{console.log("next")}, "this is a warning text. Are you sure you want to continue?"));
+document.body.append(createButton("hi", ()=>{console.log("hi")}));
 
 
-function createButton(string, callback = false){
+function createButton(text, callback){
     let button = document.createElement("button");
-    button.textContent = string;
+    if(text) button.textContent = text;
 
-    button.addEventListener("click", ()=>{
-        button.classList.add("button-active");
-        setTimeout( ()=>{
-            button.classList.remove("button-active");
-        }, 500 )
-    });
+    if(callback) button.addEventListener("click", callback);
+
+    // click animation, remove?
+    // button.addEventListener("click", ()=>{
+    //     button.classList.add("button-active");
+    //     setTimeout( ()=>{
+    //         button.classList.remove("button-active");
+    //     }, 500 )
+    // });
 
     return button;
 }
+
+function createConfirmButton(initText, ultText, callback, warningTxt){
+    let wrapper = document.createElement("section");
+
+    let warning = document.createElement("div");
+    warning.classList.add("fold");
+
+    let initButton = createButton(initText, confirm);
+
+    let confirmWrapper = document.createElement("section");
+    confirmWrapper.classList.add("button-confirm-wrapper");
+
+    confirmWrapper.append( createButton(ultText, callback), createButton("cancel", close) );
+
+    async function close(){
+        confirmWrapper.classList.remove("button-confirm-gap");
+        confirmWrapper.lastChild.classList.remove("accent");
+
+        wrapper.setAttribute("id", "mainCol");
+        
+        wrapper.setAttribute("id", "");
+        
+        warning.classList.remove("unfold");
+        
+        setTimeout(()=>{
+            wrapper.setAttribute("id", "");
+            warning.innerHTML = "";
+            wrapper.removeChild(wrapper.lastChild);
+            wrapper.append(initButton);
+            initButton.setAttribute("id", "");
+        }, 500)
+        
+    }
+
+    async function confirm(ultText, callback){     
+        wrapper.setAttribute("id", "mainCol");
+
+        warning.innerHTML = warningTxt;
+
+        setTimeout(()=>{
+            // Animation
+            wrapper.removeChild(wrapper.lastChild)
+            wrapper.append(confirmWrapper);
+            warning.classList.add("unfold")
+        }, 200)
+
+        setTimeout(()=>{
+            // Animation
+            confirmWrapper.classList.add("button-confirm-gap");
+        }, 700)
+
+        setTimeout(()=>{
+            // Animation
+            wrapper.setAttribute("id", "");
+            confirmWrapper.lastChild.classList.add("accent");
+        }, 1000)
+
+    }   
+
+    wrapper.append(warning, initButton)
+
+    return wrapper
+}
+
+function checkClassExistance(item, check){
+    return item.classList.contains(check);
+}   
+
+
+
+
+
+
 
 function createInput(labelText, id, name, value = false){
     let wrapper = document.createElement("div");
@@ -173,9 +253,9 @@ function printTerminalText(input){
     }
 }
 
-printTerminalText(textArr);
+// printTerminalText(textArr);
 
-createTabs(tabGroup)
+// createTabs(tabGroup)
 
 // Ignore
 document.getElementById("button").addEventListener("click", async(event) =>{
