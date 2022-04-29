@@ -1,3 +1,46 @@
+
+// FUNCTIONS AND DESCRIPTION
+
+// createButton( "button text" ; func: callback)
+    // return DOM
+
+// createConfirmButton( "button text" ; "button text after click" ; func: callback ; "warning text")
+    // return DOM
+
+// createConditionalButtion( "button tex"t ; obj: input ; func: return true/false for condition ; func: callback )
+    // return DOM
+
+// createInput( "label text" ; "id" ; "name" ; ("value") )
+    // return DOM
+
+// createTabs(array[
+        // {
+        //     header: "",
+        //     content: [
+
+        //     ]
+        // },
+        // {
+        //     header: "",
+        //     content: [
+
+        //     ]
+        // },
+    // ])
+    // return DOM
+
+// 
+
+// createForm( [inputs] ; "method" ; "action" ; "id")
+    // return DOM
+
+//printTerminalText( "text" || array["string", {txt: "string", func: onclick action}])
+    // appends text
+//
+
+
+// --------------------------------------------------------------------------------------
+
 // VARS FOR TEST
 let textArr = [
     "Inga aktiva spelsessioner hittas i närområdet.",
@@ -41,22 +84,21 @@ let signIn = {
 let tabGroup = [create, signIn];
 
 
+
+
+// --------------------------------------------------------------------------------------
+
 // TEST CALLS
 
-document.body.append( createInput("join lobby", "lobby", "lobby") );
+// document.body.append( createInput("join lobby", "lobby", "lobby") );
+
+// printTerminalText(textArr);
+
+createTabs(tabGroup)
 
 
-// document.body.append(createButton("hello"));
-document.body.append(createConditionalButton(
-    "Join", 
-    document.getElementById("lobby"), 
-    ()=>{
-        let statement = document.getElementById("lobby").value == "kajsa";
-        return statement}, 
-    ()=>{console.log("next")} ));
 
-document.body.append(createConfirmButton("this button", "next button", ()=>{console.log("next")}, "this is a warning text. Are you sure you want to continue?"));
-// document.body.append(createButton("hi", ()=>{console.log("hi")}));
+// --------------------------------------------------------------------------------------
 
 
 function createButton(text, callback){
@@ -144,8 +186,8 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt){
     return wrapper
 }
 
-function createConditionalButton(initTxt, heardObj, condFunc, callback){
-    let button = createButton(initTxt, callback);
+function createConditionalButton(txt, heardObj, condFunc, callback){
+    let button = createButton(txt, callback);
     button.classList.add("button-disabled")
     
     // condFunc should check if condition is met. 
@@ -165,12 +207,16 @@ function createConditionalButton(initTxt, heardObj, condFunc, callback){
     return button
 }
 
+function createReadyButton(initTxt, activeTxt){
+    let button = createButton()
+}
+
 function checkClassExistance(item, check){
     return item.classList.contains(check);
 }   
 
 function createInput(labelText, id, name, value = false){
-    let wrapper = document.createElement("div");
+    let wrapper = document.createElement("section");
     wrapper.classList.add("input-wrapper")
 
     let label = document.createElement("label");
@@ -252,7 +298,6 @@ function createForm(inputs, method, action, id){
 
 }
 
-
 function printTerminalText(input){
 
     if(Array.isArray( input ) ) {
@@ -282,10 +327,6 @@ function printTerminalText(input){
         return p
     }
 }
-
-// printTerminalText(textArr);
-
-// createTabs(tabGroup)
 
 
 
