@@ -7,15 +7,16 @@ sessionH1.innerText = activeSession;
 
 console.log(activeSession);
 
-function createGroupDiv() {
+async function createGroupDiv() {
   const div = document.createElement("div");
   div.classList = "group-div";
+  const groupID = await createGroup(activeSession);
   div.addEventListener("click", async () => {
     //Move player to div
     //Update players
     //Update group
 
-    const groupFilter = { session: activeSession };
+    const groupFilter = { _id: groupID.groupID };
     const groupUpdates = { user: player.username };
     await updateGroup({
       filter: groupFilter,

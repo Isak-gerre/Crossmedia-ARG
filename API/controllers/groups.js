@@ -33,17 +33,14 @@ export const getGroup = async (req, res) => {
 
 export const createGroup = async (req, res) => {
   const client = await main();
-  const Group = req.body;
-  console.log(req);
-  const foundUser = await client.db("CrossmediaARG").collection("groups").findOne({ username: req.body.username });
-  if (foundUser != null) {
-    res.status(400).send({ message: "User already exists" });
+  const group = req.body;
+  const foundGroup = await client.db("CrossmediaARG").collection("groups").findOne({ _id: req.body._id });
+  if (foundGroup != null) {
+    res.status(400).send({ message: "Group already exists" });
   } else {
     try {
-      const hashedPassword = await bcrypt.hash(Group.password, 10);
-      Group.password = hashedPassword;
-      await client.db("CrossmediaARG").collection("groups").insertOne(Group);
-      res.status(201).send({ message: "Group created", Group: Group });
+      await client.db("CrossmediaARG").collection("groups").insertOne(group);
+      res.status(201).send({ groupID: group._id });
     } catch (error) {
       res.status(400).send({ message: "Something went wrong", error: error });
     }
@@ -53,34 +50,11 @@ export const createGroup = async (req, res) => {
 
 //----------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------
-
-export const loginGroup = async (req, res) => {
-  const client = await main();
-  const foundUser = await client.db("CrossmediaARG").collection("groups").findOne({ username: req.body.username });
-
-  if (foundUser == null) {
-    res.status(404).send({ message: "User not found" });
-  } else {
-    try {
-      if (req.body.password === foundUser.password || (await bcrypt.compare(req.body.password, foundUser.password))) {
-        res.status(200).send(foundUser);
-      } else {
-        res.status(400).send(false);
-      }
-    } catch (error) {
-      res.status(500).send();
-    }
-  }
-
-  await client.close();
-};
-//----------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------
 export const updateGroup = async (req, res) => {
   const client = await main();
 
   const filter = req.body.filter;
-  const updates = { $set: req.body.updates };
+  const updates = { $push: req.body.updates };
 
   try {
     await client.db("CrossmediaARG").collection("groups").updateOne(filter, updates);
