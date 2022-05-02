@@ -9,7 +9,7 @@ let textArr = [
 				const user = JSON.parse(getFromLS("user"));
 				const session = await createSession(user.username);
 				const update = {
-					filter: { user: user.username, password: user.password },
+					filter: { username: user.username, password: user.password },
 					updates: { session: session.sessionCode },
 				};
 				await updatePlayer(update);
@@ -23,8 +23,18 @@ let textArr = [
 	{
 		txt: "Mata in spelkod",
 		func: () => {
-			document.querySelector("main").append(createInput("Mata in spelkod", "gamecode", "gamecode"));
-			document.querySelector("main").append(createButton("gå med"));
+			document.querySelector("body").append(createInput("Mata in spelkod", "gamecode", "gamecode"));
+			document.querySelector("body").append(
+				createButton("gå med", async () => {
+					console.log("test");
+					let gamecode = document.getElementById("gamecode").value;
+					const sessions = await getSessions();
+					if (sessions.find((session) => session.sessionCode == gamecode)) {
+						await joinSession(gamecode);
+						window.location.href = "lobby.html";
+					}
+				})
+			);
 		},
 	},
 ];
@@ -59,6 +69,9 @@ function createButton(string, callback = false) {
 		setTimeout(() => {
 			button.classList.remove("button-active");
 		}, 500);
+		if (callback) {
+			callback();
+		}
 	});
 
 	return button;

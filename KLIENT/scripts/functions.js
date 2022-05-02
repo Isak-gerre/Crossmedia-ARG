@@ -2,6 +2,9 @@
 
 //LOCALSTORAGE FUNCTIONS
 //--------------------------------------------------
+if (getFromLS("user") == null && window.location.pathname != "/KLIENT/index.html") {
+	window.location.pathname = "/KLIENT/index.html";
+}
 function saveToLS(getter, setter) {
 	if (typeof setter == "string") {
 		localStorage.setItem(getter, setter);
@@ -13,17 +16,21 @@ function getFromLS(getter) {
 	return localStorage.getItem(getter);
 }
 async function checkLoggedInPlayer() {
-	const player = JSON.parse(localStorage.getItem("loggedInUser"));
+	let player = JSON.parse(localStorage.getItem("loggedInUser"));
 	return (await logInPlayer(postData(player))) ? true : false;
 }
 async function logInPlayer(player) {
 	let res = await fetch(`${localhost}players/login`, player);
 	let loggedin = res.ok ? true : false;
 	let playerData = await res.json();
+
 	loggedin ? saveToLS("user", playerData) : null;
 	return loggedin;
 }
-
+async function updateUserLS() {
+	let player = JSON.parse(getFromLS("user"));
+	await logInPlayer(player);
+}
 //PLAYERS
 //--------------------------------------------------
 
@@ -38,22 +45,22 @@ async function createPlayer() {
 	console.log(res);
 	if (res.ok) {
 		let data = await res.json();
-		savePlayer({
-			id: data.player["_id"],
-			username: data.player.username,
-			password: data.player.password,
-		});
+		saveToLS("user", data.player);
 	} else {
 		displayLoginErrorMessage("A user with that username already exits!");
 	}
 }
 async function updatePlayer(update) {
+	console.log(update);
 	try {
 		let res = await fetch(localhost + "players", postData(update, "PATCH"));
 		if (res.ok) {
-			await logInPlayer(update.filter);
+			let data = await res.json();
+			await saveToLS("user", JSON.stringify(data));
 		}
-	} catch (error) {}
+	} catch (error) {
+		return error;
+	}
 }
 
 async function getPlayer(query, value) {
@@ -67,11 +74,39 @@ async function getPlayer(query, value) {
 
 //SESSIONS
 //--------------------------------------------------
-async function getSessions() {
-	let res = await fetch(`${localhost}sessions`);
+async function getSessions(query, value) {
+	let res = await fetch(`${localhost}sessions?${query}=${value}`);
 	if (res.ok) {
 		let data = await res.json();
-		console.log(data);
+		saveToLS("sessions", data);
+		return data;
+	} else {
+		return false;
+	}
+}
+
+async function joinSession(sessionCode) {
+	const player = JSON.parse(getFromLS("user"));
+	console.log(player);
+	const playerFilter = { username: player.username, password: player.password };
+	const playerUpdates = { session: sessionCode };
+
+	const sessionFilter = { sessionCode: sessionCode };
+	const sessionUpdates = { $push: { user: player.username } };
+
+	try {
+		await updatePlayer({
+			filter: playerFilter,
+			updates: playerUpdates,
+		});
+		await updateSession({
+			filter: sessionFilter,
+			updates: sessionUpdates,
+		});
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
 	}
 }
 async function updateSession(update) {
@@ -83,6 +118,7 @@ async function createSession(userID) {
 		creator: userID,
 		users: [userID],
 		sessionCode: makeSessionCode(6),
+		phase: 0,
 	};
 	let res = await fetch(`${localhost}sessions`, postData(postBody));
 	if (res.ok) {

@@ -1,33 +1,45 @@
-document.addEventListener("DOMContentLoaded", () => {
-	var gate = 0;
-	setTimeout(() => {
-		const getSessionsLive = new EventSource("http://localhost:8000/sessions/live");
+// document.addEventListener("DOMContentLoaded", () => {
+// 	var gate = 0;
+// 	setTimeout(() => {
+// 		const getSessionsLive = new EventSource("http://localhost:8000/sessions/live");
 
-		getSessionsLive.onmessage = function (event) {
-			if (checkPlayerInSession(JSON.parse(event.data))) {
-				window.location.href = "lobby.html";
-			}
-			if (JSON.parse(event.data).length == 0 && gate == 0) {
-				printTerminalText(textArr);
-				document.getElementById("join-session").remove();
-				gate = 1;
-			}
-			if (gate == 0) {
-				document.getElementById("session-div").innerHTML = "";
-				makeSessionButton(event.data);
-				gate = 1;
-			}
-			if (localStorage.getItem("sessions") != event.data || localStorage.getItem("sessions") == null) {
-				saveToLS("sessions", event.data);
-				document.getElementById("session-div").innerHTML = "";
-				makeSessionButton(event.data);
-			} else {
-			}
-		};
-		getSessionsLive.onerror = function () {
-			getSessionsLive.close();
-		};
-	}, 0000);
+// 		getSessionsLive.onmessage = function (event) {
+// 			if (checkPlayerInSession(JSON.parse(event.data))) {
+// 				window.location.href = "lobby.html";
+// 			}
+// 			if (JSON.parse(event.data).length == 0 && gate == 0) {
+// 				printTerminalText(textArr);
+// 				document.getElementById("join-session").remove();
+// 				gate = 1;
+// 			}
+// 			if (gate == 0) {
+// 				document.getElementById("session-div").innerHTML = "";
+// 				makeSessionButton(event.data);
+// 				gate = 1;
+// 			}
+// 			if (localStorage.getItem("sessions") != event.data || localStorage.getItem("sessions") == null) {
+// 				saveToLS("sessions", event.data);
+// 				document.getElementById("session-div").innerHTML = "";
+// 				makeSessionButton(event.data);
+// 			}
+// 		};
+// 		getSessionsLive.onerror = function () {
+// 			getSessionsLive.close();
+// 		};
+// 	}, 0000);
+// });
+document.addEventListener("DOMContentLoaded", async () => {
+	let session = await getSessions();
+	if (checkPlayerInSession(session)) {
+		window.location.href = "lobby.html";
+	}
+	if (session == []) {
+		printTerminalText(textArr);
+	} else {
+		textArr.shift();
+		printTerminalText(textArr);
+	}
+	makeSessionButton(session);
 });
 
 makeSessionPage();
@@ -41,13 +53,14 @@ function makeSessionPage() {
 }
 
 function checkPlayerInSession(sessions) {
-	const player = JSON.parse(getFromLS("user")).username;
-	return sessions.find((session) => session.users.includes(player)) ? true : false;
+	let savedPlayer = JSON.parse(getFromLS("user")).username;
+	let inSession = sessions.find((session) => session.users.includes(savedPlayer)) ? true : false;
+	console.log(inSession);
+	return inSession;
 }
 
 function makeSessionButton(sessionsJSON) {
-	arrayOfSessions = JSON.parse(sessionsJSON);
-	console.log(arrayOfSessions);
+	let arrayOfSessions = typeof sessionsJSON == "string" ? JSON.parse(sessionsJSON) : sessionsJSON;
 	arrayOfSessions.forEach((element) => {
 		let p = document.createElement("p");
 		p.className = "session-code";
@@ -68,24 +81,8 @@ document.getElementById("join-session").addEventListener("click", async () => {
 	if (selectedSession.length != 1) return;
 
 	const sessionCode = selectedSession[0].innerText;
-	const player = JSON.parse(getFromLS("user"));
-	const playerFilter = { username: player.username, password: player.password };
-	const playerUpdates = { session: sessionCode };
-
-	const sessionFilter = { session: sessionCode };
-	const sessionUpdates = { user: player.username };
-
-	try {
-		await updatePlayer({
-			filter: playerFilter,
-			updates: playerUpdates,
-		});
-		await updateSession({
-			filter: sessionFilter,
-			updates: sessionUpdates,
-		});
-		await updatePlayerinLS();
-	} catch (error) {
-		console.log(error);
+	if (await joinSession(sessionCode)) {
+		console.log(true);
+		window.location.href = "lobby.html";
 	}
 });
