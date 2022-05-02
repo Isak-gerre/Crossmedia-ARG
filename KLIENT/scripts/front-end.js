@@ -1,3 +1,49 @@
+
+// FUNCTIONS AND DESCRIPTION
+
+// createButton( "button text" ; func: callback)
+    // return DOM
+
+// createConfirmButton( "button text" ; "button text after click" ; func: callback ; "warning text")
+    // return DOM
+
+// createConditionalButton( "button text" ; obj: input ; func: return true/false for condition ; func: callback )
+    // return DOM
+
+// createReadyButton( "text innan klick", "id", "text när knapp är aktiv")
+    // return DOM
+
+// createInput( "label text" ; "id" ; "name" ; ("value") )
+    // return DOM
+
+// createTabs(array[
+        // {
+        //     header: "",
+        //     content: [
+
+        //     ]
+        // },
+        // {
+        //     header: "",
+        //     content: [
+
+        //     ]
+        // },
+    // ])
+    // return DOM
+
+// 
+
+// createForm( [inputs] ; "method" ; "action" ; "id")
+    // return DOM
+
+//printTerminalText( "text" || array["string", {txt: "string", func: onclick action}])
+    // appends text
+//
+
+
+// --------------------------------------------------------------------------------------
+
 // VARS FOR TEST
 let textArr = [
 	"Inga aktiva spelsessioner hittas i närområdet.",
@@ -50,23 +96,169 @@ let signIn = {
 
 let tabGroup = [create, signIn];
 
-function createButton(string, callback = false) {
-	let button = document.createElement("button");
-	button.textContent = string;
+function test(){
+	console.log("click");
 
-	button.addEventListener("click", () => {
-		button.classList.add("button-active");
-		setTimeout(() => {
-			button.classList.remove("button-active");
-		}, 500);
-	});
-
-	return button;
+	document.body.style.backgroundColor = "var(--supp)";
+	
+	setTimeout( ()=>{
+		document.body.style.backgroundColor = "";
+	}, 200 );
 }
 
-function createInput(labelText, id, name, value = false) {
-	let wrapper = document.createElement("div");
-	wrapper.classList.add("input-wrapper");
+
+// --------------------------------------------------------------------------------------
+
+// TEST CALLS
+
+document.body.append( createButton("hello", test) );
+document.body.append( printTerminalText(textArr) );
+
+
+
+// --------------------------------------------------------------------------------------
+
+function createButton(text, callback){
+    let button = document.createElement("button");
+    if(text) button.textContent = text;
+
+    if(callback) button.addEventListener("click", callback);
+
+    // click animation, remove?
+    // button.addEventListener("click", ()=>{
+    //     button.classList.add("button-active");
+    //     setTimeout( ()=>{
+    //         button.classList.remove("button-active");
+    //     }, 500 )
+    // });
+
+    return button;
+}
+
+function createConfirmButton(initTxt, ultTxt, callback, warningTxt){
+    let wrapper = document.createElement("section");
+
+    let warning = document.createElement("div");
+    warning.classList.add("fold");
+
+    let initButton = createButton(initTxt, confirm);
+
+    let confirmWrapper = document.createElement("section");
+    confirmWrapper.classList.add("button-confirm-wrapper");
+
+    confirmWrapper.append( createButton(ultTxt, callback), createButton("cancel", close) );
+
+
+    const time = 200;
+
+    async function close(){
+        confirmWrapper.classList.remove("button-confirm-gap");
+        confirmWrapper.lastChild.classList.remove("accent");
+
+        wrapper.setAttribute("id", "mainCol");
+        
+        wrapper.setAttribute("id", "");
+        
+        warning.classList.remove("unfold");
+
+        const time = 200;
+        
+        setTimeout(()=>{
+            wrapper.setAttribute("id", "");
+            warning.innerHTML = "";
+            wrapper.removeChild(wrapper.lastChild);
+            wrapper.append(initButton);
+            initButton.setAttribute("id", "");
+        }, time)
+        
+    }
+
+    async function confirm(ultText, callback){     
+        wrapper.setAttribute("id", "mainCol");
+
+        warning.innerHTML = warningTxt;
+
+        setTimeout(()=>{
+            // Animation
+            wrapper.removeChild(wrapper.lastChild)
+            wrapper.append(confirmWrapper);
+            warning.classList.add("unfold")
+        }, time)
+
+        setTimeout(()=>{
+            // Animation
+            confirmWrapper.classList.add("button-confirm-gap");
+        }, time*2)
+
+        setTimeout(()=>{
+            // Animation
+            wrapper.setAttribute("id", "");
+            confirmWrapper.lastChild.classList.add("accent");
+        }, time*3)
+
+    }   
+
+    wrapper.append(warning, initButton)
+
+    return wrapper
+}
+
+function createConditionalButton(txt, heardObj, condFunc, callback){
+    let button = createButton(txt, callback);
+    button.classList.add("button-disabled")
+    
+    // condFunc should check if condition is met. 
+    //Returns true or false
+    
+    heardObj.addEventListener("keyup", ()=>{
+
+        if( condFunc() ){
+            button.classList.remove("button-disabled")
+            console.log( condFunc )
+        } else {
+            button.classList.add("button-disabled")
+            console.log("no")
+        }
+    });
+
+    return button
+}
+
+function createReadyButton(initTxt, id, activeTxt){
+    let button = createButton(initTxt, activate);
+    button.setAttribute("id", id);
+
+    // HUR ÄNDRA KNAPPTEXT?
+
+    function activate(){
+        // deactivate button
+        if(checkClassExistance(button, "ready-button-activated")){
+            button.classList.remove("ready-button-activated", "button-active");
+            button.textContent = initTxt;
+
+            // PING SERVER: PLAYER NOT READY
+
+            return
+        }
+        
+        // activate button
+        button.classList.add("ready-button-activated", "button-active");
+        button.textContent = activeTxt;
+
+        // PING SERVER: PLAYER READY
+    }   
+
+    return button
+
+}
+
+function checkClassExistance(item, check){
+    return item.classList.contains(check);
+}   
+
+function createInput(labelText, id, name, value = false){
+    let wrapper = document.createElement("section");
+    wrapper.classList.add("input-wrapper")
 
 	let label = document.createElement("label");
 	label.textContent = labelText + ":";
@@ -144,66 +336,24 @@ function createForm(inputs, method, action, id) {
 	return form;
 }
 
-function printTerminalText(input) {
-	if (Array.isArray(input)) {
-		input.forEach((message) => {
-			document.querySelector("body").append(createString(message));
+function printTerminalText(input){
+	let p = document.createElement("p");
+
+	p.textContent = input;
+
+	if (typeof input == "object") {
+		p.classList.add("string-button");
+		p.textContent = input.txt;
+
+		p.addEventListener("click", () => {
+			input.func();
+			p.style.pointerEvents = "none";
 		});
-	} else {
-		document.querySelector("body").append(createString(input));
 	}
 
-	function createString(string) {
-		let p = document.createElement("p");
+	return p;
 
-		p.textContent = string;
-
-		if (typeof string == "object") {
-			p.classList.add("string-button");
-			p.textContent = string.txt;
-
-			p.addEventListener("click", () => {
-				string.func();
-				p.style.pointerEvents = "none";
-			});
-		}
-
-		return p;
-	}
 }
-
-// Ignore
-document.getElementById("button").addEventListener("click", async (event) => {
-	let button = event.target;
-	button.style.color = "var(--main)";
-
-	await new Promise((resolve, reject) => {
-		setTimeout(() => {
-			button.style.color = "";
-			button.classList.add("button-disabled");
-			resolve();
-		}, 1000);
-	});
-
-	//create new buttons
-	let wrap = document.createElement("div");
-	wrap.classList.add("button-confirm");
-	let proceed = createButton("Starta", () => {
-		console.log("hello");
-	});
-	let cancel = createButton("Avbryt");
-	wrap.append(proceed, cancel);
-
-	button.append(wrap);
-
-	await new Promise((resolve, reject) => {
-		setTimeout(() => {
-			wrap.classList.add("button-confirm-gap");
-			cancel.classList.add("accent");
-			resolve();
-		}, 500);
-	});
-});
 
 //Text bak o fram
 function reverseString(string) {
@@ -226,66 +376,15 @@ function flipString(aString) {
 		.map((c) => flipTable[c] || c)
 		.reverse()
 		.join("");
-}
+}	
 
 var flipTable = {
-	"\u0021": "\u00A1",
-	"\u0022": "\u201E",
-	"\u0026": "\u214B",
-	"\u0027": "\u002C",
-	"\u0028": "\u0029",
-	"\u002E": "\u02D9",
-	"\u0033": "\u0190",
-	"\u0034": "\u152D",
-	"\u0036": "\u0039",
-	"\u0037": "\u2C62",
-	"\u003B": "\u061B",
-	"\u003C": "\u003E",
-	"\u003F": "\u00BF",
-	"\u0041": "\u2200",
-	"\u0042": "\u10412",
-	"\u0043": "\u2183",
-	"\u0044": "\u25D6",
-	"\u0045": "\u018E",
-	"\u0046": "\u2132",
-	"\u0047": "\u2141",
-	"\u004A": "\u017F",
-	"\u004B": "\u22CA",
-	"\u004C": "\u2142",
-	"\u004D": "\u0057",
-	"\u004E": "\u1D0E",
-	"\u0050": "\u0500",
-	"\u0051": "\u038C",
-	"\u0052": "\u1D1A",
-	"\u0054": "\u22A5",
-	"\u0055": "\u2229",
-	"\u0056": "\u1D27",
-	"\u0059": "\u2144",
-	"\u005B": "\u005D",
-	"\u005F": "\u203E",
-	"\u0061": "\u0250",
-	"\u0062": "\u0071",
-	"\u0063": "\u0254",
-	"\u0064": "\u0070",
-	"\u0065": "\u01DD",
-	"\u0066": "\u025F",
-	"\u0067": "\u0183",
-	"\u0068": "\u0265",
-	"\u0069": "\u0131",
-	"\u006A": "\u027E",
-	"\u006B": "\u029E",
-	"\u006C": "\u0283",
-	"\u006D": "\u026F",
-	"\u006E": "\u0075",
-	"\u0072": "\u0279",
-	"\u0074": "\u0287",
-	"\u0076": "\u028C",
-	"\u0077": "\u028D",
-	"\u0079": "\u028E",
-	"\u007B": "\u007D",
-	"\u203F": "\u2040",
-	"\u2045": "\u2046",
-	"\u2234": "\u2235",
+	"\u0021": "\u00A1", "\u0022": "\u201E", "\u0026": "\u214B", "\u0027": "\u002C", "\u0028": "\u0029", "\u002E": "\u02D9", "\u0033": "\u0190", "\u0034": "\u152D", "\u0036": "\u0039", "\u0037": "\u2C62",
+	"\u003B": "\u061B", "\u003C": "\u003E", "\u003F": "\u00BF", "\u0041": "\u2200", "\u0042": "\u10412", "\u0043": "\u2183", "\u0044": "\u25D6", "\u0045": "\u018E", "\u0046": "\u2132", "\u0047": "\u2141", "\u004A": "\u017F", "\u004B": "\u22CA",
+	"\u004C": "\u2142", "\u004D": "\u0057", "\u004E": "\u1D0E", "\u0050": "\u0500", "\u0051": "\u038C", "\u0052": "\u1D1A", "\u0054": "\u22A5", "\u0055": "\u2229",
+	"\u0056": "\u1D27", "\u0059": "\u2144", "\u005B": "\u005D", "\u005F": "\u203E", "\u0061": "\u0250", "\u0062": "\u0071", "\u0063": "\u0254", "\u0064": "\u0070", "\u0065": "\u01DD",
+	"\u0066": "\u025F", "\u0067": "\u0183", "\u0068": "\u0265", "\u0069": "\u0131", "\u006A": "\u027E", "\u006B": "\u029E", "\u006C": "\u0283", "\u006D": "\u026F", "\u006E": "\u0075", "\u0072": "\u0279", "\u0074": "\u0287",
+	"\u0076": "\u028C", "\u0077": "\u028D", "\u0079": "\u028E", "\u007B": "\u007D", "\u203F": "\u2040", "\u2045": "\u2046", "\u2234": "\u2235",
 };
 
 Object.keys(flipTable).forEach((i) => (flipTable[flipTable[i]] = i));
@@ -294,8 +393,7 @@ Object.keys(flipTable).forEach((i) => (flipTable[flipTable[i]] = i));
 
 //Exempel
 // cipher(4.2, "sweet") =  swcct
-// 4 = e
-// 2 = c
+// 4 = e	2 = c
 // e bytts ut till c
 
 //https://blog.cloudboost.io/create-your-own-cipher-using-javascript-cac216d3d2c
@@ -304,68 +402,11 @@ function cipher(key, data) {
 	data = data.toString();
 
 	const signature = [
-		"a",
-		"b",
-		"c",
-		"d",
-		"e",
-		"f",
-		"g",
-		"h",
-		"i",
-		"j",
-		"k",
-		"l",
-		"m",
-		"n",
-		"o",
-		"p",
-		"q",
-		"r",
-		"s",
-		"t",
-		"u",
-		"v",
-		"w",
-		"x",
-		"y",
-		"z",
-		"A",
-		"B",
-		"C",
-		"D",
-		"E",
-		"F",
-		"G",
-		"H",
-		"I",
-		"J",
-		"K",
-		"L",
-		"M",
-		"N",
-		"O",
-		"P",
-		"Q",
-		"R",
-		"S",
-		"T",
-		"U",
-		"V",
-		"W",
-		"X",
-		"Y",
-		"Z",
-		0,
-		1,
-		2,
-		3,
-		4,
-		5,
-		6,
-		7,
-		8,
-		9,
+		"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l","m", 
+		"n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x","y", "z",
+		"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+		"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+		0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 	];
 
 	let arr = [];
@@ -389,4 +430,26 @@ function cipher(key, data) {
 	});
 
 	return data;
+
+}
+
+
+// not done
+function loadingScreen(){
+    let wrapper = document.createElement("div");
+    wrapper.setAttribute("id", "loading")
+    wrapper.classList.add("loading-screen-wrapper");
+    
+    document.body.innerHTML = ``;
+
+    return wrapper;
+}
+
+// not done
+function loadingButton(){
+    let wrapper = document.createElement("div");
+    wrapper.setAttribute("id", "loading");
+    wrapper.classList.add("loading-icon-wrapper");
+    
+    return wrapper
 }
