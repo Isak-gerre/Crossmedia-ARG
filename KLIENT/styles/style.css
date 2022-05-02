@@ -21,6 +21,7 @@
 
 body {
     background-color: var(--black);
+    min-height: calc( 100vh - var(--l) );
 
     display: flex;
     flex-direction: column;
@@ -53,6 +54,10 @@ h2{ font-size: var(--l);}
 
 #mainCol{
     color: var(--main);
+}
+
+#mainBack{
+    background-color: var(--main);
 }
 
 .flex{
@@ -176,3 +181,19 @@ button{
 
 }
 
+.loading-screen-wrapper{
+    /* wip */
+}
+
+.loading-icon-wrapper{
+    /* wip */
+    background-color: var(--black);
+    opacity: 0.2;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    height: 100%;
+    width: 100%;
+}

@@ -7,7 +7,10 @@
 // createConfirmButton( "button text" ; "button text after click" ; func: callback ; "warning text")
     // return DOM
 
-// createConditionalButtion( "button tex"t ; obj: input ; func: return true/false for condition ; func: callback )
+// createConditionalButton( "button text" ; obj: input ; func: return true/false for condition ; func: callback )
+    // return DOM
+
+// createReadyButton( "text innan klick", "id", "text när knapp är aktiv")
     // return DOM
 
 // createInput( "label text" ; "id" ; "name" ; ("value") )
@@ -90,7 +93,10 @@ let tabGroup = [create, signIn];
 
 // TEST CALLS
 
-document.body.append( createReadyButton("ready", "20/20 player ready") );
+// document.body.append(createBalls());
+
+
+document.body.append( createReadyButton("ready", "readyButton", "20/20 player ready") );
 // printTerminalText(textArr);
 
 createTabs(tabGroup)
@@ -351,10 +357,22 @@ function printTerminalText(input){
     }
 }
 
+// not done
+function loadingScreen(){
+    let wrapper = document.createElement("div");
+    wrapper.setAttribute("id", "loading")
+    wrapper.classList.add("loading-screen-wrapper");
+    
+    document.body.innerHTML = ``;
 
+    return wrapper;
+}
 
-
-
-
-
-
+// not done
+function loadingButton(){
+    let wrapper = document.createElement("div");
+    wrapper.setAttribute("id", "loading");
+    wrapper.classList.add("loading-icon-wrapper");
+    
+    return wrapper;
+}
