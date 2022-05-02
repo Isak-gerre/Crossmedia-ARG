@@ -35,6 +35,10 @@ body {
     margin: var(--s);
 }
 
+.no-margin{
+    margin: 0;
+}
+
 .createPlayer > form {
     display: flex;
     justify-content: space-evenly;
@@ -52,12 +56,20 @@ body {
 h1{ font-size: var(--xl);}
 h2{ font-size: var(--l);}
 
-#mainCol{
+.main-color{
     color: var(--main);
 }
 
-#mainBack{
+.main-back{
     background-color: var(--main);
+}
+
+.acc-color{
+    color: var(--accent)
+}
+
+.grayed, .grayed *{
+    color: var(--gray);
 }
 
 .flex{
@@ -198,4 +210,13 @@ button{
 
     height: 100%;
     width: 100%;
+}
+
+.list-wrapper{
+    display: flex;
+    overflow: scroll;
+}
+
+.list-wrapper > section p {
+    margin-right: var(--xl);
 }

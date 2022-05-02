@@ -16,22 +16,8 @@
 // createInput( "label text" ; "id" ; "name" ; ("value") )
     // return DOM
 
-// createTabs(array[
-        // {
-        //     header: "",
-        //     content: [
-
-        //     ]
-        // },
-        // {
-        //     header: "",
-        //     content: [
-
-        //     ]
-        // },
-    // ])
+// createTabs(array[ {header: "", content: []}, { header: "", content: []} ])
     // return DOM
-
 // 
 
 // createForm( [inputs] ; "method" ; "action" ; "id")
@@ -41,6 +27,12 @@
     // appends text
 //
 
+// createContentBlock( "header" ; "h-tagg" ; DOM: content )
+	// return DOM
+
+// createList( [items] ; antal rader = 4 )
+// "*" framför aktiv spelare ger accent-color
+	// return DOM
 
 // --------------------------------------------------------------------------------------
 
@@ -63,14 +55,6 @@ let textArr = [
 			} catch (error) {
 				console.log(error);
 			}
-		},
-	},
-	"Eller",
-	{
-		txt: "Mata in spelkod",
-		func: () => {
-			document.querySelector("main").append(createInput("Mata in spelkod", "gamecode", "gamecode"));
-			document.querySelector("main").append(createButton("gå med"));
 		},
 	},
 ];
@@ -96,6 +80,13 @@ let signIn = {
 
 let tabGroup = [create, signIn];
 
+let alpha = ["mittlånganamn", "finnick", "felicia", "paul"];
+let beta = ["bill", "*sara", "corniellerine", "mina",];
+let delta = ["clay", "zed", "mattiasguldklimp", "morphe"]
+let omega = ["barry", "marinaskovnikov", "collin", "holly"]
+
+let users = alpha.concat(beta, delta, omega);
+
 function test(){
 	console.log("click");
 
@@ -111,11 +102,22 @@ function test(){
 
 // TEST CALLS
 
-document.body.append( createButton("hello", test) );
-document.body.append( printTerminalText(textArr) );
 
 
 
+
+let phaseTwoWaiting = createContentBlock("inväntar", "h2", createList(users, 1), true);
+let phaseTwoAlpha = createContentBlock("Alpha", "h2", createList(users, 2));
+let phaseTwoBeta = createContentBlock("Beta", "h2", createList(beta, 2) )
+let phaseTwoDelta = createContentBlock("Delta", "h2", createList(delta, 2))
+
+let section = document.createElement("section");
+
+section.append( phaseTwoWaiting, phaseTwoAlpha, phaseTwoBeta, phaseTwoDelta )
+
+let phaseTwoLobby = createContentBlock( "Fas 2", "h1", section);
+
+document.body.append( phaseTwoLobby );
 // --------------------------------------------------------------------------------------
 
 function createButton(text, callback){
@@ -336,23 +338,104 @@ function createForm(inputs, method, action, id) {
 	return form;
 }
 
+// not done
+function loadingScreen(){
+    let wrapper = document.createElement("div");
+    wrapper.setAttribute("id", "loading")
+    wrapper.classList.add("loading-screen-wrapper");
+    
+    document.body.innerHTML = ``;
+
+    return wrapper;
+}
+
+// not done
+function loadingButton(){
+    let wrapper = document.createElement("div");
+    wrapper.setAttribute("id", "loading");
+    wrapper.classList.add("loading-icon-wrapper");
+    
+    return wrapper
+}
+
+function createContentBlock(label, labelType, content, grayed = false){
+	let wrapper = document.createElement("section");
+
+	let header = document.createElement(labelType);
+	header.textContent = label;
+
+	wrapper.append( header, content );
+
+	if( grayed ){
+		wrapper.classList.add("grayed")
+	} 
+
+	return wrapper;
+}
+
+function createList(items, height = 4){
+	let wrapper = document.createElement("div");
+	wrapper.classList.add("list-wrapper")
+
+	let section = document.createElement("section");
+	wrapper.append(section);
+
+	let count = 0;
+
+	items.forEach(item => {
+		if( count == height ){
+			section = document.createElement("section");
+			wrapper.append(section);
+
+			count = 0;
+		}
+
+		let li = document.createElement("p");
+		li.classList.add("no-margin");
+		li.textContent = item;
+
+		if( item[0] == "*" ){
+			li.classList.add("accCol");
+			li.textContent = item.substr(1);
+		}
+
+		section.append(li);
+
+		count++;
+	});
+
+	return wrapper;
+}
+
+
 function printTerminalText(input){
-	let p = document.createElement("p");
 
-	p.textContent = input;
+    if(Array.isArray( input ) ) {
+        input.forEach(message => {
+            document.querySelector("body").append( createString(message) )
+            
+        });
+    } else {
+        document.querySelector("body").append( createString(input) )
+    }
 
-	if (typeof input == "object") {
-		p.classList.add("string-button");
-		p.textContent = input.txt;
-
-		p.addEventListener("click", () => {
-			input.func();
-			p.style.pointerEvents = "none";
-		});
-	}
-
-	return p;
-
+    function createString(string){
+        let p = document.createElement("p");
+    
+        p.textContent = string;
+    
+        if(typeof(string) == "object"){
+            p.classList.add("string-button");
+            p.textContent = string.txt;
+            
+            p.addEventListener("click", ()=>{
+                string.func();
+                p.style.pointerEvents = "none";
+            })
+        }
+    
+        return p
+    }
 }
 
 //Text bak o fram
@@ -431,25 +514,4 @@ function cipher(key, data) {
 
 	return data;
 
-}
-
-
-// not done
-function loadingScreen(){
-    let wrapper = document.createElement("div");
-    wrapper.setAttribute("id", "loading")
-    wrapper.classList.add("loading-screen-wrapper");
-    
-    document.body.innerHTML = ``;
-
-    return wrapper;
-}
-
-// not done
-function loadingButton(){
-    let wrapper = document.createElement("div");
-    wrapper.setAttribute("id", "loading");
-    wrapper.classList.add("loading-icon-wrapper");
-    
-    return wrapper
 }
