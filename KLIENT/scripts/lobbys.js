@@ -13,10 +13,6 @@ async function createGroupDiv() {
 	div.classList = "group-div";
 	const groupID = await createGroup(activeSession);
 	div.addEventListener("click", async () => {
-		//Move player to div
-		//Update players
-		//Update group
-
 		const groupFilter = { _id: groupID.groupID };
 		const groupUpdates = { user: player.username };
 		await updateGroup({
@@ -51,7 +47,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 	const activeSession = user.session;
 	const session = await getSessions("sessionCode", activeSession);
 	const usersInSession = session.users;
-	console.log(usersInSession);
+	if (!session.lobby) {
+		window.location.href = "phase.html";
+	}
 	printTerminalText(usersInSession);
 
 	if (user.username == session.creator) {
@@ -62,12 +60,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 		document.body.append(
 			createButton("Starta Spelet", async () => {
 				const sessionFilter = { sessionCode: activeSession };
-				const sessionUpdates = { $set: { phase: 1 } };
+				const sessionUpdates = { $set: { phase: 1, lobby: false } };
 
-				await updateSession({
+				let res = await updateSession({
 					filter: sessionFilter,
 					updates: sessionUpdates,
 				});
+				if (res.ok) {
+					window.location.href = "phase.html";
+				}
 			})
 		);
 	}

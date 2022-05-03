@@ -119,6 +119,7 @@ async function createSession(userID) {
 		users: [userID],
 		sessionCode: makeSessionCode(6),
 		phase: 0,
+		lobby: true,
 	};
 	let res = await fetch(`${localhost}sessions`, postData(postBody));
 	if (res.ok) {
