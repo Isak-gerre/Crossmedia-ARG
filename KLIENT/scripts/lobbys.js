@@ -57,6 +57,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 	if (user.username == session.creator) {
 		console.log(true);
 		document.body.append(
+			printTerminalText("Efter spelet har startat kan inte nya spelare gå med. Är du säker på att du vill fortsätta?")
+		);
+		document.body.append(
 			createButton("Starta Spelet", async () => {
 				const sessionFilter = { sessionCode: activeSession };
 				const sessionUpdates = { $set: { phase: 1 } };
