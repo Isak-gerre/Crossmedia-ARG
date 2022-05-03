@@ -95,23 +95,13 @@ let signIn = {
 	],
 };
 
-let tabGroup = [create, signIn];
+// let tabGroup = [create, signIn];
 
-let alpha = ["mittlånganamn", "finnick", "felicia", "paul"];
-let beta = ["bill", "*sara", "corniellerine", "mina"];
-let delta = ["clay", "zed", "mattiasguldklimp", "morphe"];
-let omega = ["barry", "marinaskovnikov", "collin", "holly"];
-let users = alpha.concat(beta, delta, omega);
-
-button.addEventListener("click", () => {
-	button.classList.add("button-active");
-	setTimeout(() => {
-		button.classList.remove("button-active");
-	}, 500);
-	if (callback) {
-		callback();
-	}
-});
+// let alpha = ["mittlånganamn", "finnick", "felicia", "paul"];
+// let beta = ["bill", "*sara", "corniellerine", "mina"];
+// let delta = ["clay", "zed", "mattiasguldklimp", "morphe"];
+// let omega = ["barry", "marinaskovnikov", "collin", "holly"];
+// let users = alpha.concat(beta, delta, omega);
 
 function test() {
 	console.log("click");
@@ -127,18 +117,18 @@ function test() {
 
 // TEST CALLS
 
-let phaseTwoWaiting = createContentBlock("inväntar", "h2", createList(users, 1), true);
-let phaseTwoAlpha = createContentBlock("Alpha", "h2", createList(users, 2));
-let phaseTwoBeta = createContentBlock("Beta", "h2", createList(beta, 2));
-let phaseTwoDelta = createContentBlock("Delta", "h2", createList(delta, 2));
+// let phaseTwoWaiting = createContentBlock("inväntar", "h2", createList(users, 1), true);
+// let phaseTwoAlpha = createContentBlock("Alpha", "h2", createList(users, 2));
+// let phaseTwoBeta = createContentBlock("Beta", "h2", createList(beta, 2));
+// let phaseTwoDelta = createContentBlock("Delta", "h2", createList(delta, 2));
 
-let section = document.createElement("section");
+// let section = document.createElement("section");
 
-section.append(phaseTwoWaiting, phaseTwoAlpha, phaseTwoBeta, phaseTwoDelta);
+// section.append(phaseTwoWaiting, phaseTwoAlpha, phaseTwoBeta, phaseTwoDelta);
 
-let phaseTwoLobby = createContentBlock("Fas 2", "h1", section);
+// let phaseTwoLobby = createContentBlock("Fas 2", "h1", section);
 
-document.body.append(phaseTwoLobby);
+// document.body.append(phaseTwoLobby);
 // --------------------------------------------------------------------------------------
 
 function createButton(text, callback) {
