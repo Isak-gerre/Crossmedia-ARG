@@ -50,26 +50,34 @@ document.addEventListener("DOMContentLoaded", async () => {
 	if (!session.lobby) {
 		window.location.href = "phase.html";
 	}
+	if (session.phase == 0) {
+		makeLobbyOne(user, activeSession, session, usersInSession);
+	}
 	printTerminalText(usersInSession);
+});
 
+function makeLobbyOne(user, activeSession, session, usersInSession) {
 	if (user.username == session.creator) {
-		console.log(true);
 		document.body.append(
-			printTerminalText("Efter spelet har startat kan inte nya spelare gå med. Är du säker på att du vill fortsätta?")
-		);
-		document.body.append(
-			createButton("Starta Spelet", async () => {
-				const sessionFilter = { sessionCode: activeSession };
-				const sessionUpdates = { $set: { phase: 1, lobby: false } };
+			createConfirmButton(
+				"Starta Spelet",
+				"Starta",
+				async () => {
+					const sessionFilter = { sessionCode: activeSession };
+					const sessionUpdates = { $set: { phase: 1, lobby: false } };
 
-				let res = await updateSession({
-					filter: sessionFilter,
-					updates: sessionUpdates,
-				});
-				if (res.ok) {
-					window.location.href = "phase.html";
-				}
-			})
+					let res = await updateSession({
+						filter: sessionFilter,
+						updates: sessionUpdates,
+					});
+					if (res.ok) {
+						window.location.href = "phase.html";
+					}
+				},
+				"Efter spelet har startat kan inte nya spelare gå med. Är du säker på att du vill fortsätta?"
+			)
 		);
 	}
-});
+}
+function makeLobbyTwo() {}
+function makeLobbyThree() {}
