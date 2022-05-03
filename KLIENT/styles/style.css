@@ -14,9 +14,13 @@
     --l: 20px;
     --xl: 26px;
     --xxl: 100px;
+
+    --transFast: 0.2s;
+    --transSlow: 0.7s;
 }
 * {
-    font-family: 'Jetbrains Mono';
+    font-family: 'cascadia code';
+    color: var(--white);
     position: relative;
     font-weight: normal;
     box-sizing: border-box;
@@ -24,10 +28,15 @@
 
 body {
     background-color: var(--black);
+    min-height: calc( 100vh - var(--l) );
 
     display: flex;
     flex-direction: column;
     margin: var(--s);
+}
+
+.no-margin{
+    margin: 0;
 }
 
 .createPlayer > form {
@@ -44,10 +53,24 @@ body {
 }
 
 
-
 h1{ font-size: var(--xl);}
 h2{ font-size: var(--l);}
 
+.main-color{
+    color: var(--main);
+}
+
+.main-back{
+    background-color: var(--main);
+}
+
+.acc-color{
+    color: var(--accent)
+}
+
+.grayed, .grayed *{
+    color: var(--gray);
+}
 
 .flex{
     display: flex;
@@ -66,10 +89,10 @@ form > *:last-child{
     margin-top: var(--l);
 }
 
+/* SECTION ANVÄNDS SOM WRAPPERS. GER INGEN PADDING ELLER MARGIN */
 label, p, span, div, button, input{
     line-height: var(--xl);
     font-size: var(--m);
-    color: var(--white);
     margin: 0;
     margin-bottom: var(--xl);
 }
@@ -110,6 +133,8 @@ input{
 }
 
 button{
+    cursor: pointer;
+    
     outline: none;
     border: none;
 
@@ -120,29 +145,31 @@ button{
     display: block;
     width: 100%;
 
-    transition: background-color 1s, color 1s;
+    color: inherit;
+
+    transition: background-color var(--transFast), color var(--transFast);
 }
 
 .button-active{
-    background-color: var(--accent);
-    transition: background-color 0s;
+    background-color: var(--sub);
+    color: var(--black);
+    transition: background-color var(--transSlow);
 }
 
 .button-disabled{
-    background-color: var(--black);
+    background-color: var(--gray);
     color: var(--black);
 }
 
-.button-confirm{
+.button-confirm-wrapper{
     display: flex;
     gap: 0;
-    position: absolute;
     width: 100%;
     top: 0;
     right: 0;
     color: var(--main);
 
-    transition: gap 1s;
+    transition: gap var(--transFast);
 }
 
 .button-confirm-gap{
@@ -150,6 +177,46 @@ button{
     color:var(--white);
 }
 
-.button-confirm .accent{
+.button-confirm-wrapper .accent{
     background-color: var(--accent);
+}
+
+.fold{
+    overflow: hidden;
+    height: 0px;
+    margin-bottom: 0;
+    
+
+    transition: var(--transFast);
+}
+.unfold{
+    height: 50px;
+    margin-bottom: var(--xl);
+
+}
+
+/* .loading-screen-wrapper{ */
+    /* wip */
+/* } */
+
+.loading-icon-wrapper{
+    /* wip */
+    background-color: var(--black);
+    opacity: 0.2;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    height: 100%;
+    width: 100%;
+}
+
+.list-wrapper{
+    display: flex;
+    overflow: scroll;
+}
+
+.list-wrapper > section p {
+    margin-right: var(--xl);
 }

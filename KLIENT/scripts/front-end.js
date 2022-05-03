@@ -1,3 +1,40 @@
+// FUNCTIONS AND DESCRIPTION
+
+// createButton( "button text" ; func: callback)
+// return DOM
+
+// createConfirmButton( "button text" ; "button text after click" ; func: callback ; "warning text")
+// return DOM
+
+// createConditionalButton( "button text" ; obj: input ; func: return true/false for condition ; func: callback )
+// return DOM
+
+// createReadyButton( "text innan klick", "id", "text när knapp är aktiv")
+// return DOM
+
+// createInput( "label text" ; "id" ; "name" ; ("value") )
+// return DOM
+
+// createTabs(array[ {header: "", content: []}, { header: "", content: []} ])
+// return DOM
+//
+
+// createForm( [inputs] ; "method" ; "action" ; "id")
+// return DOM
+
+//printTerminalText( "text" || array["string", {txt: "string", func: onclick action}])
+// appends text
+//
+
+// createContentBlock( "header" ; "h-tagg" ; DOM: content )
+// return DOM
+
+// createList( [items] ; antal rader = 4 )
+// "*" framför aktiv spelare ger accent-color
+// return DOM
+
+// --------------------------------------------------------------------------------------
+
 // VARS FOR TEST
 let textArr = [
 	"Inga aktiva spelsessioner hittas i närområdet.",
@@ -60,25 +97,185 @@ let signIn = {
 
 let tabGroup = [create, signIn];
 
-function createButton(string, callback = false) {
-	let button = document.createElement("button");
-	button.textContent = string;
+let alpha = ["mittlånganamn", "finnick", "felicia", "paul"];
+let beta = ["bill", "*sara", "corniellerine", "mina"];
+let delta = ["clay", "zed", "mattiasguldklimp", "morphe"];
+let omega = ["barry", "marinaskovnikov", "collin", "holly"];
+let users = alpha.concat(beta, delta, omega);
 
-	button.addEventListener("click", () => {
-		button.classList.add("button-active");
+button.addEventListener("click", () => {
+	button.classList.add("button-active");
+	setTimeout(() => {
+		button.classList.remove("button-active");
+	}, 500);
+	if (callback) {
+		callback();
+	}
+});
+
+function test() {
+	console.log("click");
+
+	document.body.style.backgroundColor = "var(--supp)";
+
+	setTimeout(() => {
+		document.body.style.backgroundColor = "";
+	}, 200);
+}
+
+// --------------------------------------------------------------------------------------
+
+// TEST CALLS
+
+let phaseTwoWaiting = createContentBlock("inväntar", "h2", createList(users, 1), true);
+let phaseTwoAlpha = createContentBlock("Alpha", "h2", createList(users, 2));
+let phaseTwoBeta = createContentBlock("Beta", "h2", createList(beta, 2));
+let phaseTwoDelta = createContentBlock("Delta", "h2", createList(delta, 2));
+
+let section = document.createElement("section");
+
+section.append(phaseTwoWaiting, phaseTwoAlpha, phaseTwoBeta, phaseTwoDelta);
+
+let phaseTwoLobby = createContentBlock("Fas 2", "h1", section);
+
+document.body.append(phaseTwoLobby);
+// --------------------------------------------------------------------------------------
+
+function createButton(text, callback) {
+	let button = document.createElement("button");
+	if (text) button.textContent = text;
+
+	if (callback) button.addEventListener("click", callback);
+
+	// click animation, remove?
+	// button.addEventListener("click", ()=>{
+	//     button.classList.add("button-active");
+	//     setTimeout( ()=>{
+	//         button.classList.remove("button-active");
+	//     }, 500 )
+	// });
+
+	return button;
+}
+
+function createConfirmButton(initTxt, ultTxt, callback, warningTxt) {
+	let wrapper = document.createElement("section");
+
+	let warning = document.createElement("div");
+	warning.classList.add("fold");
+
+	let initButton = createButton(initTxt, confirm);
+
+	let confirmWrapper = document.createElement("section");
+	confirmWrapper.classList.add("button-confirm-wrapper");
+
+	confirmWrapper.append(createButton(ultTxt, callback), createButton("cancel", close));
+
+	const time = 200;
+
+	async function close() {
+		confirmWrapper.classList.remove("button-confirm-gap");
+		confirmWrapper.lastChild.classList.remove("accent");
+
+		wrapper.setAttribute("id", "mainCol");
+
+		wrapper.setAttribute("id", "");
+
+		warning.classList.remove("unfold");
+
+		const time = 200;
+
 		setTimeout(() => {
-			button.classList.remove("button-active");
-		}, 500);
-		if (callback) {
-			callback();
+			wrapper.setAttribute("id", "");
+			warning.innerHTML = "";
+			wrapper.removeChild(wrapper.lastChild);
+			wrapper.append(initButton);
+			initButton.setAttribute("id", "");
+		}, time);
+	}
+
+	async function confirm(ultText, callback) {
+		wrapper.setAttribute("id", "mainCol");
+
+		warning.innerHTML = warningTxt;
+
+		setTimeout(() => {
+			// Animation
+			wrapper.removeChild(wrapper.lastChild);
+			wrapper.append(confirmWrapper);
+			warning.classList.add("unfold");
+		}, time);
+
+		setTimeout(() => {
+			// Animation
+			confirmWrapper.classList.add("button-confirm-gap");
+		}, time * 2);
+
+		setTimeout(() => {
+			// Animation
+			wrapper.setAttribute("id", "");
+			confirmWrapper.lastChild.classList.add("accent");
+		}, time * 3);
+	}
+
+	wrapper.append(warning, initButton);
+
+	return wrapper;
+}
+
+function createConditionalButton(txt, heardObj, condFunc, callback) {
+	let button = createButton(txt, callback);
+	button.classList.add("button-disabled");
+
+	// condFunc should check if condition is met.
+	//Returns true or false
+
+	heardObj.addEventListener("keyup", () => {
+		if (condFunc()) {
+			button.classList.remove("button-disabled");
+			console.log(condFunc);
+		} else {
+			button.classList.add("button-disabled");
+			console.log("no");
 		}
 	});
 
 	return button;
 }
 
+function createReadyButton(initTxt, id, activeTxt) {
+	let button = createButton(initTxt, activate);
+	button.setAttribute("id", id);
+
+	// HUR ÄNDRA KNAPPTEXT?
+
+	function activate() {
+		// deactivate button
+		if (checkClassExistance(button, "ready-button-activated")) {
+			button.classList.remove("ready-button-activated", "button-active");
+			button.textContent = initTxt;
+
+			// PING SERVER: PLAYER NOT READY
+
+			return;
+		}
+
+		// activate button
+		button.classList.add("ready-button-activated", "button-active");
+		button.textContent = activeTxt;
+
+		// PING SERVER: PLAYER READY
+	}
+
+	return button;
+}
+
+function checkClassExistance(item, check) {
+	return item.classList.contains(check);
+}
+
 function createInput(labelText, id, name, value = false) {
-	let wrapper = document.createElement("div");
+	let wrapper = document.createElement("section");
 	wrapper.classList.add("input-wrapper");
 
 	let label = document.createElement("label");
@@ -157,6 +354,75 @@ function createForm(inputs, method, action, id) {
 	return form;
 }
 
+// not done
+function loadingScreen() {
+	let wrapper = document.createElement("div");
+	wrapper.setAttribute("id", "loading");
+	wrapper.classList.add("loading-screen-wrapper");
+
+	document.body.innerHTML = ``;
+
+	return wrapper;
+}
+
+// not done
+function loadingButton() {
+	let wrapper = document.createElement("div");
+	wrapper.setAttribute("id", "loading");
+	wrapper.classList.add("loading-icon-wrapper");
+
+	return wrapper;
+}
+
+function createContentBlock(label, labelType, content, grayed = false) {
+	let wrapper = document.createElement("section");
+
+	let header = document.createElement(labelType);
+	header.textContent = label;
+
+	wrapper.append(header, content);
+
+	if (grayed) {
+		wrapper.classList.add("grayed");
+	}
+
+	return wrapper;
+}
+
+function createList(items, height = 4) {
+	let wrapper = document.createElement("div");
+	wrapper.classList.add("list-wrapper");
+
+	let section = document.createElement("section");
+	wrapper.append(section);
+
+	let count = 0;
+
+	items.forEach((item) => {
+		if (count == height) {
+			section = document.createElement("section");
+			wrapper.append(section);
+
+			count = 0;
+		}
+
+		let li = document.createElement("p");
+		li.classList.add("no-margin");
+		li.textContent = item;
+
+		if (item[0] == "*") {
+			li.classList.add("accCol");
+			li.textContent = item.substr(1);
+		}
+
+		section.append(li);
+
+		count++;
+	});
+
+	return wrapper;
+}
+
 function printTerminalText(input) {
 	if (Array.isArray(input)) {
 		input.forEach((message) => {
@@ -184,39 +450,6 @@ function printTerminalText(input) {
 		return p;
 	}
 }
-
-// Ignore
-document.getElementById("button").addEventListener("click", async (event) => {
-	let button = event.target;
-	button.style.color = "var(--main)";
-
-	await new Promise((resolve, reject) => {
-		setTimeout(() => {
-			button.style.color = "";
-			button.classList.add("button-disabled");
-			resolve();
-		}, 1000);
-	});
-
-	//create new buttons
-	let wrap = document.createElement("div");
-	wrap.classList.add("button-confirm");
-	let proceed = createButton("Starta", () => {
-		console.log("hello");
-	});
-	let cancel = createButton("Avbryt");
-	wrap.append(proceed, cancel);
-
-	button.append(wrap);
-
-	await new Promise((resolve, reject) => {
-		setTimeout(() => {
-			wrap.classList.add("button-confirm-gap");
-			cancel.classList.add("accent");
-			resolve();
-		}, 500);
-	});
-});
 
 //Text bak o fram
 function reverseString(string) {
@@ -307,8 +540,7 @@ Object.keys(flipTable).forEach((i) => (flipTable[flipTable[i]] = i));
 
 //Exempel
 // cipher(4.2, "sweet") =  swcct
-// 4 = e
-// 2 = c
+// 4 = e	2 = c
 // e bytts ut till c
 
 //https://blog.cloudboost.io/create-your-own-cipher-using-javascript-cac216d3d2c
