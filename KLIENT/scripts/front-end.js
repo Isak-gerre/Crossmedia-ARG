@@ -126,21 +126,6 @@ function test(){
 }
 
 
-// --------------------------------------------------------------------------------------
-
-// TEST CALLS
-
-let section = createSection( [createAccordion("Alpha", createList(alpha, 4)), createAccordion("Beta", createList(beta, 4)) ] );
-
-document.body.append( createTabs(tabGroup) );
-
-document.body.append( createContentBlock( "Fas 2", "h1", section ) );
-
-
-
-
-
-
 
 // --------------------------------------------------------------------------------------
 
@@ -331,7 +316,7 @@ function createTabs(tabArr) {
 
 	let count = "one";
 	tabArr.forEach((tab) => {
-		let tabTitle = document.createElement("span");
+		let tabTitle = document.createElement("p");
 		tabTitle.classList.add("tab-header");
 
 		tabTitle.innerHTML = tab.header;
@@ -506,6 +491,41 @@ function createAccordion(header, content){
 
 	return wrapper;
 
+}
+
+
+function createProgressionSection(data, max){
+	let wrapper = document.createElement("div");
+
+	data.forEach(team => {
+
+		let wrap = document.createElement("div");
+		wrap.classList.add("progress-wrapper");
+
+		let name = document.createElement("span");
+		name.style.textTransform = "capitalize";
+		name.textContent = team[0];
+
+		if( team[0][0] == "*" ){
+			name.textContent = team[0].substr(1);
+			wrap.classList.add("sub-color");
+		}
+
+		let line = document.createElement("hr");
+		line.classList.add("line");
+
+		let prog = document.createElement("span");
+		prog.style.textAlign = "right";
+		percent = (team[1] / max) * 100;
+
+		prog.textContent = Math.floor(percent) + "%";
+
+		wrap.append(name, line, prog);
+
+		wrapper.append(wrap);
+	});
+
+	return wrapper
 }
 
 //Text bak o fram
