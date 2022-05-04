@@ -33,10 +33,8 @@
 // "*" framför aktiv spelare ger accent-color
 // return DOM
 
-
 // createAccordion( "label text", DOM: content )
 //return DOM
-
 
 // createSection( [array av DOM] )
 // skapar en wrapper för flera element som kan användas till createContentBlock Bl.a
@@ -88,37 +86,35 @@ let textArr = [
 let create = {
 	header: "Skapa konto",
 	content: createForm(
-		[createInput("användarnamn", "username", "username"),
-		createInput("lösenord", "password", "password"),
-		createInput("bekräfta lösenord", "password-heck", "password-check"),
-		createButton("skapa")], 
-		"post", 
-		"", 
+		[
+			createInput("användarnamn", "username", "username"),
+			createInput("lösenord", "password", "password"),
+			createInput("bekräfta lösenord", "password-heck", "password-check"),
+			createButton("skapa"),
+		],
+		"post",
+		"",
 		"hello"
-	)
+	),
 };
 
-
-
-
-
-function setBodyId( id ){
+function setBodyId(id) {
 	document.body.setAttribute("id", id);
 }
 
-function createSection(array){
+function createSection(array) {
 	let section = document.createElement("section");
 
-	array.forEach(item => {
-		section.append(item)
+	array.forEach((item) => {
+		section.append(item);
 	});
 
 	return section;
 }
 
-function createButton(text, callback){
-    let button = document.createElement("button");
-    if(text) button.textContent = text;
+function createButton(text, callback) {
+	let button = document.createElement("button");
+	if (text) button.textContent = text;
 
 	if (callback) button.addEventListener("click", callback);
 
@@ -133,16 +129,13 @@ function createButton(text, callback){
 	return button;
 }
 
-document.body.append( createConfirmButton("hello", "hi", ()=>{console.log("yes")}, "this is a warning") );
-console.log("hello")
-
 function createConfirmButton(initTxt, ultTxt, callback, warningTxt) {
 	let wrapper = document.createElement("section");
 
-	setBodyId("space-between")
+	setBodyId("space-between");
 
-    let warning = document.createElement("div");
-    warning.classList.add("fold", "small-txt");
+	let warning = document.createElement("div");
+	warning.classList.add("fold", "small-txt");
 
 	let initButton = createButton(initTxt, confirm);
 
@@ -159,7 +152,7 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt) {
 
 		wrapper.setAttribute("id", "mainCol");
 
-        warning.classList.remove("unfold");
+		warning.classList.remove("unfold");
 
 		warning.classList.remove("unfold");
 
@@ -203,22 +196,20 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt) {
 	return wrapper;
 }
 
-function createConditionalButton(txt, heardObj, condFunc, callback){
-    let button = createButton(txt, callback);
-    button.classList.add("button-disabled")
+function createConditionalButton(txt, heardObj, condFunc, callback) {
+	let button = createButton(txt, callback);
+	button.classList.add("button-disabled");
 
+	// condFunc should check if condition is met.
+	//Returns true or false
 
-    // condFunc should check if condition is met. 
-    //Returns true or false
-    
-    heardObj.addEventListener("keyup", ()=>{
-
-        if( condFunc() ){
-            button.classList.remove("button-disabled")
-        } else {
-            button.classList.add("button-disabled")
-        }
-    });
+	heardObj.addEventListener("keyup", () => {
+		if (condFunc()) {
+			button.classList.remove("button-disabled");
+		} else {
+			button.classList.add("button-disabled");
+		}
+	});
 
 	heardObj.addEventListener("keyup", () => {
 		if (condFunc()) {
@@ -239,7 +230,7 @@ function createReadyButton(initTxt, id, activeTxt) {
 
 	setBodyId("space-between");
 
-    // HUR ÄNDRA KNAPPTEXT?
+	// HUR ÄNDRA KNAPPTEXT?
 
 	function activate() {
 		// deactivate button
@@ -307,7 +298,7 @@ function createTabs(tabArr) {
 
 		if (count == "one") {
 			tabTitle.classList.add("active");
-			tabContent.append( tab.content );
+			tabContent.append(tab.content);
 		}
 
 		tabTitle.setAttribute("id", `tab-button-${count}`);
@@ -322,7 +313,7 @@ function createTabs(tabArr) {
 			tabTitle.classList.add("active");
 
 			tabContent.innerHTML = ``;
-			tabContent.append( tab.content );
+			tabContent.append(tab.content);
 		});
 
 		count = "two";
@@ -366,7 +357,7 @@ function loadingButton() {
 	return wrapper;
 }
 
-function createContentBlock(label, labelType, content, grayed = false){
+function createContentBlock(label, labelType, content, grayed = false) {
 	let wrapper = document.createElement("div");
 
 	let header = document.createElement(labelType);
@@ -402,7 +393,7 @@ function createList(items, height = 4) {
 		li.classList.add("no-margin");
 		li.textContent = item;
 
-		if( item[0] == "*" ){
+		if (item[0] == "*") {
 			// text "du" istället?
 			li.classList.add("acc-color");
 			li.textContent = item.substr(1);
@@ -444,7 +435,7 @@ function printTerminalText(input) {
 	}
 }
 
-function createAccordion(header, content){
+function createAccordion(header, content) {
 	let wrapper = document.createElement("div");
 	wrapper.classList.add("accordion-wrapper", "no-margin");
 
@@ -454,25 +445,24 @@ function createAccordion(header, content){
 		<div class="accordion-arrow no-margin">></div>
 		<label >${header}</label>
 	`;
-	
+
 	let accordionBody = document.createElement("section");
 	accordionBody.classList.add("accordion-body");
 	accordionBody.innerHTML = `<div class="accordion-line" ><div class="line"></div></div>`;
 	accordionBody.append(content);
 	content.classList.add("accordion-content");
 
-	wrapper.addEventListener("click", ()=>{
-		if( wrapper.classList.contains("open") ){
+	wrapper.addEventListener("click", () => {
+		if (wrapper.classList.contains("open")) {
 			wrapper.classList.remove("open");
-			return
+			return;
 		}
 		wrapper.classList.add("open");
-	})
+	});
 
 	wrapper.append(accordionHead, accordionBody);
 
 	return wrapper;
-
 }
 
 //Text bak o fram

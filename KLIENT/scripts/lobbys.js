@@ -4,10 +4,6 @@ const sessionH1 = document.getElementById("session-code");
 const lobbyDiv = document.getElementById("lobby-one-div");
 const lobbyPlayers = document.getElementById("lobby-one-players");
 
-sessionH1.innerText = activeSession;
-
-console.log(activeSession);
-
 async function createGroupDiv() {
 	const div = document.createElement("div");
 	div.classList = "group-div";
@@ -52,11 +48,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 	}
 	if (session.phase == 0) {
 		makeLobbyOne(user, activeSession, session, usersInSession);
+		printTerminalText(usersInSession);
 	}
-	printTerminalText(usersInSession);
+	if (session.phase == 2) {
+		makeLobbyTwo(user, activeSession, session, usersInSession);
+	}
 });
 
 function makeLobbyOne(user, activeSession, session, usersInSession) {
+	sessionH1.innerText = activeSession;
+
 	if (user.username == session.creator) {
 		document.body.append(
 			createConfirmButton(
@@ -71,6 +72,7 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 						updates: sessionUpdates,
 					});
 					if (res.ok) {
+						console.log("test");
 						window.location.href = "phase.html";
 					}
 				},
@@ -79,5 +81,30 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 		);
 	}
 }
-function makeLobbyTwo() {}
+function makeLobbyTwo(user, activeSession, session, usersInSession) {
+	sessionH1.innerText = "Lobby 2";
+
+	if (user.username == session.creator) {
+		document.body.append(
+			createConfirmButton(
+				"Starta Spelet",
+				"Starta",
+				async () => {
+					const sessionFilter = { sessionCode: activeSession };
+					const sessionUpdates = { $set: { phase: 1, lobby: false } };
+
+					let res = await updateSession({
+						filter: sessionFilter,
+						updates: sessionUpdates,
+					});
+					if (res.ok) {
+						console.log("test");
+						window.location.href = "phase.html";
+					}
+				},
+				"Efter spelet har startat kan inte nya spelare gå med. Är du säker på att du vill fortsätta?"
+			)
+		);
+	}
+}
 function makeLobbyThree() {}
