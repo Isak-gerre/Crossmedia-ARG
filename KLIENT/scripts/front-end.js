@@ -130,40 +130,33 @@ function test(){
 
 // TEST CALLS
 
+let section = createSection( [createAccordion("Alpha", createList(alpha, 4)), createAccordion("Beta", createList(beta, 4)) ] );
 
+document.body.append( createTabs(tabGroup) );
 
-// let phaseTwoWaiting = createContentBlock("inväntar", "h2", createList(users, 1), true);
-// let phaseTwoAlpha = createContentBlock("Alpha", "h2", createList(users, 2));
-// let phaseTwoBeta = createContentBlock("Beta", "h2", createList(beta, 2) )
-// let phaseTwoDelta = createContentBlock("Delta", "h2", createList(delta, 2))
-
-// let section = document.createElement("section");
-
-// section.append( phaseTwoWaiting, phaseTwoAlpha, phaseTwoBeta, phaseTwoDelta )
-
-// let phaseTwoLobby = createContentBlock( "Fas 2", "h1", section);
-
-// document.body.append( phaseTwoLobby );
-// document.body.append( createReadyButton("Starta", "id", "03/20 spelare redo") )
+document.body.append( createContentBlock( "Fas 2", "h1", section ) );
 
 
 
 
 
-let content = document.createElement("section");
+
+
+function createSection(array){
+	let section = document.createElement("section");
+
+	array.forEach(item => {
+		section.append(item)
+	});
+
+	return section;
+}
 
 
 
-content.append( createContentBlock( "inväntar", "h2", createList(omega, 1), true ), createAccordion("Alpha", createList(alpha, 3)), createAccordion("Beta", createList(beta, 3)), createAccordion("delta", createList(delta, 3)), createAccordion("omega", createList(omega, 3))  );
-
-console.log( content );
 
 
-document.body.append( createContentBlock( "Fas 2", "h1", content ) );
-document.body.append( createReadyButton("starta", "confirm", "20/20 redo") )
 
-
-// document.body.append( phaseTwoLobby );
 // --------------------------------------------------------------------------------------
 
 function setBodyId( id ){
@@ -441,7 +434,7 @@ function createList(items, height = 4){
 			count = 0;
 		}
 
-		let li = document.createElement("p");
+		let li = document.createElement("li");
 		li.classList.add("no-margin");
 		li.textContent = item;
 
@@ -491,13 +484,13 @@ function printTerminalText(input){
 
 function createAccordion(header, content){
 	let wrapper = document.createElement("div");
-	wrapper.classList.add("accordion-wrapper");
+	wrapper.classList.add("accordion-wrapper", "no-margin");
 
 	let accordionHead = document.createElement("section");
 	accordionHead.classList.add("accordion-head");
 	accordionHead.innerHTML = `
 		<div class="accordion-arrow no-margin">></div>
-		<label class="no-margin" >${header}</label>
+		<label >${header}</label>
 	`;
 	
 	let accordionBody = document.createElement("section");
