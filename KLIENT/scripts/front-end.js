@@ -34,6 +34,10 @@
 // "*" framför aktiv spelare ger accent-color
 	// return DOM
 
+
+// createAccordion( "label text", DOM: content )
+	//return DOM
+
 // --------------------------------------------------------------------------------------
 
 // VARS FOR TEST
@@ -61,22 +65,46 @@ let textArr = [
 
 let create = {
 	header: "Skapa konto",
-	content: [
-		createInput("användarnamn", "username", "username"),
+	content: createForm(
+		[createInput("användarnamn", "username", "username"),
 		createInput("lösenord", "password", "password"),
 		createInput("bekräfta lösenord", "password-heck", "password-check"),
-		createButton("skapa"),
-	],
+		createButton("skapa")], 
+		"post", 
+		"", 
+		"hello"
+	)
+	
 };
 
 let signIn = {
 	header: "Logga in",
-	content: [
-		createInput("användarnamn", "username", "username"),
+	content: createForm(
+		[createInput("användarnamn", "username", "username"),
 		createInput("lösenord", "password", "password"),
-		createButton("logga in"),
-	],
+		createButton("logga in")], 
+		"post", 
+		"", 
+		"hello"
+	)
 };
+
+const infoIcon = `<svg class="icon" xmlns="http://www.w3.org/2000/svg"><path d="M22.65 34H25.65V22H22.65ZM24 18.3Q24.7 18.3 25.175 17.85Q25.65 17.4 25.65 16.7Q25.65 16 25.175 15.5Q24.7 15 24 15Q23.3 15 22.825 15.5Q22.35 16 22.35 16.7Q22.35 17.4 22.825 17.85Q23.3 18.3 24 18.3ZM24 44Q19.75 44 16.1 42.475Q12.45 40.95 9.75 38.25Q7.05 35.55 5.525 31.9Q4 28.25 4 24Q4 19.8 5.525 16.15Q7.05 12.5 9.75 9.8Q12.45 7.1 16.1 5.55Q19.75 4 24 4Q28.2 4 31.85 5.55Q35.5 7.1 38.2 9.8Q40.9 12.5 42.45 16.15Q44 19.8 44 24Q44 28.25 42.45 31.9Q40.9 35.55 38.2 38.25Q35.5 40.95 31.85 42.475Q28.2 44 24 44ZM24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24ZM24 41Q31 41 36 36Q41 31 41 24Q41 17 36 12Q31 7 24 7Q17 7 12 12Q7 17 7 24Q7 31 12 36Q17 41 24 41Z"/></svg>`;
+
+let info = {
+	header: "info",
+	content: "this is how you play the game"
+
+}
+
+let missions = {
+	header: "uppdrag",
+	content: "uppdrag"
+}
+
+// createForm([createInput("användarnamn", "username", "username"), createInput("lösenord", "password", "password"), createButton("logga in")], "post", "", "hello");
+
+
 
 let tabGroup = [create, signIn];
 
@@ -104,21 +132,43 @@ function test(){
 
 
 
+// let phaseTwoWaiting = createContentBlock("inväntar", "h2", createList(users, 1), true);
+// let phaseTwoAlpha = createContentBlock("Alpha", "h2", createList(users, 2));
+// let phaseTwoBeta = createContentBlock("Beta", "h2", createList(beta, 2) )
+// let phaseTwoDelta = createContentBlock("Delta", "h2", createList(delta, 2))
+
+// let section = document.createElement("section");
+
+// section.append( phaseTwoWaiting, phaseTwoAlpha, phaseTwoBeta, phaseTwoDelta )
+
+// let phaseTwoLobby = createContentBlock( "Fas 2", "h1", section);
+
+// document.body.append( phaseTwoLobby );
+// document.body.append( createReadyButton("Starta", "id", "03/20 spelare redo") )
 
 
-let phaseTwoWaiting = createContentBlock("inväntar", "h2", createList(users, 1), true);
-let phaseTwoAlpha = createContentBlock("Alpha", "h2", createList(users, 2));
-let phaseTwoBeta = createContentBlock("Beta", "h2", createList(beta, 2) )
-let phaseTwoDelta = createContentBlock("Delta", "h2", createList(delta, 2))
 
-let section = document.createElement("section");
 
-section.append( phaseTwoWaiting, phaseTwoAlpha, phaseTwoBeta, phaseTwoDelta )
 
-let phaseTwoLobby = createContentBlock( "Fas 2", "h1", section);
+let content = document.createElement("section");
 
-document.body.append( phaseTwoLobby );
+
+
+content.append( createContentBlock( "inväntar", "h2", createList(omega, 1), true ), createAccordion("Alpha", createList(alpha, 3)), createAccordion("Beta", createList(beta, 3)), createAccordion("delta", createList(delta, 3)), createAccordion("omega", createList(omega, 3))  );
+
+console.log( content );
+
+
+document.body.append( createContentBlock( "Fas 2", "h1", content ) );
+document.body.append( createReadyButton("starta", "confirm", "20/20 redo") )
+
+
+// document.body.append( phaseTwoLobby );
 // --------------------------------------------------------------------------------------
+
+function setBodyId( id ){
+	document.body.setAttribute("id", id);
+}
 
 function createButton(text, callback){
     let button = document.createElement("button");
@@ -140,8 +190,10 @@ function createButton(text, callback){
 function createConfirmButton(initTxt, ultTxt, callback, warningTxt){
     let wrapper = document.createElement("section");
 
+	setBodyId("space-between")
+
     let warning = document.createElement("div");
-    warning.classList.add("fold");
+    warning.classList.add("fold", "small-txt");
 
     let initButton = createButton(initTxt, confirm);
 
@@ -158,8 +210,6 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt){
         confirmWrapper.lastChild.classList.remove("accent");
 
         wrapper.setAttribute("id", "mainCol");
-        
-        wrapper.setAttribute("id", "");
         
         warning.classList.remove("unfold");
 
@@ -208,7 +258,8 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt){
 function createConditionalButton(txt, heardObj, condFunc, callback){
     let button = createButton(txt, callback);
     button.classList.add("button-disabled")
-    
+
+
     // condFunc should check if condition is met. 
     //Returns true or false
     
@@ -216,10 +267,8 @@ function createConditionalButton(txt, heardObj, condFunc, callback){
 
         if( condFunc() ){
             button.classList.remove("button-disabled")
-            console.log( condFunc )
         } else {
             button.classList.add("button-disabled")
-            console.log("no")
         }
     });
 
@@ -229,6 +278,8 @@ function createConditionalButton(txt, heardObj, condFunc, callback){
 function createReadyButton(initTxt, id, activeTxt){
     let button = createButton(initTxt, activate);
     button.setAttribute("id", id);
+
+	setBodyId("space-between");
 
     // HUR ÄNDRA KNAPPTEXT?
 
@@ -295,11 +346,11 @@ function createTabs(tabArr) {
 		let tabTitle = document.createElement("span");
 		tabTitle.classList.add("tab-header");
 
-		tabTitle.textContent = tab.header;
+		tabTitle.innerHTML = tab.header;
 
 		if (count == "one") {
 			tabTitle.classList.add("active");
-			tabContent.append(createForm(tab.content, "post", "", "hello"));
+			tabContent.append( tab.content );
 		}
 
 		tabTitle.setAttribute("id", `tab-button-${count}`);
@@ -314,7 +365,7 @@ function createTabs(tabArr) {
 			tabTitle.classList.add("active");
 
 			tabContent.innerHTML = ``;
-			tabContent.append(createForm(tab.content, "post", "/", "hello"));
+			tabContent.append( tab.content );
 		});
 
 		count = "two";
@@ -359,7 +410,7 @@ function loadingButton(){
 }
 
 function createContentBlock(label, labelType, content, grayed = false){
-	let wrapper = document.createElement("section");
+	let wrapper = document.createElement("div");
 
 	let header = document.createElement(labelType);
 	header.textContent = label;
@@ -395,7 +446,8 @@ function createList(items, height = 4){
 		li.textContent = item;
 
 		if( item[0] == "*" ){
-			li.classList.add("accCol");
+			// text "du" istället?
+			li.classList.add("acc-color");
 			li.textContent = item.substr(1);
 		}
 
@@ -406,7 +458,6 @@ function createList(items, height = 4){
 
 	return wrapper;
 }
-
 
 function printTerminalText(input){
 
@@ -436,6 +487,37 @@ function printTerminalText(input){
     
         return p
     }
+}
+
+function createAccordion(header, content){
+	let wrapper = document.createElement("div");
+	wrapper.classList.add("accordion-wrapper");
+
+	let accordionHead = document.createElement("section");
+	accordionHead.classList.add("accordion-head");
+	accordionHead.innerHTML = `
+		<div class="accordion-arrow no-margin">></div>
+		<label class="no-margin" >${header}</label>
+	`;
+	
+	let accordionBody = document.createElement("section");
+	accordionBody.classList.add("accordion-body");
+	accordionBody.innerHTML = `<div class="accordion-line" ><div class="line"></div></div>`;
+	accordionBody.append(content);
+	content.classList.add("accordion-content");
+
+	wrapper.addEventListener("click", ()=>{
+		if( wrapper.classList.contains("open") ){
+			wrapper.classList.remove("open");
+			return
+		}
+		wrapper.classList.add("open");
+	})
+
+	wrapper.append(accordionHead, accordionBody);
+
+	return wrapper;
+
 }
 
 //Text bak o fram

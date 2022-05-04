@@ -9,11 +9,13 @@
     --suppTwo: #9677F7;
 
     --xs: 5px;
-    --s: 10px;
+    --s: 13px;
     --m: 16px;
     --l: 20px;
     --xl: 26px;
-    --xxl: 100px;
+    --xxl: 50px;
+
+    /* --xxl: 100px; */
 
     --transFast: 0.2s;
     --transSlow: 0.7s;
@@ -28,11 +30,22 @@
 
 body {
     background-color: var(--black);
-    min-height: calc( 100vh - var(--l) );
+    min-height: calc( 100vh - (var(--s) *2) );
 
     display: flex;
     flex-direction: column;
     margin: var(--s);
+}
+
+.tab-header svg{
+    height: var(--xl);
+    width: var(--xl);
+}
+
+#space-between{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .no-margin{
@@ -53,32 +66,18 @@ body {
 }
 
 
-h1{ font-size: var(--xl);}
-h2{ font-size: var(--l);}
+h1{ font-size: var(--xl); margin: var(--xl) 0 var(--m);}
+h2{ font-size: var(--l); margin: var(--xl) 0 var(--m);}
 
-.main-color{
-    color: var(--main);
-}
+.main-color{color: var(--main);}
+.main-back{background-color: var(--main);}
+.acc-color{ color: var(--accent);}
+.small-txt{ font-size: var(--s); }
+.grayed, .grayed *{ color: var(--gray);}
 
-.main-back{
-    background-color: var(--main);
-}
+.flex{display: flex;}
 
-.acc-color{
-    color: var(--accent)
-}
-
-.grayed, .grayed *{
-    color: var(--gray);
-}
-
-.flex{
-    display: flex;
-}
-
-.space-between{
-    justify-content: space-between;
-}
+.space-between{justify-content: space-between;}
 
 form{
     display: flex;
@@ -215,8 +214,54 @@ button{
 .list-wrapper{
     display: flex;
     overflow: scroll;
+
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll; 
 }
+
+.list-wrapper::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+}
+
 
 .list-wrapper > section p {
     margin-right: var(--xl);
+
+}
+
+.accordion-body, .accordion-head{
+    display: flex;
+
+}
+
+.accordion-line, .accordion-arrow{
+    display: flex;
+    justify-content: center;
+    width: var(--xl);
+    transition: var(--transFast);
+}
+
+.accordion-line .line{
+    width: 1px;
+    background-color: var(--white);
+    height: 100%;
+    
+}
+
+.open .accordion-arrow{
+    transform: rotate(90deg);
+    transition: 0s;
+}
+
+.accordion-body{
+    height: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+}
+
+.open .accordion-body{
+    height: auto;
+    transform: scaleY(1);
+    transition: var(--transFast);
 }
