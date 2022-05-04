@@ -142,6 +142,12 @@ document.body.append( createContentBlock( "Fas 2", "h1", section ) );
 
 
 
+// --------------------------------------------------------------------------------------
+
+function setBodyId( id ){
+	document.body.setAttribute("id", id);
+}
+
 function createSection(array){
 	let section = document.createElement("section");
 
@@ -150,17 +156,6 @@ function createSection(array){
 	});
 
 	return section;
-}
-
-
-
-
-
-
-// --------------------------------------------------------------------------------------
-
-function setBodyId( id ){
-	document.body.setAttribute("id", id);
 }
 
 function createButton(text, callback){
