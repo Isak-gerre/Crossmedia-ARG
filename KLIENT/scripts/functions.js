@@ -127,6 +127,15 @@ async function createSession(userID) {
 	}
 }
 
+async function getPhase(){
+    const user = JSON.parse(getFromLS("user"));
+	const activeSession = user.session;
+	const session = await getSessions("sessionCode", activeSession);
+	const phase = session.phase;
+	return phase;
+}
+
+
 //GROUPS
 //--------------------------------------------------
 async function getGroup() {
@@ -209,3 +218,48 @@ function makeSessionCode(length) {
 function displayLoginErrorMessage(error) {
 	document.querySelector("#error-messages").textContent = error;
 }
+
+async function getDiffrancePosition(lat, long){
+
+	async function getMyCoords(){
+		const getCoords = async () => {
+			const pos = await new Promise((resolve, reject) => {
+			  navigator.geolocation.getCurrentPosition(resolve, reject);
+			});
+		
+			return {
+			  long: pos.coords.longitude,
+			  lat: pos.coords.latitude,
+			};
+		};
+
+		const coords = await getCoords();
+		return coords
+	} 		
+
+	let coords = await getMyCoords();
+	
+	console.log(coords);
+
+    coords.long =  coords.long * Math.PI / 180;
+    long = long * Math.PI / 180;
+    coords.lat = coords.lat * Math.PI / 180;
+    lat = lat * Math.PI / 180;
+
+    // Haversine formula
+    let dlon = long - coords.long;
+    let dlat = lat - coords.lat;
+    let a = Math.pow(Math.sin(dlat / 2), 2)
+             + Math.cos(coords.lat) * Math.cos(lat)
+             * Math.pow(Math.sin(dlon / 2),2);
+           
+    let c = 2 * Math.asin(Math.sqrt(a));
+
+    let r = 6371000;
+
+    // calculate the result
+	console.log(c*r);
+
+    return(c * r);
+}
+
