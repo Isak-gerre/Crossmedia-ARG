@@ -2,41 +2,56 @@
 // FUNCTIONS AND DESCRIPTION
 
 // createButton( "button text" ; func: callback)
-    // return DOM
+// return DOM
 
 // createConfirmButton( "button text" ; "button text after click" ; func: callback ; "warning text")
-    // return DOM
+// return DOM
 
 // createConditionalButton( "button text" ; obj: input ; func: return true/false for condition ; func: callback )
-    // return DOM
+// return DOM
 
 // createReadyButton( "text innan klick", "id", "text när knapp är aktiv")
-    // return DOM
+// return DOM
 
 // createInput( "label text" ; "id" ; "name" ; ("value") )
-    // return DOM
+// return DOM
 
 // createTabs(array[ {header: "", content: []}, { header: "", content: []} ])
-    // return DOM
+// return DOM
 // 
 
 // createForm( [inputs] ; "method" ; "action" ; "id")
-    // return DOM
+// return DOM
 
 //printTerminalText( "text" || array["string", {txt: "string", func: onclick action}])
-    // appends text
+// appends text
 //
 
 // createContentBlock( "header" ; "h-tagg" ; DOM: content )
-	// return DOM
+// return DOM
 
 // createList( [items] ; antal rader = 4 )
 // "*" framför aktiv spelare ger accent-color
-	// return DOM
+// return DOM
 
 
 // createAccordion( "label text", DOM: content )
-	//return DOM
+//return DOM
+
+
+// createChallenges( [challenges], [progress] )
+// skapad utefter följande array struktur:
+	// let challenges = [
+	// 	{id: 1, stages: [4], func: ()=>{console.log("one")} },	<--**func kallas vid klick**
+	// 	{id: 2, stages: [4], func: ()=>{console.log("two")} },
+	// ]
+
+	// let progress = [
+	// 	{id: 2, prog:4, started: true},
+	// 	{id: 1, prog:4, started: true},
+	// ]
+
+// return DOM
 
 // --------------------------------------------------------------------------------------
 
@@ -493,7 +508,6 @@ function createAccordion(header, content){
 
 }
 
-
 function createProgressionSection(data, max){
 	let wrapper = document.createElement("div");
 
@@ -526,6 +540,55 @@ function createProgressionSection(data, max){
 	});
 
 	return wrapper
+}
+
+function createChallengeEntry(progressInfo, challengeInfo){
+	let wrapper = document.createElement("div");
+	wrapper.classList.add("challenge-entry");
+
+	let completed = progressInfo.prog == challengeInfo.stages;
+	let started = progressInfo.started;
+
+	if( started ) wrapper.classList.add("active");
+	if( completed ) {
+		wrapper.classList.add("completed");
+		wrapper.classList.remove("active");
+	} 
+
+	let text = document.createElement("span");
+	text.textContent = "Uppdrag " + progressInfo.count;
+
+	let num = document.createElement("span");
+	num.textContent = progressInfo.prog + " / " + challengeInfo.stages;
+
+	wrapper.append(text, num);
+
+	wrapper.addEventListener("click", () =>{
+		if( completed || !started ) return
+		
+		challengeInfo.func();
+
+	});
+
+	return wrapper;
+}
+
+function createChallenges(challenges, progress ){
+	let wrapper = document.createElement("section");
+	wrapper.classList.add("challenges-wrapper");
+
+	let count = 1;
+	progress.forEach(entry => {
+		entry['count'] = count;
+
+		let challenge = challenges.find( challenge => { return challenge.id == entry.id } );
+
+		wrapper.append( createChallengeEntry(entry, challenge) );
+
+		count++;
+	});
+
+	return wrapper;
 }
 
 //Text bak o fram

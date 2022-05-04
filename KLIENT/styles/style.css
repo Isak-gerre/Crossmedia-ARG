@@ -295,3 +295,19 @@ button{
     background-color: var(--white);
     height: 1px;
 }
+
+.challenge-entry{
+    display: flex;
+    justify-content: space-between;
+    padding: var(--s);
+    background-color: var(--gray);
+
+}
+
+.challenge-entry > *:last-child{
+    border-left: 1px solid var(--white);
+    padding-left: var(--m);
+}
+
+.challenges-wrapper .active{ background-color: var(--accent);}
+.challenges-wrapper .completed{ background-color: var(--main);}
