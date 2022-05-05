@@ -4,6 +4,8 @@
 // createButton( "button text" ; func: callback)
 // return DOM
 
+document.body.append( createButton("knapp", ()=>{console.log("hello")}) ) 
+
 // createConfirmButton( "button text" ; "button text after click" ; func: callback ; "warning text")
 // return DOM
 
@@ -253,8 +255,7 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt){
 
 function createConditionalButton(txt, heardObj, condFunc, callback){
     let button = createButton(txt, callback);
-    button.classList.add("button-disabled")
-
+    button.classList.add("button-disabled");
 
     // condFunc should check if condition is met. 
     //Returns true or false
@@ -437,7 +438,7 @@ function createList(items, height = 4){
 			count = 0;
 		}
 
-		let li = document.createElement("li");
+		let li = document.createElement("p");
 		li.classList.add("no-margin");
 		li.textContent = item;
 
@@ -502,7 +503,7 @@ function createAccordion(header, content){
 	accordionBody.append(content);
 	content.classList.add("accordion-content");
 
-	wrapper.addEventListener("click", ()=>{
+	accordionHead.addEventListener("click", ()=>{
 		if( wrapper.classList.contains("open") ){
 			wrapper.classList.remove("open");
 			return
@@ -515,6 +516,7 @@ function createAccordion(header, content){
 	return wrapper;
 
 }
+
 
 function createProgressionSection(data, max){
 	let wrapper = document.createElement("div");
@@ -720,7 +722,10 @@ function createInputBoxes(word){
 	return wrap;
 }
 
-createChallenge(challTwo);
+// createChallenge(challTwo);
+
+document.body.append( createAccordion("Alpha", createList(users)) );
+
 
 
 //Text bak o fram
