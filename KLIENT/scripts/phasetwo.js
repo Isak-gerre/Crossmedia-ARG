@@ -35,6 +35,25 @@ phaseCheck(2, async () => {
 		else if(task == 4){
 			renderChallange_2_1_4();
 		}
+		else{
+
+			if(linje == 4){
+				linje = 1;
+			}
+			else{
+				linje += linje;
+			}
+
+			let group = JSON.parse(getFromLS("user")).group;
+			const groupFilter = {id: group};
+			const groupUpdates = { $set: {linje: linje} };
+	
+			let res = await updateGroup({
+				filter: groupFilter,
+				updates: groupUpdates,
+			});
+			window.location.href = "phase.html"
+		}
 	}
 	else if(linje == 2){
 		console.log("1");
@@ -137,7 +156,7 @@ async function renderChallange_2_1_4() {
 			let group = JSON.parse(getFromLS("user")).group;
 			console.log(group);
 			const groupFilter = {id: group};
-			const groupUpdates = { $set: {task: "5"} };
+			const groupUpdates = { $set: {task: "1"} };
 	
 			let res = await updateGroup({
 				filter: groupFilter,
