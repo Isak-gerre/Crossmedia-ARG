@@ -71,8 +71,7 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 						filter: sessionFilter,
 						updates: sessionUpdates,
 					});
-					if (res.ok) {
-						console.log("test");
+					if (res.message == "Updated session") {
 						window.location.href = "phase.html";
 					}
 				},
@@ -83,6 +82,10 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 }
 function makeLobbyTwo(user, activeSession, session, usersInSession) {
 	sessionH1.innerText = "Lobby 2";
+	let p = document.createElement("p");
+	p.textContent = "Hej";
+
+	lobbyDiv.append(createAccordion("Gamma", p));
 
 	if (user.username == session.creator) {
 		document.body.append(
@@ -91,7 +94,7 @@ function makeLobbyTwo(user, activeSession, session, usersInSession) {
 				"Starta",
 				async () => {
 					const sessionFilter = { sessionCode: activeSession };
-					const sessionUpdates = { $set: { phase: 1, lobby: false } };
+					const sessionUpdates = { $set: { phase: 3, lobby: false } };
 
 					let res = await updateSession({
 						filter: sessionFilter,
