@@ -18,14 +18,15 @@
 
 // createTabs(array[ {header: "", content: []}, { header: "", content: []} ])
 // return DOM
-// 
 
 // createForm( [inputs] ; "method" ; "action" ; "id")
 // return DOM
 
+// createString("text")
+// return DOM
+
 //printTerminalText( "text" || array["string", {txt: "string", func: onclick action}])
 // appends text
-//
 
 // createContentBlock( "header" ; "h-tagg" ; DOM: content )
 // return DOM
@@ -34,12 +35,10 @@
 // "*" framför aktiv spelare ger accent-color
 // return DOM
 
-
 // createAccordion( "label text", DOM: content )
 //return DOM
 
-
-// createChallenges( [challenges], [progress] )
+// createChallengeEntries( [challenges], [progress] )
 // skapad utefter följande array struktur:
 	// let challenges = [
 	// 	{id: 1, stages: [4], func: ()=>{console.log("one")} },	<--**func kallas vid klick**
@@ -144,8 +143,17 @@ function test(){
 
 // --------------------------------------------------------------------------------------
 
-function setBodyId( id ){
-	document.body.setAttribute("id", id);
+function setBodyState( c ){
+
+	if( Array.isArray(c) ){
+		c.forEach(cls => {
+			document.body.classList.add( cls )
+		});
+	} else {
+		document.body.classList.add(c);
+	}
+
+
 }
 
 function createSection(array){
@@ -178,7 +186,7 @@ function createButton(text, callback){
 function createConfirmButton(initTxt, ultTxt, callback, warningTxt){
     let wrapper = document.createElement("section");
 
-	setBodyId("space-between")
+	setBodyState("space-between")
 
     let warning = document.createElement("div");
     warning.classList.add("fold", "small-txt");
@@ -195,7 +203,7 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt){
 
     async function close(){
         confirmWrapper.classList.remove("button-confirm-gap");
-        confirmWrapper.lastChild.classList.remove("accent");
+        confirmWrapper.lastChild.classList.remove("accent-button");
 
         wrapper.setAttribute("id", "mainCol");
         
@@ -233,7 +241,7 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt){
         setTimeout(()=>{
             // Animation
             wrapper.setAttribute("id", "");
-            confirmWrapper.lastChild.classList.add("accent");
+            confirmWrapper.lastChild.classList.add("accent-button");
         }, time*3)
 
     }   
@@ -267,7 +275,7 @@ function createReadyButton(initTxt, id, activeTxt){
     let button = createButton(initTxt, activate);
     button.setAttribute("id", id);
 
-	setBodyId("space-between");
+	setBodyState("space-between");
 
     // HUR ÄNDRA KNAPPTEXT?
 
@@ -295,7 +303,7 @@ function createReadyButton(initTxt, id, activeTxt){
 
 function checkClassExistance(item, check){
     return item.classList.contains(check);
-}   
+}   0
 
 function createInput(labelText, id, name, value = false){
     let wrapper = document.createElement("section");
@@ -457,24 +465,24 @@ function printTerminalText(input){
     } else {
         document.querySelector("body").append( createString(input) )
     }
+}
 
-    function createString(string){
-        let p = document.createElement("p");
-    
-        p.textContent = string;
-    
-        if(typeof(string) == "object"){
-            p.classList.add("string-button");
-            p.textContent = string.txt;
-            
-            p.addEventListener("click", ()=>{
-                string.func();
-                p.style.pointerEvents = "none";
-            })
-        }
-    
-        return p
-    }
+function createString(string){
+	let p = document.createElement("p");
+
+	p.textContent = string;
+
+	if(typeof(string) == "object"){
+		p.classList.add("string-button");
+		p.textContent = string.txt;
+		
+		p.addEventListener("click", ()=>{
+			string.func();
+			p.style.pointerEvents = "none";
+		})
+	}
+
+	return p
 }
 
 function createAccordion(header, content){
@@ -573,7 +581,7 @@ function createChallengeEntry(progressInfo, challengeInfo){
 	return wrapper;
 }
 
-function createChallenges(challenges, progress ){
+function createChallengeEntries(challenges, progress ){
 	let wrapper = document.createElement("section");
 	wrapper.classList.add("challenges-wrapper");
 
@@ -590,6 +598,130 @@ function createChallenges(challenges, progress ){
 
 	return wrapper;
 }
+
+const chall = { 
+	id: 4,
+	title: "Lös gåtan",
+	belongsTo: "Linje 1", 
+	description: "Tux dafgå åv våxjs mjuxåxh hyg Dyese dsm eig pa åxbsf?",
+	answer: "inga",
+	answerLength: 4,
+	övrigt: {}, 
+}
+
+const challTwo = {
+	id: 5,
+	title: "Lös sista delen av länken",
+	belongsTo: "Linje 2", 
+	description: "https://www.podplay.com/sv-se/podcasts/topp-1-i-sverige-747699/episodes/sveriges-basta-hacker-[][][][][][][][]",
+	answer: "70235110",
+	answerLength: 8,
+	övrigt: ["juli, 0, februari, mars, maj, januari, oktober"],
+
+}
+	
+
+function createChallenge(challenge){
+	// createContentBlock( "header" ; "h-tagg" ; DOM: content )
+	// createButton( "button text" ; func: callback)
+	// createInput( "label text" ; "id" ; "name" ; ("value") )
+
+	setBodyState(["body-challenge", "body-space-between"]);
+
+	let input = createInputBoxes(challenge.answer, "answer", "answer");
+	let text = createString( challenge.description );
+	let button = createButton("skicka", checkAnswer);
+
+	let objs = [text, input]
+
+	if( challenge.övrigt ){
+		let obj = document.createElement("div");
+		objs.push( obj )
+	}
+
+	let content = createSection( objs );
+
+	let block = createContentBlock(challenge.title, "h1", content);
+
+	document.body.append( block )
+	document.body.append( button )
+
+	function checkAnswer(){
+		let inputs = document.querySelectorAll(".box-input");
+
+		let answer = "";
+
+		inputs.forEach(input => {
+			answer += input.value;
+		});
+
+		
+		if( answer == challenge.answer ){
+			button.textContent = "Rätt svar, bra jobbat";
+			button.classList.add("button-active")
+
+			setTimeout( ()=>{
+				// Go to main menu?
+			}, 1000 )
+
+			// redirect till main page efter x sekunder?
+		} else {
+			button.textContent = "Fel svar, testa igen";
+			button.classList.add("accent-button");
+			button.style.pointerEvents = "none";
+			
+			setTimeout( ()=>{
+				button.classList.remove("accent-button");
+				button.textContent = "skicka";
+				button.style.pointerEvents = "unset";
+				
+			}, 1000 )
+		}
+	}
+}
+
+function createInputBoxes(word){
+
+	let wrap = document.createElement("section");
+	wrap.classList.add("box-input-wrapper");
+
+	for (let i = 0; i < word.length; i++) {
+		let input = document.createElement("input");
+
+		input.classList.add("box-input");
+		input.setAttribute("maxlength", 1);
+
+		input.addEventListener("keyup", (e)=>{
+
+			if( e.code == "Backspace" ){
+				if(!input.previousSibling) return;
+
+				input.previousSibling.focus()
+				return
+			}
+
+			if( input.value.length > 0 ){
+				if(!input.nextElementSibling){
+					input.blur();
+					return
+				}
+				input.nextElementSibling.focus();
+			}
+
+		})
+
+		input.addEventListener("keydown", ()=>{
+			input.value = "";
+		})
+
+		wrap.append(input);
+	}
+
+	return wrap;
+}
+
+createChallenge(challTwo);
+
 
 //Text bak o fram
 function reverseString(string) {
