@@ -1,13 +1,6 @@
 "use strict";
 
-async function phaseCheck() {
-	let phase = await getPhase();
-	if (phase == 1) {
-		renderChallange_1();
-	} else {
-		console.log("You are Not at phase 1 yet");
-	}
-}
+phaseCheck(1, async () => {renderChallange_1()})
 
 async function renderChallange_1() {
 	let challangeData = "";

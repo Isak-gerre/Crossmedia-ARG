@@ -22,7 +22,6 @@ async function main() {
 
 export const getGroup = async (req, res) => {
 	const client = await main();
-	console.log(req.query);
 	const foundGroup = await client.db("CrossmediaARG").collection("groups").findOne(req.query);
 	res.send(foundGroup);
 	await client.close();
@@ -58,7 +57,7 @@ export const updateGroup = async (req, res) => {
 
 	try {
 		await client.db("CrossmediaARG").collection("groups").updateOne(filter, updates);
-		res.status(201).send({ message: "Updated Groups" });
+		res.status(201).send({ message: "Group was uppdated"});
 	} catch (error) {
 		console.log(error);
 	}
