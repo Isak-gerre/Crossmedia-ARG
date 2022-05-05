@@ -22,7 +22,30 @@ async function main() {
 
 export const getPhase2 = async (req, res) => {
 	const client = await main();
-	console.log(req.query);
+	let challange = await client.db("CrossmediaARG").collection("challenges_phase_2").find({}).toArray();
+	
+	let challangeNA = [];
 
+	challange.forEach(element => {
+		delete element.answer
+		challangeNA.push(element);
+	});
+
+	res.send(challangeNA);
+
+	await client.close();
+};
+
+export const getChallange2 = async (req, res) => {
+	const client = await main();
+	let challange = await client.db("CrossmediaARG").collection("challenges_phase_2").findOne({"id": `${req.query.id}`});
+	
+	if(challange.answer == req.query.guess){
+		res.send(true);
+	}
+	else{
+		res.send(false);
+	}
+	
 	await client.close();
 };

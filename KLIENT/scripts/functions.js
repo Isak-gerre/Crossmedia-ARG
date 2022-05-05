@@ -135,6 +135,17 @@ async function getPhase(){
 	return phase;
 }
 
+async function phaseCheck(phaseCheck, callbackfunction) {
+	let phase = await getPhase();
+	let lobby = JSON.parse(getFromLS("sessions")).lobby;
+	if(lobby){
+		window.location.href = "lobby.html";
+	}
+	else if(phase === phaseCheck){
+		console.log(phase === phaseCheck);
+		callbackfunction();
+	}
+}
 
 //GROUPS
 //--------------------------------------------------
@@ -142,10 +153,12 @@ async function getGroup() {
 	let res = await fetch(`${localhost}groups`);
 	if (res.ok) {
 		let data = await res.json();
-		console.log(data);
+		return data;
 	}
+	
 }
 async function updateGroup(update) {
+	console.log(localhost + "groups", postData(update, "PATCH"));
 	let res = await fetch(localhost + "groups", postData(update, "PATCH"));
 	return res.json();
 }
@@ -202,6 +215,24 @@ function postData(postData, method = "POST") {
 		},
 	};
 	return settings;
+}
+
+//CHALLANGES
+//--------------------------------------------------
+
+async function challangeCheck(){
+	let group = await getGroup();
+	let task = group.task
+	return task;
+}
+
+async function checkAnswer(phase, id, guess){
+	let clue = "";
+	await fetch(`http://localhost:8000/challenges/${phase}/answer?id=${id}&guess=${guess}`)
+		.then((response) => response.json())
+		.then((data) => {clue = data});
+	
+	return clue;
 }
 
 //RANDOM FUNCTIONS
@@ -262,4 +293,3 @@ async function getDiffrancePosition(lat, long){
 
     return(c * r);
 }
-
