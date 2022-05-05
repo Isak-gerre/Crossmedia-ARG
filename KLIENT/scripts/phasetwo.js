@@ -34,6 +34,7 @@ phaseCheck(2, async () => {
 		}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		else{
 
 			if(linje == 4){
@@ -48,6 +49,8 @@ phaseCheck(2, async () => {
 			const groupUpdates = { $set: {linje: linje} };
 	
 =======
+=======
+>>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
 	} else if (linje == 2) {
 		console.log("1");
 	}
@@ -66,11 +69,15 @@ async function renderChallange(challangedata, clueNumber) {
 			const groupFilter = { id: group };
 			const groupUpdates = { $set: { task: task } };
 
+<<<<<<< HEAD
+>>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
+=======
 >>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
 			let res = await updateGroup({
 				filter: groupFilter,
 				updates: groupUpdates,
 			});
+<<<<<<< HEAD
 <<<<<<< HEAD
 			window.location.href = "phase.html"
 		}
@@ -100,6 +107,8 @@ async function renderChallange(challangedata, clueNumber) {
 				filter: groupFilter,
 				updates: groupUpdates,
 			});
+=======
+>>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
 =======
 >>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
 
@@ -195,9 +204,15 @@ async function renderChallange_2_1_4() {
 			console.log(group);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			const groupFilter = {id: group};
 			const groupUpdates = { $set: {task: "1"} };
 	
+=======
+			const groupFilter = { id: group };
+			const groupUpdates = { $set: { task: "5" } };
+
+>>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
 =======
 			const groupFilter = { id: group };
 			const groupUpdates = { $set: { task: "5" } };
