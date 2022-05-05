@@ -32,29 +32,7 @@ phaseCheck(2, async () => {
 		} else if (task == 4) {
 			renderChallange_2_1_4();
 		}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		else{
-
-			if(linje == 4){
-				linje = 1;
-			}
-			else{
-				linje += linje;
-			}
-
-			let group = JSON.parse(getFromLS("user")).group;
-			const groupFilter = {id: group};
-			const groupUpdates = { $set: {linje: linje} };
-	
-=======
-=======
->>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
-	} else if (linje == 2) {
-		console.log("1");
 	}
-});
 
 async function renderChallange(challangedata, clueNumber) {
 	let clue = createContentBlock(challangeData[challangedata].title, "h1", challangeData[challangedata].description);
@@ -69,26 +47,13 @@ async function renderChallange(challangedata, clueNumber) {
 			const groupFilter = { id: group };
 			const groupUpdates = { $set: { task: task } };
 
-<<<<<<< HEAD
->>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
-=======
->>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
 			let res = await updateGroup({
 				filter: groupFilter,
 				updates: groupUpdates,
 			});
-<<<<<<< HEAD
-<<<<<<< HEAD
 			window.location.href = "phase.html"
 		}
-	}
-	else if(linje == 2){
-=======
-	} else if (linje == 2) {
->>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
-		console.log("1");
-	}
-});
+	})};
 
 async function renderChallange(challangedata, clueNumber) {
 	let clue = createContentBlock(challangeData[challangedata].title, "h1", challangeData[challangedata].description);
@@ -107,11 +72,6 @@ async function renderChallange(challangedata, clueNumber) {
 				filter: groupFilter,
 				updates: groupUpdates,
 			});
-=======
->>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
-=======
->>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
-
 			window.location.href = "phase.html";
 		} else {
 			alert("Wrong Answer Try Again");
@@ -202,27 +162,9 @@ async function renderChallange_2_1_4() {
 		if (answer) {
 			let group = JSON.parse(getFromLS("user")).group;
 			console.log(group);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-			const groupFilter = {id: group};
-			const groupUpdates = { $set: {task: "1"} };
-	
-=======
 			const groupFilter = { id: group };
 			const groupUpdates = { $set: { task: "5" } };
 
->>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
-=======
-			const groupFilter = { id: group };
-			const groupUpdates = { $set: { task: "5" } };
-
->>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
-=======
-			const groupFilter = { id: group };
-			const groupUpdates = { $set: { task: "5" } };
-
->>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
 			let res = await updateGroup({
 				filter: groupFilter,
 				updates: groupUpdates,
