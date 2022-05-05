@@ -222,7 +222,10 @@ function postData(postData, method = "POST") {
 
 async function challangeCheck(){
 	let group = await getGroup();
-	let task = group.task
+	let task = {
+		task: group.task,
+		linje: group.linje
+	}
 	return task;
 }
 
