@@ -79,7 +79,7 @@ export const updateSession = async (req, res) => {
 
 	try {
 		await client.db("CrossmediaARG").collection("sessions").updateOne(filter, updates);
-		res.status(202).send({ message: "Updated session" });
+		res.status(200).send({ message: "Updated session" });
 	} catch (error) {
 		console.log(error);
 	}
