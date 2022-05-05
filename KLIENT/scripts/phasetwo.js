@@ -22,51 +22,38 @@ phaseCheck(2, async () => {
 	let task = challange.task;
 	let linje = challange.linje;
 
-	if (linje == 1) {
+	if (linje == 0 || linje == 1) {
+		linje = 1;
 		if (task == 0 || task == 1) {
-			renderChallange_2_1_1();
+			renderChallange(0, 1);
 		} else if (task == 2) {
-			renderChallange_2_1_2();
+			renderChallange(1, 2);
 		} else if (task == 3) {
-			renderChallange_2_1_3();
+			renderChallange(2, 3);
 		} else if (task == 4) {
-			renderChallange_2_1_4();
+			renderChallange(3, 4, linje);
 		}
 	}
+});
 
-async function renderChallange(challangedata, clueNumber) {
+async function renderChallange(challangedata, clueNumber, linje = "0") {
 	let clue = createContentBlock(challangeData[challangedata].title, "h1", challangeData[challangedata].description);
 	let input = createInput("answer", `clue_${clueNumber}`, "name");
 	let button = createButton("button text", async () => {
 		let guess = document.getElementById(`clue_${clueNumber}`).value;
-		let answer = await checkAnswer("phase2", clueNumber, `${guess}`);
+		let answer = await checkAnswer("phase2", `${clueNumber}`, `${guess}`);
 		if (answer) {
 			let group = JSON.parse(getFromLS("user")).group;
-			console.log(group);
-			let task = toString(clueNumber + (1 % 5));
-			const groupFilter = { id: group };
-			const groupUpdates = { $set: { task: task } };
+			
+			let task = (clueNumber + 1) % 5;
 
-			let res = await updateGroup({
-				filter: groupFilter,
-				updates: groupUpdates,
-			});
-			window.location.href = "phase.html"
-		}
-	})};
-
-async function renderChallange(challangedata, clueNumber) {
-	let clue = createContentBlock(challangeData[challangedata].title, "h1", challangeData[challangedata].description);
-	let input = createInput("answer", `clue_${clueNumber}`, "name");
-	let button = createButton("button text", async () => {
-		let guess = document.getElementById(`clue_${clueNumber}`).value;
-		let answer = await checkAnswer("phase2", clueNumber, `${guess}`);
-		if (answer) {
-			let group = JSON.parse(getFromLS("user")).group;
-			console.log(group);
-			let task = toString(clueNumber + (1 % 5));
 			const groupFilter = { id: group };
-			const groupUpdates = { $set: { task: task } };
+			let groupUpdates = { $set: { task: String(task)} };
+
+			if(task == 0){
+				groupUpdates = { $set: { task: String(task), linje: String((linje + 1) % 5)} }
+			}
+			
 
 			let res = await updateGroup({
 				filter: groupFilter,
@@ -80,99 +67,99 @@ async function renderChallange(challangedata, clueNumber) {
 	document.getElementById("phase-one-div").append(clue, input, button);
 }
 
-async function renderChallange_2_1_1() {
-	let clue = createContentBlock(challangeData[0].title, "h1", challangeData[0].description);
-	let input = createInput("answer", "clue_1", "name");
-	let button = createButton("button text", async () => {
-		let guess = document.getElementById("clue_1").value;
-		let answer = await checkAnswer("phase2", "1", `${guess}`);
-		if (answer) {
-			let group = JSON.parse(getFromLS("user")).group;
-			console.log(group);
-			const groupFilter = { id: group };
-			const groupUpdates = { $set: { task: "2" } };
+// async function renderChallange_2_1_1() {
+// 	let clue = createContentBlock(challangeData[0].title, "h1", challangeData[0].description);
+// 	let input = createInput("answer", "clue_1", "name");
+// 	let button = createButton("button text", async () => {
+// 		let guess = document.getElementById("clue_1").value;
+// 		let answer = await checkAnswer("phase2", "1", `${guess}`);
+// 		if (answer) {
+// 			let group = JSON.parse(getFromLS("user")).group;
+// 			console.log(group);
+// 			const groupFilter = { id: group };
+// 			const groupUpdates = { $set: { task: "2" } };
 
-			let res = await updateGroup({
-				filter: groupFilter,
-				updates: groupUpdates,
-			});
+// 			let res = await updateGroup({
+// 				filter: groupFilter,
+// 				updates: groupUpdates,
+// 			});
 
-			window.location.href = "phase.html";
-		} else {
-			alert("Wrong Answer Try Again");
-		}
-	});
-	document.getElementById("phase-one-div").append(clue, input, button);
-}
+// 			window.location.href = "phase.html";
+// 		} else {
+// 			alert("Wrong Answer Try Again");
+// 		}
+// 	});
+// 	document.getElementById("phase-one-div").append(clue, input, button);
+// }
 
-async function renderChallange_2_1_2() {
-	let clue = createContentBlock(challangeData[1].title, "h1", challangeData[1].description);
-	let input = createInput("answer", "clue_2", "name");
-	let button = createButton("button text", async () => {
-		let guess = document.getElementById("clue_2").value;
-		let answer = await checkAnswer("phase2", "2", `${guess}`);
-		if (answer) {
-			let group = JSON.parse(getFromLS("user")).group;
-			console.log(group);
-			const groupFilter = { id: group };
-			const groupUpdates = { $set: { task: "3" } };
+// async function renderChallange_2_1_2() {
+// 	let clue = createContentBlock(challangeData[1].title, "h1", challangeData[1].description);
+// 	let input = createInput("answer", "clue_2", "name");
+// 	let button = createButton("button text", async () => {
+// 		let guess = document.getElementById("clue_2").value;
+// 		let answer = await checkAnswer("phase2", "2", `${guess}`);
+// 		if (answer) {
+// 			let group = JSON.parse(getFromLS("user")).group;
+// 			console.log(group);
+// 			const groupFilter = { id: group };
+// 			const groupUpdates = { $set: { task: "3" } };
 
-			let res = await updateGroup({
-				filter: groupFilter,
-				updates: groupUpdates,
-			});
-			window.location.href = "phase.html";
-		} else {
-			alert("Wrong Answer Try Again");
-		}
-	});
-	document.getElementById("phase-one-div").append(clue, input, button);
-}
+// 			let res = await updateGroup({
+// 				filter: groupFilter,
+// 				updates: groupUpdates,
+// 			});
+// 			window.location.href = "phase.html";
+// 		} else {
+// 			alert("Wrong Answer Try Again");
+// 		}
+// 	});
+// 	document.getElementById("phase-one-div").append(clue, input, button);
+// }
 
-async function renderChallange_2_1_3() {
-	let clue = createContentBlock(challangeData[2].title, "h1", challangeData[2].description);
-	let input = createInput("answer", "clue_3", "name");
-	let button = createButton("button text", async () => {
-		let guess = document.getElementById("clue_3").value;
-		let answer = await checkAnswer("phase2", "3", `${guess}`);
-		if (answer) {
-			let group = JSON.parse(getFromLS("user")).group;
-			console.log(group);
-			const groupFilter = { id: group };
-			const groupUpdates = { $set: { task: "4" } };
+// async function renderChallange_2_1_3() {
+// 	let clue = createContentBlock(challangeData[2].title, "h1", challangeData[2].description);
+// 	let input = createInput("answer", "clue_3", "name");
+// 	let button = createButton("button text", async () => {
+// 		let guess = document.getElementById("clue_3").value;
+// 		let answer = await checkAnswer("phase2", "3", `${guess}`);
+// 		if (answer) {
+// 			let group = JSON.parse(getFromLS("user")).group;
+// 			console.log(group);
+// 			const groupFilter = { id: group };
+// 			const groupUpdates = { $set: { task: "4" } };
 
-			let res = await updateGroup({
-				filter: groupFilter,
-				updates: groupUpdates,
-			});
-			window.location.href = "phase.html";
-		} else {
-			alert("Wrong Answer Try Again");
-		}
-	});
-	document.getElementById("phase-one-div").append(clue, input, button);
-}
+// 			let res = await updateGroup({
+// 				filter: groupFilter,
+// 				updates: groupUpdates,
+// 			});
+// 			window.location.href = "phase.html";
+// 		} else {
+// 			alert("Wrong Answer Try Again");
+// 		}
+// 	});
+// 	document.getElementById("phase-one-div").append(clue, input, button);
+// }
 
-async function renderChallange_2_1_4() {
-	let clue = createContentBlock(challangeData[3].title, "h1", challangeData[3].description);
-	let input = createInput("answer", "clue_4", "name");
-	let button = createButton("button text", async () => {
-		let guess = document.getElementById("clue_4").value;
-		let answer = await checkAnswer("phase2", "4", `${guess}`);
-		if (answer) {
-			let group = JSON.parse(getFromLS("user")).group;
-			console.log(group);
-			const groupFilter = { id: group };
-			const groupUpdates = { $set: { task: "5" } };
+// async function renderChallange_2_1_4() {
+// 	let clue = createContentBlock(challangeData[3].title, "h1", challangeData[3].description);
+// 	let input = createInput("answer", "clue_4", "name");
+// 	let button = createButton("button text", async () => {
+// 		let guess = document.getElementById("clue_4").value;
+// 		let answer = await checkAnswer("phase2", "4", `${guess}`);
+// 		if (answer) {
+// 			let group = JSON.parse(getFromLS("user")).group;
+// 			console.log(group);
+// 			const groupFilter = { id: group };
+// 			const groupUpdates = { $set: { task: "5" } };
 
-			let res = await updateGroup({
-				filter: groupFilter,
-				updates: groupUpdates,
-			});
-			window.location.href = "phase.html";
-		} else {
-			alert("Wrong Answer Try Again");
-		}
-	});
-	document.getElementById("phase-one-div").append(clue, input, button);
-}
+// 			let res = await updateGroup({
+// 				filter: groupFilter,
+// 				updates: groupUpdates,
+// 			});
+// 			window.location.href = "phase.html";
+// 		} else {
+// 			alert("Wrong Answer Try Again");
+// 		}
+// 	});
+// 	document.getElementById("phase-one-div").append(clue, input, button);
+// }

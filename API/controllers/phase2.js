@@ -38,6 +38,7 @@ export const getPhase2 = async (req, res) => {
 
 export const getChallange2 = async (req, res) => {
 	const client = await main();
+	console.log(req.query.id);
 	let challange = await client.db("CrossmediaARG").collection("challenges_phase_2").findOne({"id": `${req.query.id}`});
 	
 	if(challange.answer == req.query.guess){
