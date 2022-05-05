@@ -94,7 +94,7 @@ function makeLobbyTwo(user, activeSession, session, usersInSession) {
 				"Starta",
 				async () => {
 					const sessionFilter = { sessionCode: activeSession };
-					const sessionUpdates = { $set: { phase: 3, lobby: false } };
+					const sessionUpdates = { $set: { phase: 2, lobby: false } };
 
 					let res = await updateSession({
 						filter: sessionFilter,
