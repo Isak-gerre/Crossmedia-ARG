@@ -33,6 +33,7 @@ phaseCheck(2, async () => {
 			renderChallange_2_1_4();
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 		else{
 
 			if(linje == 4){
@@ -46,10 +47,31 @@ phaseCheck(2, async () => {
 			const groupFilter = {id: group};
 			const groupUpdates = { $set: {linje: linje} };
 	
+=======
+	} else if (linje == 2) {
+		console.log("1");
+	}
+});
+
+async function renderChallange(challangedata, clueNumber) {
+	let clue = createContentBlock(challangeData[challangedata].title, "h1", challangeData[challangedata].description);
+	let input = createInput("answer", `clue_${clueNumber}`, "name");
+	let button = createButton("button text", async () => {
+		let guess = document.getElementById(`clue_${clueNumber}`).value;
+		let answer = await checkAnswer("phase2", clueNumber, `${guess}`);
+		if (answer) {
+			let group = JSON.parse(getFromLS("user")).group;
+			console.log(group);
+			let task = toString(clueNumber + (1 % 5));
+			const groupFilter = { id: group };
+			const groupUpdates = { $set: { task: task } };
+
+>>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
 			let res = await updateGroup({
 				filter: groupFilter,
 				updates: groupUpdates,
 			});
+<<<<<<< HEAD
 			window.location.href = "phase.html"
 		}
 	}
@@ -78,6 +100,8 @@ async function renderChallange(challangedata, clueNumber) {
 				filter: groupFilter,
 				updates: groupUpdates,
 			});
+=======
+>>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
 
 			window.location.href = "phase.html";
 		} else {
@@ -170,9 +194,15 @@ async function renderChallange_2_1_4() {
 			let group = JSON.parse(getFromLS("user")).group;
 			console.log(group);
 <<<<<<< HEAD
+<<<<<<< HEAD
 			const groupFilter = {id: group};
 			const groupUpdates = { $set: {task: "1"} };
 	
+=======
+			const groupFilter = { id: group };
+			const groupUpdates = { $set: { task: "5" } };
+
+>>>>>>> c39760a104b6be1a28c58f0bb44c6ebac2613ef1
 =======
 			const groupFilter = { id: group };
 			const groupUpdates = { $set: { task: "5" } };
