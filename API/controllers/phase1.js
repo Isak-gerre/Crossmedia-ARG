@@ -22,7 +22,7 @@ async function main() {
 
 export const getPhase1 = async (req, res) => {
 	const client = await main();
-	let challange = await client.db("CrossmediaARG").collection("challenges_phase_1").findOne({"challange": 1});
-	res.send(challange);
+	let challenge = await client.db("CrossmediaARG").collection("challenges_phase_1").findOne({ challenge: 1 });
+	res.send(challenge);
 	await client.close();
 };

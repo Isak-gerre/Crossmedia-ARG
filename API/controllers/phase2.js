@@ -22,31 +22,33 @@ async function main() {
 
 export const getPhase2 = async (req, res) => {
 	const client = await main();
-	let challange = await client.db("CrossmediaARG").collection("challenges_phase_2").find({}).toArray();
-	
-	let challangeNA = [];
+	let challenge = await client.db("CrossmediaARG").collection("challenges_phase_2").find({}).toArray();
 
-	challange.forEach(element => {
-		delete element.answer
-		challangeNA.push(element);
+	let challengeNA = [];
+
+	challenge.forEach((element) => {
+		delete element.answer;
+		challengeNA.push(element);
 	});
 
-	res.send(challangeNA);
+	res.send(challengeNA);
 
 	await client.close();
 };
 
-export const getChallange2 = async (req, res) => {
+export const getChallenge2 = async (req, res) => {
 	const client = await main();
 	console.log(req.query.id);
-	let challange = await client.db("CrossmediaARG").collection("challenges_phase_2").findOne({"id": `${req.query.id}`});
-	
-	if(challange.answer == req.query.guess){
+	let challenge = await client
+		.db("CrossmediaARG")
+		.collection("challenges_phase_2")
+		.findOne({ id: `${req.query.id}` });
+
+	if (challenge.answer == req.query.guess) {
 		res.send(true);
-	}
-	else{
+	} else {
 		res.send(false);
 	}
-	
+
 	await client.close();
 };

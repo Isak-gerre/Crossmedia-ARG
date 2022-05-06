@@ -35,7 +35,7 @@ async function updateUserLS() {
 //--------------------------------------------------
 
 async function createPlayer() {
-	let formData = new FormData(document.getElementById("sign-form"));
+	let formData = new FormData(document.getElementById("sign-in-form"));
 	formData.append("group", "0");
 	formData.append("team", "0");
 	formData.append("session", "0");
@@ -123,12 +123,18 @@ async function createSession(userID) {
 	};
 	let res = await fetch(`${localhost}sessions`, postData(postBody));
 	if (res.ok) {
-		return await res.json();
+		const data = await res.json();
+		let groupNames = ["Alpha", "Beta", "Gamma", "Omega"];
+		groupNames.forEach(async (groupName) => {
+			console.log(data);
+			let group = await createGroup(groupName, data.sessionCode);
+		});
+		return data;
 	}
 }
 
-async function getPhase(){
-    const user = JSON.parse(getFromLS("user"));
+async function getPhase() {
+	const user = JSON.parse(getFromLS("user"));
 	const activeSession = user.session;
 	const session = await getSessions("sessionCode", activeSession);
 	const phase = session.phase;
@@ -138,10 +144,9 @@ async function getPhase(){
 async function phaseCheck(phaseCheck, callbackfunction) {
 	let phase = await getPhase();
 	let lobby = JSON.parse(getFromLS("sessions")).lobby;
-	if(lobby){
+	if (lobby) {
 		window.location.href = "lobby.html";
-	}
-	else if(phase === phaseCheck){
+	} else if (phase === phaseCheck) {
 		console.log(phase === phaseCheck);
 		callbackfunction();
 	}
@@ -149,23 +154,30 @@ async function phaseCheck(phaseCheck, callbackfunction) {
 
 //GROUPS
 //--------------------------------------------------
-async function getGroup() {
-	let res = await fetch(`${localhost}groups`);
+async function getGroups(query, value) {
+	let res = await fetch(`${localhost}groups?${query}=${value}`);
 	if (res.ok) {
 		let data = await res.json();
 		return data;
 	}
-	
 }
 async function updateGroup(update) {
 	console.log(localhost + "groups", postData(update, "PATCH"));
 	let res = await fetch(localhost + "groups", postData(update, "PATCH"));
 	return res.json();
 }
-async function createGroup(sessionCode = "") {
+async function joinGroup(update) {
+	console.log(localhost + "groups", postData(update, "PATCH"));
+	let res = await fetch(localhost + "groups", postData(update, "PATCH"));
+	return res.json();
+}
+async function createGroup(groupName = "", sessionCode) {
 	let postBody = {
 		users: [],
-		inSession: sessionCode,
+		groupName: groupName,
+		task: "0",
+		linje: "0",
+		session: sessionCode,
 	};
 	let res = await fetch(`${localhost}groups`, postData(postBody));
 	if (res.ok) {
@@ -217,24 +229,26 @@ function postData(postData, method = "POST") {
 	return settings;
 }
 
-//CHALLANGES
+//Challenges
 //--------------------------------------------------
 
-async function challangeCheck(){
+async function challengeCheck() {
 	let group = await getGroup();
 	let task = {
 		task: group.task,
-		linje: group.linje
-	}
+		linje: group.linje,
+	};
 	return task;
 }
 
-async function checkAnswer(phase, id, guess){
+async function checkAnswer(phase, id, guess) {
 	let clue = "";
 	await fetch(`http://localhost:8000/challenges/${phase}/answer?id=${id}&guess=${guess}`)
 		.then((response) => response.json())
-		.then((data) => {clue = data});
-	
+		.then((data) => {
+			clue = data;
+		});
+
 	return clue;
 }
 
@@ -253,46 +267,43 @@ function displayLoginErrorMessage(error) {
 	document.querySelector("#error-messages").textContent = error;
 }
 
-async function getDiffrancePosition(lat, long){
-
-	async function getMyCoords(){
+async function getDiffrencePosition(lat, long) {
+	async function getMyCoords() {
 		const getCoords = async () => {
 			const pos = await new Promise((resolve, reject) => {
-			  navigator.geolocation.getCurrentPosition(resolve, reject);
+				navigator.geolocation.getCurrentPosition(resolve, reject);
 			});
-		
+
 			return {
-			  long: pos.coords.longitude,
-			  lat: pos.coords.latitude,
+				long: pos.coords.longitude,
+				lat: pos.coords.latitude,
 			};
 		};
 
 		const coords = await getCoords();
-		return coords
-	} 		
+		return coords;
+	}
 
 	let coords = await getMyCoords();
-	
+
 	console.log(coords);
 
-    coords.long =  coords.long * Math.PI / 180;
-    long = long * Math.PI / 180;
-    coords.lat = coords.lat * Math.PI / 180;
-    lat = lat * Math.PI / 180;
+	coords.long = (coords.long * Math.PI) / 180;
+	long = (long * Math.PI) / 180;
+	coords.lat = (coords.lat * Math.PI) / 180;
+	lat = (lat * Math.PI) / 180;
 
-    // Haversine formula
-    let dlon = long - coords.long;
-    let dlat = lat - coords.lat;
-    let a = Math.pow(Math.sin(dlat / 2), 2)
-             + Math.cos(coords.lat) * Math.cos(lat)
-             * Math.pow(Math.sin(dlon / 2),2);
-           
-    let c = 2 * Math.asin(Math.sqrt(a));
+	// Haversine formula
+	let dlon = long - coords.long;
+	let dlat = lat - coords.lat;
+	let a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(coords.lat) * Math.cos(lat) * Math.pow(Math.sin(dlon / 2), 2);
 
-    let r = 6371000;
+	let c = 2 * Math.asin(Math.sqrt(a));
 
-    // calculate the result
-	console.log(c*r);
+	let r = 6371000;
 
-    return(c * r);
+	// calculate the result
+	console.log(c * r);
+
+	return c * r;
 }

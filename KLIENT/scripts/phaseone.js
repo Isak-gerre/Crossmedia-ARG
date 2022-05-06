@@ -1,22 +1,24 @@
 "use strict";
 
-phaseCheck(1, async () => {renderChallange_1()})
+phaseCheck(1, async () => {
+	renderChallenge_1();
+});
 
-async function renderChallange_1() {
-	let challangeData = "";
+async function renderChallenge_1() {
+	let challengeData = "";
 
 	await fetch("http://localhost:8000/challenges/phase1")
 		.then((response) => response.json())
-		.then((data) => (challangeData = data));
+		.then((data) => (challengeData = data));
 
-	let position = challangeData.position;
+	let position = challengeData.position;
 
-	let text = challangeData.text;
-	console.log(challangeData);
+	let text = challengeData.text;
+	console.log(challengeData);
 
 	let info = createContentBlock(text[1], "h3", "");
 	let button = createButton("I am here", async () => {
-		let distance = await getDiffrancePosition(position.latitude, position.longitude);
+		let distance = await getDiffrencePosition(position.latitude, position.longitude);
 
 		if (distance < 20000) {
 			document.getElementById("phase-one-div").innerHTML = "";
@@ -29,7 +31,7 @@ async function renderChallange_1() {
 			let block7 = createContentBlock("", "h1", text[7]);
 
 			let button2 = createButton("I found it", async () => {
-				let distance = await getDiffrancePosition(position.latitude, position.longitude);
+				let distance = await getDiffrencePosition(position.latitude, position.longitude);
 
 				if (distance < 20000) {
 					document.getElementById("phase-one-div").innerHTML = "";

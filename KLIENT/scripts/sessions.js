@@ -65,13 +65,18 @@ function makeSessionButton(sessionsJSON) {
 		let p = document.createElement("p");
 		p.className = "session-code";
 		p.innerText = element.sessionCode;
-		p.addEventListener("click", () => {
-			document.querySelectorAll(".selected-session").forEach((selectedSession) => {
-				selectedSession.classList.remove("selected-session");
+		if (element.phase != 0) {
+			p.className += " started";
+			p.innerText += " (Alredy Started)";
+		} else {
+			p.addEventListener("click", () => {
+				document.querySelectorAll(".selected-session").forEach((selectedSession) => {
+					selectedSession.classList.remove("selected-session");
+				});
+				p.classList.toggle("selected-session");
+				document.getElementById("join-session").disabled = false;
 			});
-			p.classList.toggle("selected-session");
-			document.getElementById("join-session").disabled = false;
-		});
+		}
 		document.getElementById("session-div").append(p);
 	});
 }

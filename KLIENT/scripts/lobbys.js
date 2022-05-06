@@ -4,20 +4,6 @@ const sessionH1 = document.getElementById("session-code");
 const lobbyDiv = document.getElementById("lobby-one-div");
 const lobbyPlayers = document.getElementById("lobby-one-players");
 
-async function createGroupDiv() {
-	const div = document.createElement("div");
-	div.classList = "group-div";
-	const groupID = await createGroup(activeSession);
-	div.addEventListener("click", async () => {
-		const groupFilter = { _id: groupID.groupID };
-		const groupUpdates = { user: player.username };
-		await updateGroup({
-			filter: groupFilter,
-			updates: groupUpdates,
-		});
-	});
-	lobbyDiv.append(div);
-}
 // document.addEventListener("DOMContentLoaded", () => {
 // 	setTimeout(() => {
 // 		const getSessionsLive = new EventSource("http://localhost:8000/sessions/live/users");
@@ -48,7 +34,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 	}
 	if (session.phase == 0) {
 		makeLobbyOne(user, activeSession, session, usersInSession);
-		printTerminalText(usersInSession);
 	}
 	if (session.phase == 2) {
 		makeLobbyTwo(user, activeSession, session, usersInSession);
@@ -57,6 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 function makeLobbyOne(user, activeSession, session, usersInSession) {
 	sessionH1.innerText = activeSession;
+	lobbyDiv.append(createList(usersInSession, 8));
 
 	if (user.username == session.creator) {
 		document.body.append(
@@ -80,12 +66,39 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 		);
 	}
 }
-function makeLobbyTwo(user, activeSession, session, usersInSession) {
+function shuffleArray(array) {
+	let currentIndex = array.length,
+		randomIndex;
+
+	// While there remain elements to shuffle.
+	while (currentIndex != 0) {
+		// Pick a remaining element.
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex--;
+
+		// And swap it with the current element.
+		[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+	}
+
+	return array;
+}
+async function makeLobbyTwo(user, activeSession, session, usersInSession) {
 	sessionH1.innerText = "Lobby 2";
 	let p = document.createElement("p");
 	p.textContent = "Hej";
+	lobbyDiv.append(createList(usersInSession, 1));
+	let groupedPlayers = [[], [], [], []];
+	let shuffeldUsers = shuffleArray(usersInSession);
+	shuffeldUsers.forEach((user, index) => {
+		groupedPlayers[`${(index + 1) % 4}`].push(user);
+	});
+	console.log(groupedPlayers);
 
-	lobbyDiv.append(createAccordion("Gamma", p));
+	let groups = await getGroups("session", activeSession);
+	groups.forEach((group, index) => {
+		let list = createList(groupedPlayers[index], 1);
+		lobbyDiv.append(createAccordion(group.groupName, list));
+	});
 
 	if (user.username == session.creator) {
 		document.body.append(

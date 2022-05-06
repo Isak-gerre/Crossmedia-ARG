@@ -44,8 +44,9 @@ export const getSessions = async (req, res) => {
 export const createSession = async (req, res) => {
 	const client = await main();
 	try {
-		await client.db("CrossmediaARG").collection("sessions").insertOne(req.body);
-		res.send(req.body);
+		let session = await client.db("CrossmediaARG").collection("sessions").insertOne(req.body);
+		const createdSession = await client.db("CrossmediaARG").collection("sessions").findOne({ _id: session.insertedId });
+		res.send(createdSession);
 	} catch (error) {}
 	await client.close();
 };

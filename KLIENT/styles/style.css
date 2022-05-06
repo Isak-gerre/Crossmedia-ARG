@@ -273,3 +273,6 @@ button{
     transform: scaleY(1);
     transition: var(--transFast);
 }
+.started {
+    opacity: .5;
+}
