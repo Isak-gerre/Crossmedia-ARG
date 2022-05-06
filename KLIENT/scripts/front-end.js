@@ -4,8 +4,6 @@
 // createButton( "button text" ; func: callback)
 // return DOM
 
-document.body.append( createButton("knapp", ()=>{console.log("hello")}) ) 
-
 // createConfirmButton( "button text" ; "button text after click" ; func: callback ; "warning text")
 // return DOM
 
@@ -722,10 +720,121 @@ function createInputBoxes(word){
 	return wrap;
 }
 
-// createChallenge(challTwo);
+const CHALL = [
+	{
+		id: 1,
+		type: "kabel",
+		difficulty: 1,
+		func: ()=>{console.log("yes")},
+	},
+	{
+		id: 2,
+		type: "kod",
+		difficulty: 2,
+		func: ()=>{console.log("yes")},
+	},
+	{
+		id:3,
+		type: "kod",
+		difficulty: 2,
+		func: ()=>{console.log("yes")},
+	},
+	{
+		id:4,
+		type: "kabel",
+		difficulty: 1,
+		func: ()=>{console.log("yes")},
+	},
+	{
+		id:5,
+		type: "kod",
+		difficulty: 3,
+		func: ()=>{console.log("yes")},
+	},
+	{
+		id:6,
+		type: "kabel",
+		difficulty: 3,
+		func: ()=>{console.log("yes")},
+	},
+]
 
-document.body.append( createAccordion("Alpha", createList(users)) );
+const PROG = [2,5]
 
+function createChallengeGrid(challenges, progress){
+	let wrapper = document.createElement("section");
+
+	let filter = false;
+
+	let difficultyWrapper = document.createElement("div");
+	difficultyWrapper.classList.add("button-confirm-wrapper", "button-confirm-gap");
+
+	const difficulties = ["lätt", "medel", "svår"];
+	let count = 1;
+
+	difficulties.forEach(diff => {
+		let currentDifficulty = count;
+
+		let button = createButton(diff, ()=>{
+			filter = challenges.filter( challenge => challenge.difficulty == currentDifficulty );
+			
+			gridWrapper.innerHTML = "";
+
+			filter.forEach( challenge =>{
+				createChallenge(challenge);
+			} )
+		} );
+
+		console.log(currentDifficulty);
+
+		difficultyWrapper.append(button);
+
+		count++;
+	});
+
+	let gridWrapper = document.createElement("div");
+	gridWrapper.classList.add("challenges-grid");
+
+	challenges.forEach(challenge => {
+		createChallenge(challenge);
+	});
+
+	wrapper.append(difficultyWrapper, gridWrapper)
+
+	return wrapper;
+
+	function createChallenge(challenge){
+		let wrapper = document.createElement("section");
+		if( progress.includes( challenge.id ) ) wrapper.classList.add("completed");
+
+		let block = document.createElement("section");
+		block.classList.add("challenge-block", challenge.difficulty);
+
+		let difficulty = document.createElement("section");
+		block.append(difficulty);
+
+		for (let i = 1; i <= 3; i++) {
+			let star = i > challenge.difficulty ? "&#9734" : "&#9733";
+			difficulty.innerHTML += star;			
+		}
+
+		wrapper.addEventListener("click", challenge.func)
+		
+		wrapper.append(block, difficulty);
+		gridWrapper.append(wrapper);
+	}
+	
+	function createDifficultyButton(){
+		
+	}
+	
+}
+
+
+
+
+
+document.body.append(createChallengeGrid(CHALL, PROG));
 
 
 //Text bak o fram

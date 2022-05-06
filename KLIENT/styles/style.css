@@ -7,7 +7,7 @@
     --sub: #8EE4EB;
     --accent: #D13767;
     --suppOne: #A8E5B7;
-    --suppTwo: #9677F7;
+    --suppTwo: #875fff;
 
     --xs: 5px;
     --s: 13px;
@@ -354,3 +354,27 @@ body .accent-button{
 
 .challenges-wrapper .active{ background-color: var(--accent);}
 .challenges-wrapper .completed{ background-color: var(--main);}
+
+.challenges-grid{
+    display: flex;
+    flex-wrap: wrap;
+    
+    gap: var(--m);
+}
+
+.challenges-grid .completed{
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.challenges-grid .easy{border: 2px solid var(--suppOne)}
+.challenges-grid .med{border: 2px solid var(--accent)}
+.challenges-grid .hard{border: 2px solid var(--suppTwo)}
+
+.challenge-block{
+    --size: calc( (100vw - var(--s) * 2 - var(--m) * 3) / 4);
+    height: var(--size);
+    width: var(--size);
+
+    background-color: var(--sub);
+}
