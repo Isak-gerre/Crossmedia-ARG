@@ -198,6 +198,10 @@ button{
     transition: background-color var(--transSlow);
 }
 
+.button-accent{
+
+}
+
 .button-disabled{
     background-color: var(--gray);
     color: var(--black);
@@ -226,7 +230,7 @@ button{
     transition: background-color var(--transSlow), color var(--transSlow);
 }
 
-body .accent-button{
+body .button-accent{
     background-color: var(--accent);
     color: var(--white) ;
     

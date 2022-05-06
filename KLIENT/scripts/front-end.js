@@ -203,7 +203,7 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt){
 
     async function close(){
         confirmWrapper.classList.remove("button-confirm-gap");
-        confirmWrapper.lastChild.classList.remove("accent-button");
+        confirmWrapper.lastChild.classList.remove("button-accent");
 
         wrapper.setAttribute("id", "mainCol");
         
@@ -241,7 +241,7 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt){
         setTimeout(()=>{
             // Animation
             wrapper.setAttribute("id", "");
-            confirmWrapper.lastChild.classList.add("accent-button");
+            confirmWrapper.lastChild.classList.add("button-accent");
         }, time*3)
 
     }   
@@ -667,11 +667,11 @@ function createChallenge(challenge){
 			// redirect till main page efter x sekunder?
 		} else {
 			button.textContent = "Fel svar, testa igen";
-			button.classList.add("accent-button");
+			button.classList.add("button-accent");
 			button.style.pointerEvents = "none";
 			
 			setTimeout( ()=>{
-				button.classList.remove("accent-button");
+				button.classList.remove("button-accent");
 				button.textContent = "skicka";
 				button.style.pointerEvents = "unset";
 				
@@ -775,14 +775,48 @@ function createChallengeGrid(challenges, progress){
 	difficulties.forEach(diff => {
 		let currentDifficulty = count;
 
-		let button = createButton(diff, ()=>{
-			filter = challenges.filter( challenge => challenge.difficulty == currentDifficulty );
-			
-			gridWrapper.innerHTML = "";
+		let text = "";
 
-			filter.forEach( challenge =>{
-				createChallenge(challenge);
-			} )
+		for (let i = 0; i < count; i++) {
+			text += "★";
+		}
+
+		let button = createButton(text, ()=>{
+			// if there already is a filter
+			if( gridWrapper.classList.contains("filter") ){
+
+				// if currently filtered is clicked
+				if( button.classList.contains("button-accent") ){
+					renderChallenges(challenges);
+					button.classList.remove("button-accent");
+					gridWrapper.classList.remove("filter", diff[0]);
+
+					return
+				} 
+
+				// if other filter is active
+				document.querySelector(".button-accent").classList.remove("button-accent");
+				button.classList.add("button-accent");
+				
+				gridWrapper.classList.remove("l");
+				gridWrapper.classList.remove("s");
+				gridWrapper.classList.remove("m");
+
+				gridWrapper.classList.add(diff[0]);
+
+				filter = challenges.filter( challenge => challenge.difficulty == currentDifficulty );
+				renderChallenges(filter);
+
+				return
+			}
+
+			// if there is no filter
+			gridWrapper.classList.add("filter", diff[0]);
+			
+			filter = challenges.filter( challenge => challenge.difficulty == currentDifficulty );
+			renderChallenges( filter );
+
+			button.classList.add("button-accent");
 		} );
 
 		console.log(currentDifficulty);
@@ -795,13 +829,18 @@ function createChallengeGrid(challenges, progress){
 	let gridWrapper = document.createElement("div");
 	gridWrapper.classList.add("challenges-grid");
 
-	challenges.forEach(challenge => {
-		createChallenge(challenge);
-	});
+	renderChallenges( challenges );
 
 	wrapper.append(difficultyWrapper, gridWrapper)
 
 	return wrapper;
+
+	function renderChallenges(chals){
+		gridWrapper.innerHTML = "";
+		chals.forEach(challenge => {
+			createChallenge(challenge);
+		});
+	}
 
 	function createChallenge(challenge){
 		let wrapper = document.createElement("section");
@@ -823,10 +862,7 @@ function createChallengeGrid(challenges, progress){
 		wrapper.append(block, difficulty);
 		gridWrapper.append(wrapper);
 	}
-	
-	function createDifficultyButton(){
-		
-	}
+
 	
 }
 
