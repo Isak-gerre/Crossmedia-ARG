@@ -112,9 +112,10 @@ function createSection(array) {
 	return section;
 }
 
-function createButton(text, callback) {
+function createButton(text, callback, id = "") {
 	let button = document.createElement("button");
 	if (text) button.textContent = text;
+	if (id) button.setAttribute("id", id);
 
 	if (callback) button.addEventListener("click", callback);
 
@@ -224,21 +225,49 @@ function createConditionalButton(txt, heardObj, condFunc, callback) {
 	return button;
 }
 
-function createReadyButton(initTxt, id, activeTxt) {
-	let button = createButton(initTxt, activate);
+function createReadyButton(initTxt, id, activeTxt, sessionCode) {
+	let button = createButton(initTxt, activate, "start-button");
 	button.setAttribute("id", id);
 
 	setBodyId("space-between");
 
 	// HUR ÄNDRA KNAPPTEXT?
+	var sessionC = sessionCode;
+	function UnLoadWindow() {
+		return "We strongly recommends NOT closing this window yet.";
+	}
 
-	function activate() {
+	window.onbeforeunload = UnLoadWindow;
+
+	async function activate(sessionCode) {
+		setTimeout(() => {
+			const getSessionsLive = new EventSource(
+				`http://localhost:8000/sessions/live?sessionCode=${String(activeSession)}`
+			);
+
+			getSessionsLive.onmessage = function (event) {
+				let numberOfReadyPlayers = JSON.parse(event.data).readyPlayers;
+				document.querySelector("#ready-btn").textContent = `${numberOfReadyPlayers}/${
+					JSON.parse(event.data).users.length - 1
+				} spelare redo`;
+			};
+			getSessionsLive.onerror = function () {
+				getSessionsLive.close();
+			};
+		}, 0000);
 		// deactivate button
 		if (checkClassExistance(button, "ready-button-activated")) {
 			button.classList.remove("ready-button-activated", "button-active");
 			button.textContent = initTxt;
 
 			// PING SERVER: PLAYER NOT READY
+			const sessionFilter = { sessionCode: sessionC };
+			const sessionUpdates = { $inc: { readyPlayers: -1 } };
+
+			let sUpdated = await updateSession({
+				filter: sessionFilter,
+				updates: sessionUpdates,
+			});
 
 			return;
 		}
@@ -248,6 +277,14 @@ function createReadyButton(initTxt, id, activeTxt) {
 		button.textContent = activeTxt;
 
 		// PING SERVER: PLAYER READY
+		const sessionFilter = { sessionCode: sessionC };
+		const sessionUpdates = { $inc: { readyPlayers: 1 } };
+
+		console.log(sessionFilter);
+		let sUpdated = await updateSession({
+			filter: sessionFilter,
+			updates: sessionUpdates,
+		});
 	}
 
 	return button;
