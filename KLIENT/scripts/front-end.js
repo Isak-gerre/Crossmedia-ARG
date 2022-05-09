@@ -125,7 +125,7 @@ let missions = {
 
 // createForm([createInput("användarnamn", "username", "username"), createInput("lösenord", "password", "password"), createButton("logga in")], "post", "", "hello");
 
-let tabGroup = [create, signIn];
+// let tabGroup = [create, signIn];
 
 let alpha = ["mittlånganamn", "finnick", "felicia", "paul"];
 let beta = ["bill", "*sara", "corniellerine", "mina"];
@@ -1081,7 +1081,7 @@ function createChallengeGrid(challenges, progress) {
 	}
 }
 
-document.body.append(createChallengeGrid(CHALL, PROG));
+// document.body.append(createChallengeGrid(CHALL, PROG));
 
 //Text bak o fram
 function reverseString(string) {
