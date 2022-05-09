@@ -631,8 +631,14 @@ function createContentBlock(label, labelType, content, grayed = false) {
 
 	let header = document.createElement(labelType);
 	header.textContent = label;
-
-	wrapper.append(header, content);
+	wrapper.append(header);
+	if (typeof content == "array") {
+		content.forEach((cont) => {
+			wrapper.append(cont);
+		});
+	} else {
+		wrapper.append(content);
+	}
 
 	if (grayed) {
 		wrapper.classList.add("grayed");
