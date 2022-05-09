@@ -17,14 +17,15 @@
 
 // createTabs(array[ {header: "", content: []}, { header: "", content: []} ])
 // return DOM
-//
 
 // createForm( [inputs] ; "method" ; "action" ; "id")
 // return DOM
 
+// createString("text")
+// return DOM
+
 //printTerminalText( "text" || array["string", {txt: "string", func: onclick action}])
 // appends text
-//
 
 // createContentBlock( "header" ; "h-tagg" ; DOM: content )
 // return DOM
@@ -35,6 +36,20 @@
 
 // createAccordion( "label text", DOM: content )
 //return DOM
+
+// createChallengeEntries( [challenges], [progress] )
+// skapad utefter följande array struktur:
+// let challenges = [
+// 	{id: 1, stages: [4], func: ()=>{console.log("one")} },	<--**func kallas vid klick**
+// 	{id: 2, stages: [4], func: ()=>{console.log("two")} },
+// ]
+
+// let progress = [
+// 	{id: 2, prog:4, started: true},
+// 	{id: 1, prog:4, started: true},
+// ]
+
+// return DOM
 
 // createSection( [array av DOM] )
 // skapar en wrapper för flera element som kan användas till createContentBlock Bl.a
@@ -103,6 +118,44 @@ function setBodyId(id) {
 	document.body.setAttribute("id", id);
 }
 
+let missions = {
+	header: "uppdrag",
+	content: "uppdrag",
+};
+
+// createForm([createInput("användarnamn", "username", "username"), createInput("lösenord", "password", "password"), createButton("logga in")], "post", "", "hello");
+
+let tabGroup = [create, signIn];
+
+let alpha = ["mittlånganamn", "finnick", "felicia", "paul"];
+let beta = ["bill", "*sara", "corniellerine", "mina"];
+let delta = ["clay", "zed", "mattiasguldklimp", "morphe"];
+let omega = ["barry", "marinaskovnikov", "collin", "holly"];
+
+let users = alpha.concat(beta, delta, omega);
+
+function test() {
+	console.log("click");
+
+	document.body.style.backgroundColor = "var(--supp)";
+
+	setTimeout(() => {
+		document.body.style.backgroundColor = "";
+	}, 200);
+}
+
+// --------------------------------------------------------------------------------------
+
+function setBodyState(c) {
+	if (Array.isArray(c)) {
+		c.forEach((cls) => {
+			document.body.classList.add(cls);
+		});
+	} else {
+		document.body.classList.add(c);
+	}
+}
+
 function createSection(array) {
 	let section = document.createElement("section");
 
@@ -113,10 +166,9 @@ function createSection(array) {
 	return section;
 }
 
-function createButton(text, callback, id = "") {
+function createButton(text, callback) {
 	let button = document.createElement("button");
 	if (text) button.textContent = text;
-	if (id) button.setAttribute("id", id);
 
 	if (callback) button.addEventListener("click", callback);
 
@@ -134,7 +186,91 @@ function createButton(text, callback, id = "") {
 function createConfirmButton(initTxt, ultTxt, callback, warningTxt) {
 	let wrapper = document.createElement("section");
 
-	setBodyId("space-between");
+	setBodyState("space-between");
+
+	let warning = document.createElement("div");
+	warning.classList.add("fold", "small-txt");
+
+	let initButton = createButton(initTxt, confirm);
+
+	let confirmWrapper = document.createElement("section");
+	confirmWrapper.classList.add("button-confirm-wrapper");
+
+	confirmWrapper.append(createButton(ultTxt, callback), createButton("cancel", close));
+
+	const time = 200;
+
+	async function close() {
+		confirmWrapper.classList.remove("button-confirm-gap");
+		confirmWrapper.lastChild.classList.remove("accent-button");
+
+		wrapper.setAttribute("id", "mainCol");
+
+		warning.classList.remove("unfold");
+
+		const time = 200;
+
+		setTimeout(() => {
+			wrapper.setAttribute("id", "");
+			warning.innerHTML = "";
+			wrapper.removeChild(wrapper.lastChild);
+			wrapper.append(initButton);
+			initButton.setAttribute("id", "");
+		}, time);
+	}
+
+	async function confirm(ultText, callback) {
+		wrapper.setAttribute("id", "mainCol");
+
+		warning.innerHTML = warningTxt;
+
+		setTimeout(() => {
+			// Animation
+			wrapper.removeChild(wrapper.lastChild);
+			wrapper.append(confirmWrapper);
+			warning.classList.add("unfold");
+		}, time);
+
+		setTimeout(() => {
+			// Animation
+			confirmWrapper.classList.add("button-confirm-gap");
+		}, time * 2);
+
+		setTimeout(() => {
+			// Animation
+			wrapper.setAttribute("id", "");
+			confirmWrapper.lastChild.classList.add("accent-button");
+		}, time * 3);
+	}
+
+	wrapper.append(warning, initButton);
+
+	return wrapper;
+}
+
+function createConditionalButton(txt, heardObj, condFunc, callback) {
+	let button = createButton(txt, callback);
+	button.classList.add("button-disabled");
+
+	// condFunc should check if condition is met.
+	//Returns true or false
+
+	heardObj.addEventListener("keyup", () => {
+		if (condFunc()) {
+			button.classList.remove("button-disabled");
+		} else {
+			button.classList.add("button-disabled");
+		}
+	});
+
+	return button;
+}
+
+function createReadyButton(initTxt, id, activeTxt) {
+	let button = createButton(initTxt, activate);
+	button.setAttribute("id", id);
+
+	setBodyState("space-between");
 
 	let warning = document.createElement("div");
 	warning.classList.add("fold", "small-txt");
@@ -196,6 +332,9 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt) {
 	wrapper.append(warning, initButton);
 
 	return wrapper;
+}
+function checkClassExistance(item, check) {
+	return item.classList.contains(check);
 }
 
 function createConditionalButton(txt, heardObj, condFunc, callback) {
@@ -337,7 +476,7 @@ function createTabs(tabArr) {
 
 	let count = "one";
 	tabArr.forEach((tab) => {
-		let tabTitle = document.createElement("span");
+		let tabTitle = document.createElement("p");
 		tabTitle.classList.add("tab-header");
 
 		tabTitle.innerHTML = tab.header;
@@ -435,7 +574,7 @@ function createList(items, height = 4) {
 			count = 0;
 		}
 
-		let li = document.createElement("li");
+		let li = document.createElement("p");
 		li.classList.add("no-margin");
 		li.textContent = item;
 
@@ -462,23 +601,31 @@ function printTerminalText(input) {
 		document.querySelector("body").append(createString(input));
 	}
 
-	function createString(string) {
-		let p = document.createElement("p");
-
-		p.textContent = string;
-
-		if (typeof string == "object") {
-			p.classList.add("string-button");
-			p.textContent = string.txt;
-
-			p.addEventListener("click", () => {
-				string.func();
-				p.style.pointerEvents = "none";
-			});
-		}
-
-		return p;
+	if (Array.isArray(input)) {
+		input.forEach((message) => {
+			document.querySelector("body").append(createString(message));
+		});
+	} else {
+		document.querySelector("body").append(createString(input));
 	}
+}
+
+function createString(string) {
+	let p = document.createElement("p");
+
+	p.textContent = string;
+
+	if (typeof string == "object") {
+		p.classList.add("string-button");
+		p.textContent = string.txt;
+
+		p.addEventListener("click", () => {
+			string.func();
+			p.style.pointerEvents = "none";
+		});
+	}
+
+	return p;
 }
 
 function createAccordion(header, content) {
@@ -498,7 +645,7 @@ function createAccordion(header, content) {
 	accordionBody.append(content);
 	content.classList.add("accordion-content");
 
-	wrapper.addEventListener("click", () => {
+	accordionHead.addEventListener("click", () => {
 		if (wrapper.classList.contains("open")) {
 			wrapper.classList.remove("open");
 			return;
@@ -510,6 +657,187 @@ function createAccordion(header, content) {
 
 	return wrapper;
 }
+
+function createProgressionSection(data, max) {
+	let wrapper = document.createElement("div");
+
+	data.forEach((team) => {
+		let wrap = document.createElement("div");
+		wrap.classList.add("progress-wrapper");
+
+		let name = document.createElement("span");
+		name.style.textTransform = "capitalize";
+		name.textContent = team[0];
+
+		if (team[0][0] == "*") {
+			name.textContent = team[0].substr(1);
+			wrap.classList.add("sub-color");
+		}
+
+		let line = document.createElement("hr");
+		line.classList.add("line");
+
+		let prog = document.createElement("span");
+		prog.style.textAlign = "right";
+		percent = (team[1] / max) * 100;
+
+		prog.textContent = Math.floor(percent) + "%";
+
+		wrap.append(name, line, prog);
+
+		wrapper.append(wrap);
+	});
+
+	return wrapper;
+}
+
+function createChallengeEntry(progressInfo, challengeInfo) {
+	let wrapper = document.createElement("div");
+	wrapper.classList.add("challenge-entry");
+
+	let completed = progressInfo.prog == challengeInfo.stages;
+	let started = progressInfo.started;
+
+	if (started) wrapper.classList.add("active");
+	if (completed) {
+		wrapper.classList.add("completed");
+		wrapper.classList.remove("active");
+	}
+
+	let text = document.createElement("span");
+	text.textContent = "Uppdrag " + progressInfo.count;
+
+	let num = document.createElement("span");
+	num.textContent = progressInfo.prog + " / " + challengeInfo.stages;
+
+	wrapper.append(text, num);
+
+	wrapper.addEventListener("click", () => {
+		if (completed || !started) return;
+
+		challengeInfo.func();
+	});
+
+	return wrapper;
+}
+
+function createChallengeEntries(challenges, progress) {
+	let wrapper = document.createElement("section");
+	wrapper.classList.add("challenges-wrapper");
+
+	let count = 1;
+	progress.forEach((entry) => {
+		entry["count"] = count;
+
+		let challenge = challenges.find((challenge) => {
+			return challenge.id == entry.id;
+		});
+
+		wrapper.append(createChallengeEntry(entry, challenge));
+
+		count++;
+	});
+
+	return wrapper;
+}
+
+function createChallenge(challenge) {
+	// createContentBlock( "header" ; "h-tagg" ; DOM: content )
+	// createButton( "button text" ; func: callback)
+	// createInput( "label text" ; "id" ; "name" ; ("value") )
+
+	setBodyState(["body-challenge", "body-space-between"]);
+
+	let input = createInputBoxes(challenge.answer, "answer", "answer");
+	let text = createString(challenge.description);
+	let button = createButton("skicka", checkAnswer);
+
+	let objs = [text, input];
+
+	if (challenge.övrigt) {
+		let obj = document.createElement("div");
+		objs.push(obj);
+	}
+
+	let content = createSection(objs);
+
+	let block = createContentBlock(challenge.title, "h1", content);
+
+	document.body.append(block);
+	document.body.append(button);
+
+	function checkAnswer() {
+		let inputs = document.querySelectorAll(".box-input");
+
+		let answer = "";
+
+		inputs.forEach((input) => {
+			answer += input.value;
+		});
+
+		if (answer == challenge.answer) {
+			button.textContent = "Rätt svar, bra jobbat";
+			button.classList.add("button-active");
+
+			setTimeout(() => {
+				// Go to main menu?
+			}, 1000);
+
+			// redirect till main page efter x sekunder?
+		} else {
+			button.textContent = "Fel svar, testa igen";
+			button.classList.add("accent-button");
+			button.style.pointerEvents = "none";
+
+			setTimeout(() => {
+				button.classList.remove("accent-button");
+				button.textContent = "skicka";
+				button.style.pointerEvents = "unset";
+			}, 1000);
+		}
+	}
+}
+
+function createInputBoxes(word) {
+	let wrap = document.createElement("section");
+	wrap.classList.add("box-input-wrapper");
+
+	for (let i = 0; i < word.length; i++) {
+		let input = document.createElement("input");
+
+		input.classList.add("box-input");
+		input.setAttribute("maxlength", 1);
+
+		input.addEventListener("keyup", (e) => {
+			if (e.code == "Backspace") {
+				if (!input.previousSibling) return;
+
+				input.previousSibling.focus();
+				return;
+			}
+
+			if (input.value.length > 0) {
+				if (!input.nextElementSibling) {
+					input.blur();
+					return;
+				}
+				input.nextElementSibling.focus();
+			}
+		});
+
+		input.addEventListener("keydown", () => {
+			input.value = "";
+		});
+
+		wrap.append(input);
+	}
+
+	return wrap;
+}
+
+// createChallenge(challTwo);
+
+document.body.append(createAccordion("Alpha", createList(users)));
 
 //Text bak o fram
 function reverseString(string) {
