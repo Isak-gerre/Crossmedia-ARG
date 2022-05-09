@@ -632,12 +632,13 @@ function createContentBlock(label, labelType, content, grayed = false) {
 	let header = document.createElement(labelType);
 	header.textContent = label;
 	wrapper.append(header);
-	if (typeof content == "array") {
+	if (typeof content == "object") {
 		content.forEach((cont) => {
-			wrapper.append(cont);
+			let br = document.createElement("br");
+			wrapper.append(cont, br);
 		});
 	} else {
-		wrapper.append(content, "<br>");
+		wrapper.append(content);
 	}
 
 	if (grayed) {
