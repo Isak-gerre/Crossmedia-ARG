@@ -56,7 +56,7 @@ async function updatePlayer(update) {
 		let res = await fetch(localhost + "players", postData(update, "PATCH"));
 		if (res.ok) {
 			let data = await res.json();
-			await saveToLS("user", JSON.stringify(data));
+			// await saveToLS("user", JSON.stringify(data));
 		}
 	} catch (error) {
 		return error;

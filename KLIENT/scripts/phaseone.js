@@ -40,7 +40,7 @@ async function renderChallenge_1() {
 						const user = JSON.parse(getFromLS("user"));
 						const activeSession = user.session;
 						const sessionFilter = { sessionCode: activeSession };
-						const sessionUpdates = { $set: { phase: 2, lobby: true } };
+						const sessionUpdates = { $set: { phase: 1, lobby: true } };
 
 						await updateSession({
 							filter: sessionFilter,

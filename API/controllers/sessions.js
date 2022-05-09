@@ -1,3 +1,4 @@
+import { clear } from "console";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const { MongoClient } = require("mongodb");
@@ -56,21 +57,44 @@ export const getSessionsLive = async (req, res) => {
 
 	res.setHeader("Content-Type", "text/event-stream");
 	res.setHeader("Allow-Control-Allow-Origin", "*");
-
-	setInterval(async () => {
+	var id = setInterval(async () => {
 		const client = await main();
-		const sessions = await client.db("CrossmediaARG").collection("sessions").find({}).toArray();
+		const sessions = await client
+			.db("CrossmediaARG")
+			.collection("sessions")
+			.findOne({ sessionCode: req.query.sessionCode });
+		console.log(sessions);
 		res.write(`data: ${JSON.stringify(sessions)}\n\n`);
 		await client.close();
 	}, 2000);
 	console.log("send");
 
-	// res.on("close", () => {
-	// 	console.log("Closed");
-	// 	// clearInterval(intervalID);
-	// 	res.end();
-	// });
+	res.on("close", () => {
+		id._destroyed = true;
+		clearInterval(id);
+		console.log("Closed");
+	});
 };
+// export const getSessionsLive = async (req, res) => {
+// 	console.log("open");
+
+// 	res.setHeader("Content-Type", "text/event-stream");
+// 	res.setHeader("Allow-Control-Allow-Origin", "*");
+
+// 	setInterval(async () => {
+// 		const client = await main();
+// 		const sessions = await client.db("CrossmediaARG").collection("sessions").find({}).toArray();
+// 		res.write(`data: ${JSON.stringify(sessions)}\n\n`);
+// 		await client.close();
+// 	}, 2000);
+// 	console.log("send");
+
+// 	// res.on("close", () => {
+// 	// 	console.log("Closed");
+// 	// 	// clearInterval(intervalID);
+// 	// 	res.end();
+// 	// });
+// };
 export const updateSession = async (req, res) => {
 	const client = await main();
 

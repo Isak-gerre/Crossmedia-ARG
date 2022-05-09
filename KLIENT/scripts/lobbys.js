@@ -53,13 +53,37 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 					const sessionFilter = { sessionCode: activeSession };
 					const sessionUpdates = { $set: { phase: 1, lobby: false } };
 
+					let groupedPlayers = [[], [], [], []];
+					let shuffeldUsers = shuffleArray(usersInSession);
+					shuffeldUsers.forEach((user, index) => {
+						groupedPlayers[`${(index + 1) % 4}`].push(user);
+					});
+
+					let groups = await getGroups("session", activeSession);
+					groups.forEach(async (group, index) => {
+						const groupFilter = { session: activeSession, groupName: group.groupName };
+						const groupUpdates = { $set: { users: groupedPlayers[index] } };
+						const res = await updateGroup({
+							filter: groupFilter,
+							updates: groupUpdates,
+						});
+						groupedPlayers[index].forEach(async (player) => {
+							console.log(res);
+							const playerFilter = { username: player };
+							const playerUpdates = { $set: { group: group._id } };
+							await updatePlayer({
+								filter: playerFilter,
+								updates: playerUpdates,
+							});
+						});
+					});
 					let res = await updateSession({
 						filter: sessionFilter,
 						updates: sessionUpdates,
 					});
-					if (res.message == "Updated session") {
-						window.location.href = "phase.html";
-					}
+					// if (res.message == "Updated session") {
+					// 	window.location.href = "phase.html";
+					// }
 				},
 				"Efter spelet har startat kan inte nya spelare gå med. Är du säker på att du vill fortsätta?"
 			)
@@ -83,44 +107,14 @@ function shuffleArray(array) {
 	return array;
 }
 async function makeLobbyTwo(user, activeSession, session, usersInSession) {
-	sessionH1.innerText = "Lobby 2";
-	let p = document.createElement("p");
-	p.textContent = "Hej";
+	sessionH1.innerText = "Fas 2";
 	lobbyDiv.append(createList(usersInSession, 1));
-	let groupedPlayers = [[], [], [], []];
-	let shuffeldUsers = shuffleArray(usersInSession);
-	shuffeldUsers.forEach((user, index) => {
-		groupedPlayers[`${(index + 1) % 4}`].push(user);
-	});
-	console.log(groupedPlayers);
-
 	let groups = await getGroups("session", activeSession);
-	groups.forEach((group, index) => {
-		let list = createList(groupedPlayers[index], 1);
+	console.log(groups);
+	groups.forEach((group) => {
+		let list = createList(group.users, 2);
 		lobbyDiv.append(createAccordion(group.groupName, list));
 	});
-
-	if (user.username == session.creator) {
-		document.body.append(
-			createConfirmButton(
-				"Starta Spelet",
-				"Starta",
-				async () => {
-					const sessionFilter = { sessionCode: activeSession };
-					const sessionUpdates = { $set: { phase: 3, lobby: false } };
-
-					let res = await updateSession({
-						filter: sessionFilter,
-						updates: sessionUpdates,
-					});
-					if (res.ok) {
-						console.log("test");
-						window.location.href = "phase.html";
-					}
-				},
-				"Efter spelet har startat kan inte nya spelare gå med. Är du säker på att du vill fortsätta?"
-			)
-		);
-	}
+	document.body.append(createReadyButton("Redo", "ready-btn", "Väntar på andra spelare", activeSession));
 }
 function makeLobbyThree() {}

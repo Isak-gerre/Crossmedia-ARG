@@ -1,12 +1,13 @@
 :root{
     --black: #272727;
+    --blackOp: #2727275a;
     --white: #FBFBFB;
     --gray: #7B7B7B;
     --main: #517EEE;
     --sub: #8EE4EB;
     --accent: #D13767;
     --suppOne: #A8E5B7;
-    --suppTwo: #9677F7;
+    --suppTwo: #875fff;
 
     --xs: 5px;
     --s: 13px;
@@ -42,10 +43,20 @@ body {
     width: var(--xl);
 }
 
-#space-between{
+.body-space-between{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.body-main{
+    background-color: var(--main);
+    color: var(--white);
+}
+
+.body-challenge{
+    background-color: var(--suppTwo);
+    color: var(--white);
 }
 
 .no-margin{
@@ -72,6 +83,7 @@ h2{ font-size: var(--l); margin: var(--xl) 0 var(--m);}
 .main-color{color: var(--main);}
 .main-back{background-color: var(--main);}
 .acc-color{ color: var(--accent);}
+.sub-color, .sub-color *{color: var(--sub)}
 .small-txt{ font-size: var(--s); }
 .grayed, .grayed *{ color: var(--gray);}
 
@@ -94,6 +106,10 @@ label, p, span, div, button, input{
     font-size: var(--m);
     margin: 0;
     margin-bottom: var(--xl);
+}
+
+span{
+    margin: 0;
 }
 
 label{
@@ -135,6 +151,29 @@ input{
     border: 1px solid var(--white);
 }
 
+.box-input-wrapper{
+    display: flex;
+    gap: var(--m);
+}
+
+.box-input-wrapper input{
+    width: var(--l);
+    height: var(--l);
+
+    box-sizing:content-box;
+
+    padding: var(--xs);
+    border: none;
+    background-color: var(--white);
+    color: var(--black);
+
+    text-align: center;
+
+    box-shadow: -1px 1px 1px 0px var(--blackOp) inset;
+    /* -webkit-box-shadow: -2px 2px 5px 0px var(--gray) inset;
+    -moz-box-shadow: -2px 2px 5px 0px var(--gray) inset; */
+}
+
 button{
     cursor: pointer;
     
@@ -150,13 +189,17 @@ button{
 
     color: inherit;
 
-    transition: background-color var(--transFast), color var(--transFast);
+    transition: background-color var(--transFast), color var(--transSlow);
 }
 
 .button-active{
     background-color: var(--sub);
     color: var(--black);
     transition: background-color var(--transSlow);
+}
+
+.button-accent{
+
 }
 
 .button-disabled{
@@ -177,11 +220,21 @@ button{
 
 .button-confirm-gap{
     gap:var(--l);
-    color:var(--white);
+    color: var(--white);
 }
 
-.button-confirm-wrapper .accent{
+.body-challenge button{
+    background-color: var(--white);
+    color: var(--black);
+
+    transition: background-color var(--transSlow), color var(--transSlow);
+}
+
+body .button-accent{
     background-color: var(--accent);
+    color: var(--white) ;
+    
+    transition: 0s;
 }
 
 .fold{
@@ -231,7 +284,6 @@ button{
 
 .list-wrapper > section p {
     margin-right: var(--xl);
-
 }
 
 .accordion-body, .accordion-head{
@@ -275,4 +327,61 @@ button{
 }
 .started {
     opacity: .5;
+}
+
+.progress-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* gap: var(--xl) */
+}
+
+.progress-wrapper > *{
+    flex-basis: calc( var(--xxl) + var(--l) );
+}
+
+.progress-wrapper .line{
+    flex-grow: 1;
+    background-color: var(--white);
+    height: 1px;
+}
+
+.challenge-entry{
+    display: flex;
+    justify-content: space-between;
+    padding: var(--s);
+    background-color: var(--gray);
+
+}
+
+.challenge-entry > *:last-child{
+    border-left: 1px solid var(--white);
+    padding-left: var(--m);
+}
+
+.challenges-wrapper .active{ background-color: var(--accent);}
+.challenges-wrapper .completed{ background-color: var(--main);}
+
+.challenges-grid{
+    display: flex;
+    flex-wrap: wrap;
+    
+    gap: var(--m);
+}
+
+.challenges-grid .completed{
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.challenges-grid .easy{border: 2px solid var(--suppOne)}
+.challenges-grid .med{border: 2px solid var(--accent)}
+.challenges-grid .hard{border: 2px solid var(--suppTwo)}
+
+.challenge-block{
+    --size: calc( (100vw - var(--s) * 2 - var(--m) * 3) / 4);
+    height: var(--size);
+    width: var(--size);
+
+    background-color: var(--sub);
 }
