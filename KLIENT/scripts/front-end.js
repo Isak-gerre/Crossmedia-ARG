@@ -637,7 +637,7 @@ function createContentBlock(label, labelType, content, grayed = false) {
 			wrapper.append(cont);
 		});
 	} else {
-		wrapper.append(content);
+		wrapper.append(content, "<br>");
 	}
 
 	if (grayed) {
