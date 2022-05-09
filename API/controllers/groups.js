@@ -57,9 +57,9 @@ export const updateGroup = async (req, res) => {
 	console.log(filter, updates);
 
 	try {
-		let test = await client.db("CrossmediaARG").collection("groups").updateOne(filter, updates);
-		console.log(test);
-		res.status(201).send({ message: "Group was updated" });
+		let group = await client.db("CrossmediaARG").collection("groups").updateOne(filter, updates);
+		console.log(group);
+		res.status(201).send(group);
 	} catch (error) {
 		console.log(error);
 	}

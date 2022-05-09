@@ -82,7 +82,7 @@ export const updatePlayer = async (req, res) => {
 	const client = await main();
 
 	const filter = req.body.filter;
-	const updates = { $set: req.body.updates };
+	const updates = req.body.updates;
 	console.log(filter);
 
 	try {

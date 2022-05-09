@@ -55,7 +55,8 @@ let textArr = [
 					filter: { username: user.username, password: user.password },
 					updates: { session: session.sessionCode },
 				};
-				await updatePlayer(update);
+				let res = await updatePlayer(update);
+				saveToLS("user", res);
 				location.reload();
 			} catch (error) {
 				console.log(error);
@@ -245,11 +246,19 @@ function createReadyButton(initTxt, id, activeTxt, sessionCode) {
 				`http://localhost:8000/sessions/live?sessionCode=${String(activeSession)}`
 			);
 
-			getSessionsLive.onmessage = function (event) {
+			getSessionsLive.onmessage = async function (event) {
 				let numberOfReadyPlayers = JSON.parse(event.data).readyPlayers;
 				document.querySelector("#ready-btn").textContent = `${numberOfReadyPlayers}/${
 					JSON.parse(event.data).users.length - 1
 				} spelare redo`;
+				if (numberOfReadyPlayers == JSON.parse(event.data).users.length - 1) {
+					const sessionFilter = { sessionCode: activeSession };
+					const sessionUpdates = { $set: { phase: 1, lobby: false } };
+					let res = await updateSession({
+						filter: sessionFilter,
+						updates: sessionUpdates,
+					});
+				}
 			};
 			getSessionsLive.onerror = function () {
 				getSessionsLive.close();

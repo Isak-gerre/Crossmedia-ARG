@@ -64,18 +64,27 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 					groups.forEach(async (group, index) => {
 						const groupFilter = { session: activeSession, groupName: group.groupName };
 						const groupUpdates = { $set: { users: groupedPlayers[index] } };
-						await updateGroup({
+						const res = await updateGroup({
 							filter: groupFilter,
 							updates: groupUpdates,
+						});
+						groupedPlayers[index].forEach(async (player) => {
+							console.log(res);
+							const playerFilter = { username: player };
+							const playerUpdates = { $set: { group: group._id } };
+							await updatePlayer({
+								filter: playerFilter,
+								updates: playerUpdates,
+							});
 						});
 					});
 					let res = await updateSession({
 						filter: sessionFilter,
 						updates: sessionUpdates,
 					});
-					if (res.message == "Updated session") {
-						window.location.href = "phase.html";
-					}
+					// if (res.message == "Updated session") {
+					// 	window.location.href = "phase.html";
+					// }
 				},
 				"Efter spelet har startat kan inte nya spelare gå med. Är du säker på att du vill fortsätta?"
 			)
