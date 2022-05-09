@@ -202,6 +202,90 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt) {
 
 	async function close() {
 		confirmWrapper.classList.remove("button-confirm-gap");
+		confirmWrapper.lastChild.classList.remove("button-accent");
+
+		wrapper.setAttribute("id", "mainCol");
+
+		warning.classList.remove("unfold");
+
+		const time = 200;
+
+		setTimeout(() => {
+			wrapper.setAttribute("id", "");
+			warning.innerHTML = "";
+			wrapper.removeChild(wrapper.lastChild);
+			wrapper.append(initButton);
+			initButton.setAttribute("id", "");
+		}, time);
+	}
+
+	async function confirm(ultText, callback) {
+		wrapper.setAttribute("id", "mainCol");
+
+		warning.innerHTML = warningTxt;
+
+		setTimeout(() => {
+			// Animation
+			wrapper.removeChild(wrapper.lastChild);
+			wrapper.append(confirmWrapper);
+			warning.classList.add("unfold");
+		}, time);
+
+		setTimeout(() => {
+			// Animation
+			confirmWrapper.classList.add("button-confirm-gap");
+		}, time * 2);
+
+		setTimeout(() => {
+			// Animation
+			wrapper.setAttribute("id", "");
+			confirmWrapper.lastChild.classList.add("button-accent");
+		}, time * 3);
+	}
+
+	wrapper.append(warning, initButton);
+
+	return wrapper;
+}
+
+function createConditionalButton(txt, heardObj, condFunc, callback) {
+	let button = createButton(txt, callback);
+	button.classList.add("button-disabled");
+
+	// condFunc should check if condition is met.
+	//Returns true or false
+
+	heardObj.addEventListener("keyup", () => {
+		if (condFunc()) {
+			button.classList.remove("button-disabled");
+		} else {
+			button.classList.add("button-disabled");
+		}
+	});
+
+	return button;
+}
+
+function createReadyButton(initTxt, id, activeTxt) {
+	let button = createButton(initTxt, activate);
+	button.setAttribute("id", id);
+
+	setBodyState("space-between");
+
+	let warning = document.createElement("div");
+	warning.classList.add("fold", "small-txt");
+
+	let initButton = createButton(initTxt, confirm);
+
+	let confirmWrapper = document.createElement("section");
+	confirmWrapper.classList.add("button-confirm-wrapper");
+
+	confirmWrapper.append(createButton(ultTxt, callback), createButton("cancel", close));
+
+	const time = 200;
+
+	async function close() {
+		confirmWrapper.classList.remove("button-confirm-gap");
 		confirmWrapper.lastChild.classList.remove("accent-button");
 
 		wrapper.setAttribute("id", "mainCol");
@@ -786,11 +870,11 @@ function createChallenge(challenge) {
 			// redirect till main page efter x sekunder?
 		} else {
 			button.textContent = "Fel svar, testa igen";
-			button.classList.add("accent-button");
+			button.classList.add("button-accent");
 			button.style.pointerEvents = "none";
 
 			setTimeout(() => {
-				button.classList.remove("accent-button");
+				button.classList.remove("button-accent");
 				button.textContent = "skicka";
 				button.style.pointerEvents = "unset";
 			}, 1000);
@@ -835,9 +919,162 @@ function createInputBoxes(word) {
 	return wrap;
 }
 
-// createChallenge(challTwo);
+const CHALL = [
+	{
+		id: 1,
+		type: "kabel",
+		difficulty: 1,
+		func: () => {
+			console.log("yes");
+		},
+	},
+	{
+		id: 2,
+		type: "kod",
+		difficulty: 2,
+		func: () => {
+			console.log("yes");
+		},
+	},
+	{
+		id: 3,
+		type: "kod",
+		difficulty: 2,
+		func: () => {
+			console.log("yes");
+		},
+	},
+	{
+		id: 4,
+		type: "kabel",
+		difficulty: 1,
+		func: () => {
+			console.log("yes");
+		},
+	},
+	{
+		id: 5,
+		type: "kod",
+		difficulty: 3,
+		func: () => {
+			console.log("yes");
+		},
+	},
+	{
+		id: 6,
+		type: "kabel",
+		difficulty: 3,
+		func: () => {
+			console.log("yes");
+		},
+	},
+];
 
-document.body.append(createAccordion("Alpha", createList(users)));
+const PROG = [2, 5];
+
+function createChallengeGrid(challenges, progress) {
+	let wrapper = document.createElement("section");
+
+	let filter = false;
+
+	let difficultyWrapper = document.createElement("div");
+	difficultyWrapper.classList.add("button-confirm-wrapper", "button-confirm-gap");
+
+	const difficulties = ["lätt", "medel", "svår"];
+	let count = 1;
+
+	difficulties.forEach((diff) => {
+		let currentDifficulty = count;
+
+		let text = "";
+
+		for (let i = 0; i < count; i++) {
+			text += "★";
+		}
+
+		let button = createButton(text, () => {
+			// if there already is a filter
+			if (gridWrapper.classList.contains("filter")) {
+				// if currently filtered is clicked
+				if (button.classList.contains("button-accent")) {
+					renderChallenges(challenges);
+					button.classList.remove("button-accent");
+					gridWrapper.classList.remove("filter", diff[0]);
+
+					return;
+				}
+
+				// if other filter is active
+				document.querySelector(".button-accent").classList.remove("button-accent");
+				button.classList.add("button-accent");
+
+				gridWrapper.classList.remove("l");
+				gridWrapper.classList.remove("s");
+				gridWrapper.classList.remove("m");
+
+				gridWrapper.classList.add(diff[0]);
+
+				filter = challenges.filter((challenge) => challenge.difficulty == currentDifficulty);
+				renderChallenges(filter);
+
+				return;
+			}
+
+			// if there is no filter
+			gridWrapper.classList.add("filter", diff[0]);
+
+			filter = challenges.filter((challenge) => challenge.difficulty == currentDifficulty);
+			renderChallenges(filter);
+
+			button.classList.add("button-accent");
+		});
+
+		console.log(currentDifficulty);
+
+		difficultyWrapper.append(button);
+
+		count++;
+	});
+
+	let gridWrapper = document.createElement("div");
+	gridWrapper.classList.add("challenges-grid");
+
+	renderChallenges(challenges);
+
+	wrapper.append(difficultyWrapper, gridWrapper);
+
+	return wrapper;
+
+	function renderChallenges(chals) {
+		gridWrapper.innerHTML = "";
+		chals.forEach((challenge) => {
+			createChallenge(challenge);
+		});
+	}
+
+	function createChallenge(challenge) {
+		let wrapper = document.createElement("section");
+		if (progress.includes(challenge.id)) wrapper.classList.add("completed");
+
+		let block = document.createElement("section");
+		block.classList.add("challenge-block", challenge.difficulty);
+
+		let difficulty = document.createElement("section");
+		block.append(difficulty);
+
+		for (let i = 1; i <= 3; i++) {
+			let star = i > challenge.difficulty ? "&#9734" : "&#9733";
+			difficulty.innerHTML += star;
+		}
+
+		wrapper.addEventListener("click", challenge.func);
+
+		wrapper.append(block, difficulty);
+		gridWrapper.append(wrapper);
+	}
+}
+
+document.body.append(createChallengeGrid(CHALL, PROG));
 
 //Text bak o fram
 function reverseString(string) {
