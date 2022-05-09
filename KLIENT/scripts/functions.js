@@ -161,6 +161,15 @@ async function getGroups(query, value) {
 		return data;
 	}
 }
+
+async function getGroupById(id) {
+	let res = await fetch(`${localhost}groups/id/${id}`);
+	if (res.ok) {
+		let data = await res.json();
+		return data;
+	}
+}
+
 async function updateGroup(update) {
 	console.log(localhost + "groups", postData(update, "PATCH"));
 	let res = await fetch(localhost + "groups", postData(update, "PATCH"));
@@ -233,11 +242,13 @@ function postData(postData, method = "POST") {
 //--------------------------------------------------
 
 async function challengeCheck() {
-	let group = await getGroup();
+	let user = getFromLS("user");
+	let group = await getGroupById(`${JSON.parse(user).group}`);
 	let task = {
 		task: group.task,
 		linje: group.linje,
 	};
+	console.log(task)
 	return task;
 }
 

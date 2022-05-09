@@ -1,7 +1,8 @@
+import { ObjectID } from "bson";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 
 import { credentials } from "../database_credentials.js";
 
@@ -24,6 +25,14 @@ export const getGroup = async (req, res) => {
 	const client = await main();
 	const foundGroups = await client.db("CrossmediaARG").collection("groups").find(req.query).toArray();
 	res.send(foundGroups);
+	await client.close();
+};
+
+export const getGroupId = async (req, res) => {
+	const client = await main();
+	console.log(req.params.id);
+	const foundGroup = await client.db("CrossmediaARG").collection("groups").findOne(ObjectId(req.params.id));
+	res.send(foundGroup);
 	await client.close();
 };
 
@@ -52,7 +61,10 @@ export const createGroup = async (req, res) => {
 export const updateGroup = async (req, res) => {
 	const client = await main();
 
-	const filter = req.body.filter;
+	let filter = req.body.filter;
+	if(req.body.filter._id){
+		filter = {"_id" : ObjectId(req.body.filter._id)};
+	}
 	const updates = req.body.updates;
 
 	try {
