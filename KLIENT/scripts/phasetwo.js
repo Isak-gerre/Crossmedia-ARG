@@ -26,29 +26,11 @@ phaseCheck(2, async () => {
 	let position = challengeData[task].position;
 	console.log(position);
 
-	if (task == 0) {
-		renderChallenge(0, 0, position.latitude, position.longitude);
-	} else if (task == 1) {
-		renderChallenge(1, 1, position.latitude, position.longitude);
-	} else if (task == 2) {
-		renderChallenge(2, 2, position.latitude, position.longitude);
-	} else if (task == 3) {
-		renderChallenge(3, 3, position.latitude, position.longitude, linje);
-	} else if (task == 4) {
-		renderChallenge(4, 4, position.latitude, position.longitude);
-	} else if (task == 5) {
-		renderChallenge(5, 5, position.latitude, position.longitude);
-	} else if (task == 6) {
-		renderChallenge(6, 6, position.latitude, position.longitude, linje);
-	} else if (task == 7) {
-		renderChallenge(7, 7, position.latitude, position.longitude);
-	} else if (task == 8) {
-		renderChallenge(8, 8, position.latitude, position.longitude);
-	} else if (task == 9) {
-		renderChallenge(9, 9, position.latitude, position.longitude);
+	for(let i = 0; i <= 15; i++){
+		if(task == i){
+			renderChallenge(i, i, position.latitude, position.longitude, linje)
+		}
 	}
-	
-
 });
 
 async function renderChallenge(challengedata, clueNumber, lat, long, linje = "0") {
@@ -63,7 +45,7 @@ async function renderChallenge(challengedata, clueNumber, lat, long, linje = "0"
 			if (answer) {
 				let group = JSON.parse(getFromLS("user")).group;
 	
-				let task = (clueNumber + 1) % 15;
+				let task = (clueNumber + 1) % 16;
 	
 				const groupFilter = { _id: group };
 				let groupUpdates = { $set: { task: String(task) } };

@@ -315,7 +315,10 @@ function displayLoginErrorMessage(error) {
 	document.querySelector("#error-messages").textContent = error;
 }
 
-async function getDiffrencePosition(lat, long) {
+async function getDiffrencePosition(latString, longString) {
+	let lat = parseFloat(latString)
+	let long = parseFloat(longString)
+	console.log(latString);
 	async function getMyCoords() {
 		const getCoords = async () => {
 			const pos = await new Promise((resolve, reject) => {
@@ -347,7 +350,6 @@ async function getDiffrencePosition(lat, long) {
 	let a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(coords.lat) * Math.cos(lat) * Math.pow(Math.sin(dlon / 2), 2);
 
 	let c = 2 * Math.asin(Math.sqrt(a));
-
 	let r = 6371000;
 
 	// calculate the result
