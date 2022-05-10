@@ -10,7 +10,7 @@
 // 	}
 // });
 
-let challengeData = "";
+var challengeData = "";
 (async () => {
 	console.log("hej");
 	await fetch("http://localhost:8000/challenges/phase2")
@@ -33,30 +33,73 @@ phaseCheck(2, async () => {
 	let position = challengeData[task].position;
 
 	const content = await checkChallenge(task, linje, position);
-	console.log(content);
+	console.log(challenge);
 
 	// createChallengeEntries( [challenges], [progress] )
 	// skapad utefter följande array struktur:
-	// let challenges = [
-	// 	{id: 1, stages: [4], func: ()=>{console.log("one")} },	<--**func kallas vid klick**
-	// 	{id: 2, stages: [4], func: ()=>{console.log("two")} },
-	// ]
-
-	// let progress = [
-	// 	{id: 2, prog:4, started: true},
-	// 	{id: 1, prog:4, started: true},
-	// ]
-	// createChallengeEntries();
+	let challenges = [
+		{
+			id: 1,
+			stages: [4],
+			func: () => {
+				console.log("one");
+			},
+		},
+		{
+			id: 2,
+			stages: [4],
+			func: () => {
+				console.log("two");
+			},
+		},
+		{
+			id: 3,
+			stages: [4],
+			func: () => {
+				console.log("one");
+			},
+		},
+		{
+			id: 4,
+			stages: [4],
+			func: () => {
+				console.log("two");
+			},
+		},
+	];
+	const currentTask = (task, id) => {
+		let roof = id * 4;
+		if (roof < task) {
+			return 4;
+		}
+		if (task < roof - 4 && roof > task) {
+			console.log(task < roof - 4);
+			return 0;
+		}
+		if (roof > task) {
+			return task % 4;
+		}
+	};
+	const isStarted = (task, id) => {
+		return currentTask(task, id) != 0 ? true : false;
+	};
+	let progress = [
+		{ id: 1, prog: currentTask(task, 1), started: isStarted(task, 1) },
+		{ id: 2, prog: currentTask(task, 2), started: isStarted(task, 2) },
+		{ id: 3, prog: currentTask(task, 3), started: isStarted(task, 3) },
+		{ id: 4, prog: currentTask(task, 4), started: isStarted(task, 4) },
+	];
+	let challengeEntries = createChallengeEntries(challenges, progress);
 
 	const tabs = createTabs([
-		{ header: "Overview", content: content },
+		{ header: "Overview", content: challengeEntries },
 		{ header: "Utmaningar", content: content },
 	]);
 	document.getElementById("phase-one-div").append(tabs);
 });
 
-async function renderChallenge(challengedata, clueNumber, lat, long, linje = "0") {
-	let clue = createContentBlock(challengeData[challengedata].title, "h1", challengeData[challengedata].description);
+async function renderChallenge(number, clueNumber, lat, long, linje = "0") {
+	let clue = createContentBlock(challengeData[number].title, "h1", challengeData[number].description);
 	let input = createInput("answer", `clue_${clueNumber}`, "name");
 	let button = createButton("button text", async () => {
 		let guess = document.getElementById(`clue_${clueNumber}`).value;
