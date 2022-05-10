@@ -693,14 +693,6 @@ function printTerminalText(input) {
 	} else {
 		document.querySelector("body").append(createString(input));
 	}
-
-	if (Array.isArray(input)) {
-		input.forEach((message) => {
-			document.querySelector("body").append(createString(message));
-		});
-	} else {
-		document.querySelector("body").append(createString(input));
-	}
 }
 
 function createString(string) {
