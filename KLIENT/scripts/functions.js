@@ -55,7 +55,7 @@ async function updatePlayer(update) {
 	try {
 		let res = await fetch(localhost + "players", postData(update, "PATCH"));
 		if (res.ok) {
-			let data = await res.json();
+			return await res.json();
 			// await saveToLS("user", JSON.stringify(data));
 		}
 	} catch (error) {
@@ -195,7 +195,44 @@ async function createGroup(groupName = "", sessionCode) {
 }
 //TEAMS
 //--------------------------------------------------
+async function getTeam(query, value) {
+	let res = await fetch(`${localhost}teams?${query}=${value}`);
+	if (res.ok) {
+		let data = await res.json();
+		return data;
+	}
+}
 
+async function getTeamById(id) {
+	let res = await fetch(`${localhost}teams/id/${id}`);
+	if (res.ok) {
+		let data = await res.json();
+		return data;
+	}
+}
+
+async function updateTeam(update) {
+	console.log(localhost + "teams", postData(update, "PATCH"));
+	let res = await fetch(localhost + "teams", postData(update, "PATCH"));
+	return res.json();
+}
+async function joinTeam(update) {
+	console.log(localhost + "teams", postData(update, "PATCH"));
+	let res = await fetch(localhost + "teams", postData(update, "PATCH"));
+	return res.json();
+}
+async function createTeams(sessionCode, number) {
+	let postBody = {
+		users: [],
+		points: "0",
+		session: sessionCode,
+		team: number,
+	};
+	let res = await fetch(`${localhost}teams`, postData(postBody));
+	if (res.ok) {
+		return await res.json();
+	}
+}
 //LOGS
 //--------------------------------------------------
 
@@ -248,7 +285,7 @@ async function challengeCheck() {
 		task: group.task,
 		linje: group.linje,
 	};
-	console.log(task)
+	console.log(task);
 	return task;
 }
 

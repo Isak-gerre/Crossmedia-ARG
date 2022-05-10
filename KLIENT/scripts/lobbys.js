@@ -32,11 +32,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 	if (!session.lobby) {
 		window.location.href = "phase.html";
 	}
+	console.log(session.phase);
 	if (session.phase == 0) {
 		makeLobbyOne(user, activeSession, session, usersInSession);
 	}
-	if (session.phase == 2) {
+	if (session.phase == 1) {
 		makeLobbyTwo(user, activeSession, session, usersInSession);
+	}
+	if (session.phase == 2) {
+		makeLobbyThree(user, activeSession, session, usersInSession);
 	}
 });
 
@@ -52,6 +56,9 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 				async () => {
 					const sessionFilter = { sessionCode: activeSession };
 					const sessionUpdates = { $set: { phase: 1, lobby: false } };
+
+					await createTeams(activeSession, "1");
+					await createTeams(activeSession, "2");
 
 					let groupedPlayers = [[], [], [], []];
 					let shuffeldUsers = shuffleArray(usersInSession);
@@ -117,4 +124,38 @@ async function makeLobbyTwo(user, activeSession, session, usersInSession) {
 	});
 	document.body.append(createReadyButton("Redo", "ready-btn", "Väntar på andra spelare", activeSession));
 }
-function makeLobbyThree() {}
+function makeLobbyThree(user, activeSession, session, usersInSession) {
+	sessionH1.innerText = "Fas 3";
+	let save = createConfirmButton(
+		"Rädda världen",
+		"rädda",
+		async () => {
+			await joinTeam(player.username, "1", activeSession);
+		},
+		"Är du säker? Du kan inte ångra dig"
+	);
+	let destroy = createConfirmButton(
+		"Förstöra världen",
+		"förstöra",
+		async () => {
+			await joinTeam(player.username, "2", activeSession);
+		},
+		"Är du säker? Du kan inte ångra dig"
+	);
+	lobbyDiv.append(save, destroy);
+}
+
+async function joinTeam(username, teamID, sessionCode) {
+	const playerFilter = { username: username, session: sessionCode };
+	const playerUpdates = { $set: { team: teamID } };
+	let resPlayer = await updatePlayer({
+		filter: playerFilter,
+		updates: playerUpdates,
+	});
+	const teamFilter = { session: sessionCode, team: teamID };
+	const teamUpdates = { $push: { users: username } };
+	let resTeam = await updateTeam({
+		filter: teamFilter,
+		updates: teamUpdates,
+	});
+}

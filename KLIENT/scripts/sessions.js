@@ -42,20 +42,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 	makeSessionButton(session);
 });
 
-makeSessionPage();
-function makeSessionPage() {
-	const sessionDiv = `
-    <div id="session-div">
-    </div>
-    <button id="join-session" disabled>Join Session´
-    </button>
-    `;
-}
+// makeSessionPage();
+// function makeSessionPage() {
+// 	const sessionDiv = `
+//     <div id="session-div">
+//     </div>
+//     <button id="join-session" disabled>Join Session´
+//     </button>
+//     `;
+// }
 
 function checkPlayerInSession(sessions) {
 	let savedPlayer = JSON.parse(getFromLS("user")).username;
 	let inSession = sessions.find((session) => session.users.includes(savedPlayer)) ? true : false;
-	console.log(inSession);
 	return inSession;
 }
 

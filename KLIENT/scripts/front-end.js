@@ -66,11 +66,13 @@ let textArr = [
 			try {
 				const user = JSON.parse(getFromLS("user"));
 				const session = await createSession(user.username);
-				const update = {
-					filter: { username: user.username, password: user.password },
-					updates: { session: session.sessionCode },
-				};
-				let res = await updatePlayer(update);
+				const playerFilter = { username: user.username };
+				const playerUpdates = { $set: { session: session.sessionCode } };
+				let res = await updatePlayer({
+					filter: playerFilter,
+					updates: playerUpdates,
+				});
+				console.log(res);
 				saveToLS("user", res);
 				location.reload();
 			} catch (error) {
