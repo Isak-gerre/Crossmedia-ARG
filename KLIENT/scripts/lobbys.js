@@ -148,14 +148,17 @@ function makeLobbyThree(user, activeSession, session, usersInSession) {
 async function joinTeam(username, teamID, sessionCode) {
 	const playerFilter = { username: username, session: sessionCode };
 	const playerUpdates = { $set: { team: teamID } };
-	let resPlayer = await updatePlayer({
-		filter: playerFilter,
-		updates: playerUpdates,
-	});
+
 	const teamFilter = { session: sessionCode, team: teamID };
 	const teamUpdates = { $push: { users: username } };
-	let resTeam = await updateTeam({
-		filter: teamFilter,
-		updates: teamUpdates,
-	});
+	try {
+		let resPlayer = await updatePlayer({
+			filter: playerFilter,
+			updates: playerUpdates,
+		});
+		let resTeam = await updateTeam({
+			filter: teamFilter,
+			updates: teamUpdates,
+		});
+	} catch (error) {}
 }
