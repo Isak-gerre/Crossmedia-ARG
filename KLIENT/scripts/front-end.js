@@ -1,5 +1,7 @@
 // FUNCTIONS AND DESCRIPTION
 
+// BUTTONS ----------------------------
+
 // createButton( "button text" ; func: callback)
 // return DOM
 
@@ -11,6 +13,9 @@
 
 // createReadyButton( "text innan klick", "id", "text när knapp är aktiv")
 // return DOM
+
+
+// OTHER --------------------------
 
 // createInput( "label text" ; "id" ; "name" ; ("value") )
 // return DOM
@@ -34,10 +39,17 @@
 // "*" framför aktiv spelare ger accent-color
 // return DOM
 
+// createSection( [array av DOM] )
+// skapar en wrapper för flera element som kan användas till createContentBlock Bl.a
+// return DOM
+
+
+//FAS 2 ---------------------------------
+
 // createAccordion( "label text", DOM: content )
 //return DOM
 
-// createChallengeEntries( [challenges], [progress] )
+// createChallengeEntries( [challenges], [progress] ) 
 // skapad utefter följande array struktur:
 // let challenges = [
 // 	{id: 1, stages: [4], func: ()=>{console.log("one")} },	<--**func kallas vid klick**
@@ -51,9 +63,19 @@
 
 // return DOM
 
-// createSection( [array av DOM] )
-// skapar en wrapper för flera element som kan användas till createContentBlock Bl.a
+// 	createInputBoxes("ord")
+// skapar input boxar som kan skrivas i för att få fram svar
+// används i 
 // return DOM
+
+// FAS 3 ------------------
+
+// createChallengeGrid([challenges], [teampogress], currentTime)
+// renderar grid av challenges med filterknappar och timer
+// OBS TIMER BEHÖVER ÄNDRAS FÖR ATT FUNGERA
+// return DOM
+
+
 // --------------------------------------------------------------------------------------
 
 // EXEMPEL HUR TEXT OCH TEXTKNAPPAR SKAPAS
@@ -116,20 +138,13 @@ let create = {
 	),
 };
 
-function setBodyId(id) {
-	document.body.setAttribute("id", id);
-}
-
 let missions = {
 	header: "uppdrag",
 	content: "uppdrag",
 };
 
 
-
-// createForm([createInput("användarnamn", "username", "username"), createInput("lösenord", "password", "password"), createButton("logga in")], "post", "", "hello");
-
-// let tabGroup = [create, signIn];
+// VARIABLES FOR TESTING ----------------------------
 
 let alpha = ["mittlånganamn", "finnick", "felicia", "paul"];
 let beta = ["bill", "*sara", "corniellerine", "mina"];
@@ -148,7 +163,8 @@ function test() {
 	}, 200);
 }
 
-// --------------------------------------------------------------------------------------
+
+// HELP FUNCTIONS --------------------------------
 
 function setBodyState(c) {
 	if (Array.isArray(c)) {
@@ -159,6 +175,20 @@ function setBodyState(c) {
 		document.body.classList.add(c);
 	}
 }
+
+function createElemAndClass(type, className, classNameTwo){
+	let wrapper = document.createElement(type);
+	wrapper.classList.add(className);
+	if(classNameTwo) wrapper.classList.add(classNameTwo);
+	return wrapper;
+}
+
+function setBodyId(id) {
+	document.body.setAttribute("id", id);
+}
+
+
+// FUNCTIONS -------------------------------------
 
 function createSection(array) {
 	let section = document.createElement("section");
@@ -655,7 +685,7 @@ function createChallenge(challenge, answer) {
 
 	setBodyState(["body-challenge", "body-space-between"]);
 
-	let input = createInputBoxes(challenge.answer, "answer", "answer");
+	let input = createInputBoxes(challenge.answer);
 	let text = createString(challenge.description);
 	let button = createButton("skicka", checkAnswer(answer));
 
@@ -956,12 +986,6 @@ function createChallengeGrid(challenges, progress, currentTime) {
 
 document.body.append(createChallengeGrid(CHALL, PROG, "14:32"));
 
-function createElemAndClass(type, className, classNameTwo){
-	let wrapper = document.createElement(type);
-	wrapper.classList.add(className);
-	if(classNameTwo) wrapper.classList.add(classNameTwo);
-	return wrapper;
-}
 
 //Text bak o fram
 function reverseString(string) {
