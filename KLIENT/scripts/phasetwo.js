@@ -69,25 +69,44 @@ phaseCheck(2, async () => {
 	];
 	const currentTask = (task, id) => {
 		let roof = id * 4;
+		console.log(task % roof);
 		if (roof < task) {
 			return 4;
 		}
 		if (task < roof - 4 && roof > task) {
-			console.log(task < roof - 4);
 			return 0;
 		}
 		if (roof > task) {
 			return task % 4;
+		}
+		if (roof == task) {
+			return 3;
 		}
 	};
 	const isStarted = (task, id) => {
 		return currentTask(task, id) != 0 ? true : false;
 	};
 	let progress = [
-		{ id: 1, prog: currentTask(task, 1), started: isStarted(task, 1) },
-		{ id: 2, prog: currentTask(task, 2), started: isStarted(task, 2) },
-		{ id: 3, prog: currentTask(task, 3), started: isStarted(task, 3) },
-		{ id: 4, prog: currentTask(task, 4), started: isStarted(task, 4) },
+		{
+			id: 1,
+			prog: currentTask(task, 1) != 4 && currentTask(task, 1) != 0 ? currentTask(task, 1) - 1 : currentTask(task, 1),
+			started: isStarted(task, 1),
+		},
+		{
+			id: 2,
+			prog: currentTask(task, 2) != 4 && currentTask(task, 2) != 0 ? currentTask(task, 2) - 1 : currentTask(task, 2),
+			started: isStarted(task, 2),
+		},
+		{
+			id: 3,
+			prog: currentTask(task, 3) != 4 && currentTask(task, 3) != 0 ? currentTask(task, 3) - 1 : currentTask(task, 3),
+			started: isStarted(task, 3),
+		},
+		{
+			id: 4,
+			prog: currentTask(task, 4) != 4 && currentTask(task, 4) != 0 ? currentTask(task, 4) - 1 : currentTask(task, 4),
+			started: isStarted(task, 4),
+		},
 	];
 	let challengeEntries = createChallengeEntries(challenges, progress);
 

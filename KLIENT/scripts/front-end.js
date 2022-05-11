@@ -14,7 +14,6 @@
 // createReadyButton( "text innan klick", "id", "text när knapp är aktiv")
 // return DOM
 
-
 // OTHER --------------------------
 
 // createInput( "label text" ; "id" ; "name" ; ("value") )
@@ -43,13 +42,12 @@
 // skapar en wrapper för flera element som kan användas till createContentBlock Bl.a
 // return DOM
 
-
 //FAS 2 ---------------------------------
 
 // createAccordion( "label text", DOM: content )
 //return DOM
 
-// createChallengeEntries( [challenges], [progress] ) 
+// createChallengeEntries( [challenges], [progress] )
 // skapad utefter följande array struktur:
 // let challenges = [
 // 	{id: 1, stages: [4], func: ()=>{console.log("one")} },	<--**func kallas vid klick**
@@ -65,7 +63,7 @@
 
 // 	createInputBoxes("ord")
 // skapar input boxar som kan skrivas i för att få fram svar
-// används i 
+// används i
 // return DOM
 
 // FAS 3 ------------------
@@ -74,7 +72,6 @@
 // renderar grid av challenges med filterknappar och timer
 // OBS TIMER BEHÖVER ÄNDRAS FÖR ATT FUNGERA
 // return DOM
-
 
 // --------------------------------------------------------------------------------------
 
@@ -143,7 +140,6 @@ let missions = {
 	content: "uppdrag",
 };
 
-
 // VARIABLES FOR TESTING ----------------------------
 
 let alpha = ["mittlånganamn", "finnick", "felicia", "paul"];
@@ -163,7 +159,6 @@ function test() {
 	}, 200);
 }
 
-
 // HELP FUNCTIONS --------------------------------
 
 function setBodyState(c) {
@@ -176,17 +171,16 @@ function setBodyState(c) {
 	}
 }
 
-function createElemAndClass(type, className, classNameTwo){
+function createElemAndClass(type, className, classNameTwo) {
 	let wrapper = document.createElement(type);
 	wrapper.classList.add(className);
-	if(classNameTwo) wrapper.classList.add(classNameTwo);
+	if (classNameTwo) wrapper.classList.add(classNameTwo);
 	return wrapper;
 }
 
 function setBodyId(id) {
 	document.body.setAttribute("id", id);
 }
-
 
 // FUNCTIONS -------------------------------------
 
@@ -222,11 +216,11 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt) {
 
 	setBodyState("space-between");
 
-	let warning = createElemAndClass('div', 'fold', 'small-txt');
+	let warning = createElemAndClass("div", "fold", "small-txt");
 
 	let initButton = createButton(initTxt, confirm);
 
-	let confirmWrapper = createElemAndClass('section', 'button-confirm-wrapper');
+	let confirmWrapper = createElemAndClass("section", "button-confirm-wrapper");
 
 	confirmWrapper.append(createButton(ultTxt, callback), createButton("cancel", close));
 
@@ -393,9 +387,8 @@ function checkClassExistance(item, check) {
 	return item.classList.contains(check);
 }
 
-
 function createInput(labelText, id, name, value = false) {
-	let wrapper = createElemAndClass('section', 'input-wrapper');
+	let wrapper = createElemAndClass("section", "input-wrapper");
 
 	let label = document.createElement("label");
 	label.textContent = labelText + ":";
@@ -416,16 +409,16 @@ function createInput(labelText, id, name, value = false) {
 }
 
 function createTabs(tabArr) {
-	let wrapper = createElemAndClass('div', 'tab-wrapper')
+	let wrapper = createElemAndClass("div", "tab-wrapper");
 
-	let tabHeadWrapper = createElemAndClass('div', 'tab-head-wrapper', 'header')
+	let tabHeadWrapper = createElemAndClass("div", "tab-head-wrapper", "header");
 
 	let tabContent = document.createElement("section");
 	tabContent.setAttribute("id", "tabContent");
 
 	let count = "one";
 	tabArr.forEach((tab) => {
-		let tabTitle = createElemAndClass('p', 'tab-header');
+		let tabTitle = createElemAndClass("p", "tab-header");
 
 		tabTitle.innerHTML = tab.header;
 
@@ -472,7 +465,7 @@ function createForm(inputs, method, action, id) {
 
 // not done
 function loadingScreen() {
-	let wrapper = createElemAndClass('div', 'loading-screen-wrapper');
+	let wrapper = createElemAndClass("div", "loading-screen-wrapper");
 	wrapper.setAttribute("id", "loading");
 
 	document.body.innerHTML = ``;
@@ -482,7 +475,7 @@ function loadingScreen() {
 
 // not done
 function loadingButton() {
-	let wrapper = createElemAndClass('div', 'loading-icon-wrapper');
+	let wrapper = createElemAndClass("div", "loading-icon-wrapper");
 	wrapper.setAttribute("id", "loading");
 
 	return wrapper;
@@ -511,7 +504,7 @@ function createContentBlock(label, labelType, content, grayed = false) {
 }
 
 function createList(items, height = 4) {
-	let wrapper = createElemAndClass('div', 'list-wrapper');
+	let wrapper = createElemAndClass("div", "list-wrapper");
 
 	let section = document.createElement("section");
 	wrapper.append(section);
@@ -526,7 +519,7 @@ function createList(items, height = 4) {
 			count = 0;
 		}
 
-		let li = createElemAndClass('p', 'no-margin');
+		let li = createElemAndClass("p", "no-margin");
 		li.textContent = item;
 
 		if (item[0] == "*") {
@@ -572,17 +565,17 @@ function createString(string) {
 }
 
 function createAccordion(header, content) {
-	let wrapper = createElemAndClass('section', 'accordion-wrapper');
+	let wrapper = createElemAndClass("section", "accordion-wrapper");
 
-	let accordionHead = createElemAndClass('section', 'accordion-head');
+	let accordionHead = createElemAndClass("section", "accordion-head");
 	accordionHead.innerHTML = `
 		<div class="accordion-arrow no-margin">></div>
 		<label >${header}</label>
 	`;
 
-	let accordionBody = createElemAndClass('section', 'accordion-body');
+	let accordionBody = createElemAndClass("section", "accordion-body");
 	accordionBody.innerHTML = `<div class="accordion-line" ><div class="line"></div></div>`;
-	
+
 	accordionBody.append(content);
 	content.classList.add("accordion-content");
 
@@ -603,7 +596,7 @@ function createProgressionSection(data, max) {
 	let wrapper = document.createElement("div");
 
 	data.forEach((team) => {
-		let wrap = createElemAndClass('div', 'progress-wrapper');
+		let wrap = createElemAndClass("div", "progress-wrapper");
 
 		let name = document.createElement("span");
 		name.style.textTransform = "capitalize";
@@ -614,7 +607,7 @@ function createProgressionSection(data, max) {
 			wrap.classList.add("sub-color");
 		}
 
-		let line = createElemAndClass('hr', 'line');
+		let line = createElemAndClass("hr", "line");
 
 		let prog = document.createElement("span");
 		prog.style.textAlign = "right";
@@ -631,7 +624,7 @@ function createProgressionSection(data, max) {
 }
 
 function createChallengeEntry(progressInfo, challengeInfo) {
-	let wrapper = createElemAndClass('div', 'challenge-entry');
+	let wrapper = createElemAndClass("div", "challenge-entry");
 
 	let completed = progressInfo.prog == challengeInfo.stages;
 	let started = progressInfo.started;
@@ -660,7 +653,7 @@ function createChallengeEntry(progressInfo, challengeInfo) {
 }
 
 function createChallengeEntries(challenges, progress) {
-	let wrapper = createElemAndClass('section', 'challenges-wrapper');
+	let wrapper = createElemAndClass("section", "challenges-wrapper");
 
 	let count = 1;
 	progress.forEach((entry) => {
@@ -736,10 +729,10 @@ function createChallenge(challenge, answer) {
 }
 
 function createInputBoxes(word) {
-	let wrap = createElemAndClass('section', 'box-input-wrapper');
+	let wrap = createElemAndClass("section", "box-input-wrapper");
 
 	for (let i = 0; i < word.length; i++) {
-		let input = createElemAndClass('input', 'box-input');
+		let input = createElemAndClass("input", "box-input");
 		input.setAttribute("maxlength", 1);
 
 		input.addEventListener("keyup", (e) => {
@@ -877,11 +870,11 @@ function createChallengeGrid(challenges, progress, currentTime) {
 
 	let filter = false;
 
-	let gridWrapper = createElemAndClass('div', 'challenges-grid');
+	let gridWrapper = createElemAndClass("div", "challenges-grid");
 
 	renderChallenges(challenges);
 
-	wrapper.append( createChallengeHeader(), gridWrapper );
+	wrapper.append(createChallengeHeader(), gridWrapper);
 
 	return wrapper;
 
@@ -890,13 +883,13 @@ function createChallengeGrid(challenges, progress, currentTime) {
 		chals.forEach((challenge) => {
 			createChallenge(challenge);
 		});
-	} 
+	}
 
 	function createChallenge(challenge) {
 		let wrapper = document.createElement("section");
 		if (progress.includes(challenge.id)) wrapper.classList.add("completed");
 
-		let block = createElemAndClass('section', 'challenge-block');
+		let block = createElemAndClass("section", "challenge-block");
 
 		let type = challenge.type == "kabel" ? "cable" : "code";
 
@@ -916,26 +909,26 @@ function createChallengeGrid(challenges, progress, currentTime) {
 		gridWrapper.append(wrapper);
 	}
 
-	function createChallengeHeader(){
-		let wrapper = createElemAndClass('section', 'challenge-header');
-		
-		let time = createElemAndClass('div', 'timer');
+	function createChallengeHeader() {
+		let wrapper = createElemAndClass("section", "challenge-header");
+
+		let time = createElemAndClass("div", "timer");
 		time.innerHTML = currentTime;
-		
-		let difficultyWrapper = createElemAndClass('div',"button-confirm-wrapper", "button-confirm-gap" )
-		
+
+		let difficultyWrapper = createElemAndClass("div", "button-confirm-wrapper", "button-confirm-gap");
+
 		const difficulties = ["lätt", "medel", "svår"];
 		let count = 1;
-		
+
 		difficulties.forEach((diff) => {
 			let currentDifficulty = count;
-			
+
 			let text = "";
-			
+
 			for (let i = 0; i < count; i++) {
 				text += "★";
 			}
-	
+
 			let button = createButton(text, () => {
 				// if there already is a filter
 				if (gridWrapper.classList.contains("filter")) {
@@ -944,48 +937,47 @@ function createChallengeGrid(challenges, progress, currentTime) {
 						renderChallenges(challenges);
 						button.classList.remove("button-accent");
 						gridWrapper.classList.remove("filter", diff[0]);
-						
+
 						return;
 					}
-					
+
 					// if other filter is active
 					document.querySelector(".button-accent").classList.remove("button-accent");
 					button.classList.add("button-accent");
-					
+
 					gridWrapper.classList.remove("l");
 					gridWrapper.classList.remove("s");
 					gridWrapper.classList.remove("m");
-					
+
 					gridWrapper.classList.add(diff[0]);
-					
+
 					filter = challenges.filter((challenge) => challenge.difficulty == currentDifficulty);
 					renderChallenges(filter);
-					
+
 					return;
 				}
-				
+
 				// if there is no filter
 				gridWrapper.classList.add("filter", diff[0]);
-				
+
 				filter = challenges.filter((challenge) => challenge.difficulty == currentDifficulty);
 				renderChallenges(filter);
-				
+
 				button.classList.add("button-accent");
 			});
-			
-			button.classList.add("button-small")	
+
+			button.classList.add("button-small");
 			difficultyWrapper.append(button);
-			
+
 			count++;
 		});
-		
+
 		wrapper.append(time, difficultyWrapper);
 		return wrapper;
 	}
 }
 
-document.body.append(createChallengeGrid(CHALL, PROG, "14:32"));
-
+// document.body.append(createChallengeGrid(CHALL, PROG, "14:32"));
 
 //Text bak o fram
 function reverseString(string) {
