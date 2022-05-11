@@ -9,6 +9,7 @@ import playersRoutes from "./routes/players.js";
 import sessionRoutes from "./routes/sessions.js";
 import groupRoutes from "./routes/groups.js";
 import challengesRoutes from "./routes/challenges.js";
+import teamRoutes from "./routes/team.js";
 
 const app = express();
 
@@ -31,3 +32,4 @@ app.use("/players", playersRoutes);
 app.use("/sessions", sessionRoutes);
 app.use("/groups", groupRoutes);
 app.use("/challenges", challengesRoutes);
+app.use("/teams", teamRoutes);

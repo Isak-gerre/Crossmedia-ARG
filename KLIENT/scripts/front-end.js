@@ -66,11 +66,13 @@ let textArr = [
 			try {
 				const user = JSON.parse(getFromLS("user"));
 				const session = await createSession(user.username);
-				const update = {
-					filter: { username: user.username, password: user.password },
-					updates: { session: session.sessionCode },
-				};
-				let res = await updatePlayer(update);
+				const playerFilter = { username: user.username };
+				const playerUpdates = { $set: { session: session.sessionCode } };
+				let res = await updatePlayer({
+					filter: playerFilter,
+					updates: playerUpdates,
+				});
+				console.log(res);
 				saveToLS("user", res);
 				location.reload();
 			} catch (error) {
@@ -646,7 +648,7 @@ function createChallengeEntries(challenges, progress) {
 	return wrapper;
 }
 
-function createChallenge(challenge) {
+function createChallenge(challenge, answer) {
 	// createContentBlock( "header" ; "h-tagg" ; DOM: content )
 	// createButton( "button text" ; func: callback)
 	// createInput( "label text" ; "id" ; "name" ; ("value") )
@@ -655,7 +657,7 @@ function createChallenge(challenge) {
 
 	let input = createInputBoxes(challenge.answer, "answer", "answer");
 	let text = createString(challenge.description);
-	let button = createButton("skicka", checkAnswer);
+	let button = createButton("skicka", checkAnswer(answer));
 
 	let objs = [text, input];
 
@@ -671,16 +673,16 @@ function createChallenge(challenge) {
 	document.body.append(block);
 	document.body.append(button);
 
-	function checkAnswer() {
+	function checkAnswer(answer) {
 		let inputs = document.querySelectorAll(".box-input");
 
-		let answer = "";
+		let submission = "";
 
 		inputs.forEach((input) => {
 			answer += input.value;
 		});
 
-		if (answer == challenge.answer) {
+		if (answer == submission) {
 			button.textContent = "Rätt svar, bra jobbat";
 			button.classList.add("button-active");
 
@@ -952,7 +954,6 @@ function createChallengeGrid(challenges, progress, currentTime) {
 	}
 }
 
-// document.body.append(createChallengeHeader("14:23"));
 document.body.append(createChallengeGrid(CHALL, PROG, "14:32"));
 
 function createElemAndClass(type, className, classNameTwo){

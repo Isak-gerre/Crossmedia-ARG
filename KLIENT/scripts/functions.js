@@ -55,7 +55,7 @@ async function updatePlayer(update) {
 	try {
 		let res = await fetch(localhost + "players", postData(update, "PATCH"));
 		if (res.ok) {
-			let data = await res.json();
+			return await res.json();
 			// await saveToLS("user", JSON.stringify(data));
 		}
 	} catch (error) {
@@ -195,7 +195,44 @@ async function createGroup(groupName = "", sessionCode) {
 }
 //TEAMS
 //--------------------------------------------------
+async function getTeam(query, value) {
+	let res = await fetch(`${localhost}teams?${query}=${value}`);
+	if (res.ok) {
+		let data = await res.json();
+		return data;
+	}
+}
 
+async function getTeamById(id) {
+	let res = await fetch(`${localhost}teams/id/${id}`);
+	if (res.ok) {
+		let data = await res.json();
+		return data;
+	}
+}
+
+async function updateTeam(update) {
+	console.log(localhost + "teams", postData(update, "PATCH"));
+	let res = await fetch(localhost + "teams", postData(update, "PATCH"));
+	return res.json();
+}
+async function joinTeam(update) {
+	console.log(localhost + "teams", postData(update, "PATCH"));
+	let res = await fetch(localhost + "teams", postData(update, "PATCH"));
+	return res.json();
+}
+async function createTeams(sessionCode, number) {
+	let postBody = {
+		users: [],
+		points: "0",
+		session: sessionCode,
+		team: number,
+	};
+	let res = await fetch(`${localhost}teams`, postData(postBody));
+	if (res.ok) {
+		return await res.json();
+	}
+}
 //LOGS
 //--------------------------------------------------
 
@@ -248,7 +285,7 @@ async function challengeCheck() {
 		task: group.task,
 		linje: group.linje,
 	};
-	console.log(task)
+	console.log(task);
 	return task;
 }
 
@@ -278,7 +315,10 @@ function displayLoginErrorMessage(error) {
 	document.querySelector("#error-messages").textContent = error;
 }
 
-async function getDiffrencePosition(lat, long) {
+async function getDiffrencePosition(latString, longString) {
+	let lat = parseFloat(latString)
+	let long = parseFloat(longString)
+	console.log(latString);
 	async function getMyCoords() {
 		const getCoords = async () => {
 			const pos = await new Promise((resolve, reject) => {
@@ -310,7 +350,6 @@ async function getDiffrencePosition(lat, long) {
 	let a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(coords.lat) * Math.cos(lat) * Math.pow(Math.sin(dlon / 2), 2);
 
 	let c = 2 * Math.asin(Math.sqrt(a));
-
 	let r = 6371000;
 
 	// calculate the result
