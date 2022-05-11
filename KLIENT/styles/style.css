@@ -132,11 +132,6 @@ label{
     border-bottom: 1px solid var(--white);
 }
 
-.string-button{
-    color: var(--sub);
-    cursor: pointer;
-}
-
 .input-wrapper {
    display: flex;
    flex-direction: column;
@@ -192,15 +187,25 @@ button{
     transition: background-color var(--transFast), color var(--transSlow);
 }
 
+.string-button{
+    color: var(--sub);
+    cursor: pointer;
+}
+
+.button-small{
+    line-height: var(--xs);
+    border-radius: var(--m);
+}
+
 .button-active{
     background-color: var(--sub);
     color: var(--black);
     transition: background-color var(--transSlow);
 }
 
-.button-accent{
+/* .button-accent{
 
-}
+} */
 
 .button-disabled{
     background-color: var(--gray);
@@ -379,9 +384,35 @@ body .button-accent{
 .challenges-grid .hard{border: 2px solid var(--suppTwo)}
 
 .challenge-block{
-    --size: calc( (100vw - var(--s) * 2 - var(--m) * 3) / 4);
+    --size: calc( (100vw - var(--s) * 2 - var(--m) * 2) / 3);
     height: var(--size);
     width: var(--size);
 
     background-color: var(--sub);
+
+    background-size: cover;
+    cursor: pointer;
+}
+
+
+.cable-chall{
+    background-image: url("../images/cable.png");
+}
+
+.code-chall{
+    background-image: url("../images/code.png");
+}
+
+.challenge-header{
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: var(--black);
+    padding-top: var(--s);
+}
+
+.timer {
+    font-size: var(--xl);
+    font-weight: bold;
+    text-align: center;
 }
