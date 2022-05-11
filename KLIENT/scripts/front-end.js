@@ -63,6 +63,10 @@
 
 // return DOM
 
+// createChallenge(challenge, answer)
+
+
+
 // 	createInputBoxes("ord")
 // skapar input boxar som kan skrivas i för att få fram svar
 // används i 
@@ -735,10 +739,10 @@ function createChallenge(challenge, answer) {
 	}
 }
 
-function createInputBoxes(word) {
+function createInputBoxes(num) {
 	let wrap = createElemAndClass('section', 'box-input-wrapper');
 
-	for (let i = 0; i < word.length; i++) {
+	for (let i = 0; i < num; i++) {
 		let input = createElemAndClass('input', 'box-input');
 		input.setAttribute("maxlength", 1);
 
