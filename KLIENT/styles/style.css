@@ -262,16 +262,119 @@ body .button-accent{
     position: absolute;
     top: var(--negS) ;
     left: var(--negS) ;
-    height: calc( 100% + var(--s) * 2 );
-    width: calc( 100% + var(--s) * 2 );
+    height: calc( 100vh + var(--s) * 2 );
+    width: calc( 100vw + var(--s) * 2 );
 
     filter: blur();
 
     z-index: 100;
 
     overflow: hidden;
-    padding: var(--s);
 }
+
+
+/* STYLE THREE-------------------------------------------------- */
+
+
+.style-three{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    place-content: center;
+
+    background-color: var(--black);
+}
+
+.style-three .base{
+    height: 300vh;
+    width: 100%;
+
+    background: linear-gradient(0deg, var(--main), var(--black));  
+
+    border-radius: unset;
+
+    animation: 5s linear 1s infinite alternate slide;
+
+}
+
+@keyframes slide{
+    0%{top: 0;}
+    50%{top: 100vh;}
+    100%{top:0;}
+}
+
+
+
+.style-three .base, .style-three .lay0{
+    align-self: center;
+    justify-self: center;
+
+    grid-row: 1;
+    grid-column: 1;
+}
+
+.style-three .lay0{
+    border-radius: 50%;
+
+    opacity: 0.8;
+
+    height: 200vh;
+    width: 200vh;
+
+    background: var(--main);
+
+    animation-iteration-count: infinite;
+    animation-timing-function: ease;
+    animation-direction: alternate;
+    animation-name: spin, col, breathe;
+
+    box-shadow: 0 0 var(--xl) var(--blackOp);
+}
+
+@keyframes breathe{
+    0%{height: 200vh; width: 200vh;}
+    100%{height: 250vh; width: 250vh;}
+}
+
+.style-three .lay0 *, .style-three .lay0{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.style-three .lay0 *, .style-three .lay0{
+    filter: blur(var(--s));
+
+    border-radius: 50%;
+
+    background: radial-gradient(circle at 65% 15%, var(--main) 5%,  transparent 100%);
+
+    /* box-shadow: 0 0 var(--s) var(--suppTwo); */
+
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    /* animation-direction: alternate; */
+    animation-name: spin, col;
+
+}
+
+.style-three .lay0 *:nth-child(even){
+    animation-duration: 5s, 10s ;
+    animation-delay: 1.5s;
+} 
+.style-three .lay0 *:nth-child(odd){
+    animation-duration: 12s, 7s;
+} 
+
+.style-three .lay0 *{
+    height: 70%;
+    width: 70%;
+}
+
+
+
+
+/* STYLE TWO --------------------------------------------------------------- */
 
 .style-two{
     display: grid;
@@ -291,7 +394,7 @@ body .button-accent{
     grid-row: 1;
     grid-column: 1;
 
-    /* filter: blur( var(--s) ); */
+    filter: blur( var(--xs) );
 
     background: var(--main);
     animation-duration: 2s;
@@ -310,19 +413,43 @@ body .button-accent{
 .style-two .lay2{
     animation-duration: 5s, 2s, 5s;
 }
+.style-two .lay3{
+    height: 15vh;
+    width: 15vh;
+    background-color: var(--black);
+
+    border-radius: 50%;
+
+    align-self: center;
+    justify-self: center;
+
+    grid-row: 1;
+    grid-column: 1;
+
+    /* filter: blur( 0); */
+
+    animation: none;
+    /* animation-name: spin, warp, col; */
+}
 
 @keyframes col{
     0%{
-        background-color: var(--main);
+        background-color: var(--black);
     }               
-    33%{
-        background-color: var(--sub);
-    }
-    66%{
+    20%{
         background-color: var(--accent);
     }
+    40%{
+        background-color: var(--sub);
+    }
+    60%{
+        background-color: var(--white);
+    }
+    80%{
+        background-color: var(--suppTwo);
+    }
     100%{
-        background-color: var(--main);
+        background-color: var(--black);
     }
 }
 @keyframes warp{
@@ -340,6 +467,10 @@ body .button-accent{
     }
 }
 
+
+
+
+/* STYLE ONE ----------------------------------------------- */
 
 .style-one{
     position: absolute;
@@ -374,9 +505,9 @@ body .button-accent{
 }
 
 @keyframes spin{
-    0%{transform: rotate(0deg) scaleX(1, 1.2);}
-    50%{transform: rotate(180deg) scale(1.2, 0.9);}
-    100%{transform: rotate(360deg) scaleX(1, 1.2);}
+    0%{transform: rotate(0deg); }
+    50%{transform: rotate(180deg) ;}
+    100%{transform: rotate(360deg) ;}
 }
 @keyframes move{
     0%{
@@ -392,11 +523,6 @@ body .button-accent{
         left: -70vw;
     }
 }
-
-
-
-
-
 
 
 

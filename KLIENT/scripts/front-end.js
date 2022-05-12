@@ -472,15 +472,35 @@ function loadingScreen(style) {
 
 	if(style == "one") {
 		wrapper.append( createElemAndClass("section", "lay0"), createElemAndClass("section", "lay1") );
-	} else {
+	} else if( style == "two") {
+		wrapper.append(createElemAndClass("section", "lay0"), createElemAndClass("section", "lay1"), createElemAndClass("section", "lay2"), createElemAndClass("section", "lay3"));
 
-		wrapper.append(createElemAndClass("section", "lay0"), createElemAndClass("section", "lay1"), createElemAndClass("section", "lay2"));
+	} else if( style == "three"){
+
+		let obj = createElemAndClass("section", "lay0");
+
+		let newChild;
+		for (let i = 1; i < 6; i++) {
+			let section;
+
+			if( i == 1 ){
+				newChild = createElemAndClass("section", "lay"+i);
+				obj.append( newChild );
+			} else {
+				section = createElemAndClass("section", "lay"+i);
+				newChild.append(section);
+				newChild = section;
+			}
+		}
+
+		wrapper.append(createElemAndClass("section", "base"), obj);
+
 	}
 		
-		return wrapper;
+	return wrapper;
 }
 
-document.body.append( loadingScreen("two") );
+document.body.append( loadingScreen("three") );
 
 // not done
 function loadingButton() {
