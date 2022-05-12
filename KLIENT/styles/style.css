@@ -149,6 +149,8 @@ input{
 .box-input-wrapper{
     display: flex;
     gap: var(--m);
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .box-input-wrapper input{
@@ -160,6 +162,23 @@ input{
     padding: var(--xs);
     border: none;
     background-color: var(--white);
+    color: var(--black);
+
+    text-align: center;
+
+    box-shadow: -1px 1px 1px 0px var(--blackOp) inset;
+    /* -webkit-box-shadow: -2px 2px 5px 0px var(--gray) inset;
+    -moz-box-shadow: -2px 2px 5px 0px var(--gray) inset; */
+}
+
+.box-space{
+    height: var(--l);
+
+    box-sizing:content-box;
+
+    padding: var(--xs);
+    border: none;
+    background-color: var(--black);
     color: var(--black);
 
     text-align: center;
@@ -411,4 +430,12 @@ body .button-accent{
     font-size: var(--xl);
     font-weight: bold;
     text-align: center;
+}
+
+.video-wrapper{
+    text-align: center;
+}
+
+iframe{
+    width: 100%;
 }
