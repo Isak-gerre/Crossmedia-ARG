@@ -467,13 +467,19 @@ function createForm(inputs, method, action, id) {
 
 // not done
 function loadingScreen() {
-	let wrapper = createElemAndClass("div", "loading-screen-wrapper");
+	let wrapper = createElemAndClass("section", "loading-screen-wrapper");
 	wrapper.setAttribute("id", "loading");
 
-	document.body.innerHTML = ``;
-
-	return wrapper;
+	wrapper.innerHTML = `
+		<section class="lay1"></section>
+		<section class="lay3"></section>
+		`;
+		
+		return wrapper;
+		// <section class="lay2"></section>
 }
+
+document.body.append( loadingScreen() );
 
 // not done
 function loadingButton() {
