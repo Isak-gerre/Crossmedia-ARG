@@ -466,20 +466,21 @@ function createForm(inputs, method, action, id) {
 }
 
 // not done
-function loadingScreen() {
-	let wrapper = createElemAndClass("section", "loading-screen-wrapper");
+function loadingScreen(style) {
+	let wrapper = createElemAndClass("section", "loading-screen-wrapper", "style-"+ style);
 	wrapper.setAttribute("id", "loading");
 
-	wrapper.innerHTML = `
-		<section class="lay1"></section>
-		<section class="lay3"></section>
-		`;
+	if(style == "one") {
+		wrapper.append( createElemAndClass("section", "lay0"), createElemAndClass("section", "lay1") );
+	} else {
+
+		wrapper.append(createElemAndClass("section", "lay0"), createElemAndClass("section", "lay1"), createElemAndClass("section", "lay2"));
+	}
 		
 		return wrapper;
-		// <section class="lay2"></section>
 }
 
-document.body.append( loadingScreen() );
+document.body.append( loadingScreen("two") );
 
 // not done
 function loadingButton() {

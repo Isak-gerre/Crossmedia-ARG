@@ -270,74 +270,132 @@ body .button-accent{
     z-index: 100;
 
     overflow: hidden;
+    padding: var(--s);
 }
 
-.loading-screen-wrapper > *{
-    position: absolute;
-    /* filter: blur(var(--l));  */
-    /* mix-blend-mode: hard-light;  */
-
-    border-radius: 50%;
-
-    animation-name: breathe;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
+.style-two{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    place-content: center;
 }
 
-.lay1{
+.style-two > *{
+    height: 20vh;
+    width: 20vh;
+    /* border-radius: 50%; */
+
+    align-self: center;
+    justify-self: center;
+
+    grid-row: 1;
+    grid-column: 1;
+
+    /* filter: blur( var(--s) ); */
+
     background: var(--main);
-    background: linear-gradient( 0deg, var(--suppOne) 0%, var(--main) 50%, var(--accent) 100%);
-
-    height: 200vh;
-    width: 200vh;
-    
-    animation-duration: 20s;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-name: spin, warp, col;
 }
 
-.lay2{
-    background: var(--accent);
-    background: linear-gradient( 0deg, var(--accent) 0%, var(--main) );
-
-    height: 100vh;
-    width: 100vh;
-
-    top: 20vw;
-    left: 20vw;
-
-    filter: blur(var(--xxl));
-    mix-blend-mode:hard-light;
-    
-    animation-duration: 15s;
-    
+.style-two .lay0{
+    animation-duration: 1.5s, 3s, 5s;
+}
+.style-two .lay1{
+    animation-duration: 5s, 4s, 5s;
+    /* animation-direction: unset reverse unset; */
+}
+.style-two .lay2{
+    animation-duration: 5s, 2s, 5s;
 }
 
-.lay3{
-    background: var(--accent);
-    background: linear-gradient( 0deg, var(--white) 0%, var(--black) );
-    
-    height: 200vh;
-    width: 200vh;
-
-    
-    
-    animation-duration: 10s;
-    
-    mix-blend-mode:hard-light;
-}
-
-@keyframes breathe{
+@keyframes col{
     0%{
-        transform: rotate(0deg);
+        background-color: var(--main);
+    }               
+    33%{
+        background-color: var(--sub);
+    }
+    66%{
+        background-color: var(--accent);
     }
     100%{
-        transform: rotate(360deg); 
+        background-color: var(--main);
     }
 }
+@keyframes warp{
+    0%{
+        border-radius: 33% 55% 20% 40%;
+    }               
+    33%{
+        border-radius: 90% 20% 65% 10%;
+    }
+    66%{
+        border-radius: 10% 60% 90% 50%;    
+    }
+    100%{
+        border-radius: 33% 55% 20% 40%;
+    }
+}
+
+
+.style-one{
+    position: absolute;
+    animation: linear 0s infinite alternate;
+    border-radius: 50%;
+
+
+    height: 300vh;
+    width: 300vh;
+
+    transform-origin: center;
+    margin: 0;
+}
+
+
+.style-one .lay0{
+    animation-name: spin;
+    animation-duration: 15s;
+    background: var(--main);
+    background: linear-gradient( 0deg, var(--main) 0%, var(--black) 50%, var(--accent) 100%);
+    top: -100vh;
+    left: -100vh;
+}
+
+.style-one .lay1{
+    filter: blur(100px); 
+
+    animation-name: spin, move;
+    animation-duration: 15s;
+    background: var(--main);
+    background: linear-gradient( 0deg, var(--suppOne) 0%, var(--main) 50%, var(--accent) 100%);
+}
+
+@keyframes spin{
+    0%{transform: rotate(0deg) scaleX(1, 1.2);}
+    50%{transform: rotate(180deg) scale(1.2, 0.9);}
+    100%{transform: rotate(360deg) scaleX(1, 1.2);}
+}
+@keyframes move{
+    0%{
+        top: -50vh;
+        left: -50vw;
+    }
+    50%{
+        top: -30vh;
+        left: -10vw;
+    }
+    100%{
+        top: -10vh;
+        left: -70vw;
+    }
+}
+
+
+
+
 
 
 
