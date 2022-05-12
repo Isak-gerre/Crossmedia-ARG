@@ -44,7 +44,7 @@
 
 //FAS 2 ---------------------------------
 
-// createAccordion( "label text", DOM: content )
+// createAccordion( "label text", DOM: content, open = false )
 //return DOM
 
 // createChallengeEntries( [challenges], [progress] )
@@ -566,8 +566,9 @@ function createString(string) {
 	return p;
 }
 
-function createAccordion(header, content) {
+function createAccordion(header, content, open = false) {
 	let wrapper = createElemAndClass("section", "accordion-wrapper");
+	if( open ) wrapper.classList.add("open")
 
 	let accordionHead = createElemAndClass("section", "accordion-head");
 	accordionHead.innerHTML = `
@@ -729,8 +730,6 @@ function createChallenge(challenge, answer) {
 		}
 	}
 }
-
-document.body.append(createInputBoxes(9))
 
 function createInputBoxes(num) {
 	let wrap = createElemAndClass("div", "box-input-wrapper");
