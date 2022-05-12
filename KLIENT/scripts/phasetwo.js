@@ -118,10 +118,16 @@ phaseCheck(2, async () => {
 });
 
 async function renderChallenge(number, clueNumber, lat, long, linje = "0") {
+	
+	let img = document.createElement("img");
+	img.src = `../images/phase_2/nokia.png`;
+
+
 	let clue = createContentBlock(challengeData[number].title, "h1", challengeData[number].description);
-	let input = createInput("answer", `clue_${clueNumber}`, "name");
+	let input = createInputBoxes(challengeData[number].answerLength);
 	let button = createButton("button text", async () => {
-		let guess = document.getElementById(`clue_${clueNumber}`).value;
+		let guess = checkAnswerBox();
+		console.log(guess);
 		let answer = await checkAnswer("phase2", `${clueNumber}`, `${guess}`);
 		let distance = await getDiffrencePosition(lat, long);
 		console.log(distance);
