@@ -730,11 +730,13 @@ function createChallenge(challenge, answer) {
 	}
 }
 
+document.body.append(createInputBoxes(9))
+
 function createInputBoxes(num) {
-	let wrap = createElemAndClass("section", "box-input-wrapper");
+	let wrap = createElemAndClass("div", "box-input-wrapper");
 
 	for (let i = 0; i < num; i++) {
-		let input = createElemAndClass("input", "box-input");
+		let input = createElemAndClass("input", "box-input", "no-margin");
 		input.setAttribute("maxlength", 1);
 
 		input.addEventListener("keyup", (e) => {

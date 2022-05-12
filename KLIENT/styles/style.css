@@ -149,6 +149,8 @@ input{
 .box-input-wrapper{
     display: flex;
     gap: var(--m);
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .box-input-wrapper input{
