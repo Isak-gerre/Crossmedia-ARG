@@ -883,6 +883,22 @@ const CHALL = [
 	},
 ];
 
+function createVideo(link){
+	let wrapper = createElemAndClass("div", "video-wrapper");
+
+	let video = createElemAndClass("iframe", "video");
+	
+	wrapper.innerHTML = `
+	<iframe src="${link} &autoplay=1" 
+	title="YouTube video player" 
+	width="720" height="405"
+	frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+	allowfullscreen></iframe>
+	`;
+
+	return wrapper;
+}
+
 const PROG = [2, 5];
 
 // document.body.append( createChallengeEntries(CHALL, PROG) );

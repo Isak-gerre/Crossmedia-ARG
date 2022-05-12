@@ -431,3 +431,11 @@ body .button-accent{
     font-weight: bold;
     text-align: center;
 }
+
+.video-wrapper{
+    text-align: center;
+}
+
+iframe{
+    width: 100%;
+}
