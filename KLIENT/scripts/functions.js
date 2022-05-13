@@ -278,6 +278,18 @@ function postData(postData, method = "POST") {
 //Challenges
 //--------------------------------------------------
 
+function checkAnswerBox() {
+	let inputs = document.querySelectorAll(".box-input");
+
+	let answer = "";
+
+	inputs.forEach((input) => {
+		answer += input.value;
+	});
+
+	return answer;
+}
+
 async function challengeCheck() {
 	let user = getFromLS("user");
 	let group = await getGroupById(`${JSON.parse(user).group}`);
@@ -302,6 +314,26 @@ async function checkAnswer(phase, id, guess) {
 
 //RANDOM FUNCTIONS
 //--------------------------------------------------
+
+
+function scannerDistance(start, distance){	
+
+	let gone = start-distance; 
+
+	let scannerStrength = `${(-(start-gone))}dBm`;
+
+	if(start-gone == 0){
+		scannerStrength = `${((start-gone))}dBm`;
+	}
+
+	if(start < distance){
+		scannerStrength = "No signal return to last task!";
+	}
+
+	return scannerStrength;
+
+}
+
 function makeSessionCode(length) {
 	var result = "";
 	var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -348,6 +380,31 @@ async function getDiffrencePosition(latString, longString) {
 	let dlon = long - coords.long;
 	let dlat = lat - coords.lat;
 	let a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(coords.lat) * Math.cos(lat) * Math.pow(Math.sin(dlon / 2), 2);
+
+	let c = 2 * Math.asin(Math.sqrt(a));
+	let r = 6371000;
+
+	// calculate the result
+	console.log(c * r);
+
+	return c * r;
+}
+
+async function getDiffrencePositionScanner(latStartString, longStartString, latGoalString, longGoalString) {
+	let lat = parseFloat(latStartString);
+	let long = parseFloat(longStartString);
+	let latG = parseFloat(latGoalString);
+	let longG = parseFloat(longGoalString);
+
+	longG = (longG * Math.PI) / 180;
+	long = (long * Math.PI) / 180;
+	latG = (latG * Math.PI) / 180;
+	lat = (lat * Math.PI) / 180;
+
+	// Haversine formula
+	let dlon = long - longG;
+	let dlat = lat - latG;
+	let a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(latG) * Math.cos(lat) * Math.pow(Math.sin(dlon / 2), 2);
 
 	let c = 2 * Math.asin(Math.sqrt(a));
 	let r = 6371000;

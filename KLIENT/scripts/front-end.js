@@ -559,9 +559,14 @@ function loadText(obj, txt){
 	}
 }
 
-function createContentBlock(label, labelType, content, grayed = false) {
+function createContentBlock(label, labelType, content, wrapperClass, grayed = false) {
 	let wrapper = document.createElement("div");
 
+
+	if(wrapperClass){
+		wrapper.classList.add(wrapperClass);
+	}
+	
 	let header = document.createElement(labelType);
 	header.textContent = label;
 	wrapper.append(header);
@@ -775,10 +780,10 @@ function createChallenge(challenge, answer) {
 	document.body.append(block);
 	document.body.append(button);
 
-	function checkAnswer(answer) {
+	function checkAnswer() {
 		let inputs = document.querySelectorAll(".box-input");
 
-		let submission = "";
+		let answer = "";
 
 		inputs.forEach((input) => {
 			answer += input.value;
@@ -807,36 +812,55 @@ function createChallenge(challenge, answer) {
 	}
 }
 
-function createInputBoxes(num) {
+function createInputBoxes(array) {
 	let wrap = createElemAndClass("div", "box-input-wrapper");
 
-	for (let i = 0; i < num; i++) {
-		let input = createElemAndClass("input", "box-input", "no-margin");
-		input.setAttribute("maxlength", 1);
+	array.forEach(element => {
+		for (let i = 0; i < element; i++) {
+			let input = createElemAndClass("input", "box-input", "no-margin");
+			input.setAttribute("maxlength", 1);
 
-		input.addEventListener("keyup", (e) => {
-			if (e.code == "Backspace") {
-				if (!input.previousSibling) return;
+			input.addEventListener("keyup", (e) => {
 
-				input.previousSibling.focus();
-				return;
-			}
-
-			if (input.value.length > 0) {
-				if (!input.nextElementSibling) {
-					input.blur();
+				if (e.code == "Backspace") {
+					if (!input.previousSibling) return;
+					if(input.previousSibling.tagName == "DIV"){
+						input.previousSibling.previousSibling.focus();
+					}
+					input.previousSibling.focus();
 					return;
 				}
-				input.nextElementSibling.focus();
-			}
-		});
+				
+				setTimeout(() => {
+					input.value = input.value.toUpperCase()
+				}, 1);
 
-		input.addEventListener("keydown", () => {
-			input.value = "";
-		});
+				if (input.value.length > 0) {
+					if (!input.nextElementSibling) {
+						input.blur();
+						return;
+					}
+					if(input.nextElementSibling.tagName == "DIV"){
+						input.nextElementSibling.nextElementSibling.focus();
+					}
+					else{
+						input.nextElementSibling.focus();
+					}
+				}
+			});
 
-		wrap.append(input);
-	}
+			input.addEventListener("keydown", () => {
+				input.value = "";
+			});
+			wrap.append(input);
+		}
+
+		if(array.indexOf(element) + 1 != array.length){
+			let space = createElemAndClass("div", "box-space", "no-margin");
+			wrap.append(space);
+		}
+
+	});
 
 	return wrap;
 }
@@ -940,6 +964,22 @@ const CHALL = [
 	},
 ];
 
+function createVideo(link){
+	let wrapper = createElemAndClass("div", "video-wrapper");
+
+	let video = createElemAndClass("iframe", "video");
+	
+	wrapper.innerHTML = `
+	<iframe src="${link} &autoplay=1" 
+	title="YouTube video player" 
+	width="720" height="405"
+	frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+	allowfullscreen></iframe>
+	`;
+
+	return wrapper;
+}
+
 const PROG = [2, 5];
 
 // document.body.append( createChallengeEntries(CHALL, PROG) );
@@ -951,13 +991,16 @@ function createChallengeGrid(challenges, progress, currentTime) {
 
 	let gridWrapper = createElemAndClass("div", "challenges-grid");
 
-	renderChallenges(challenges);
-
+	let challangeGame = challenges.answers
+	console.log(challangeGame);
+	console.log(challenges);
+	renderChallenges(challangeGame);
 	wrapper.append(createChallengeHeader(), gridWrapper);
 
 	return wrapper;
 
 	function renderChallenges(chals) {
+		console.log
 		gridWrapper.innerHTML = "";
 		chals.forEach((challenge) => {
 			createChallenge(challenge);
@@ -970,19 +1013,27 @@ function createChallengeGrid(challenges, progress, currentTime) {
 
 		let block = createElemAndClass("section", "challenge-block");
 
-		let type = challenge.type == "kabel" ? "cable" : "code";
+		let type = "cable";
 
 		block.classList.add(type + "-chall");
 
 		let difficulty = document.createElement("section");
 		block.append(difficulty);
 
-		for (let i = 1; i <= 3; i++) {
-			let star = i > challenge.difficulty ? "&#9734" : "&#9733";
-			difficulty.innerHTML += star;
+		let diff = 1;
+		if(challenge.game.includes("M")){
+			diff = 2;
+		}
+		if(challenge.game.includes("H")){
+			diff = 3;
 		}
 
-		wrapper.addEventListener("click", challenge.func);
+		for (let i = 1; i <= 3; i++) {
+			let star = i > diff ? "&#9734" : "&#9733";
+			difficulty.innerHTML += star;
+		}
+		console.log(challenge.style);
+		wrapper.addEventListener("click", () => {renderGame(challenge.game, challenge.style)});
 
 		wrapper.append(block, difficulty);
 		gridWrapper.append(wrapper);
