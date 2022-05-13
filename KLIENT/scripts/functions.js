@@ -278,6 +278,18 @@ function postData(postData, method = "POST") {
 //Challenges
 //--------------------------------------------------
 
+function checkAnswerBox() {
+	let inputs = document.querySelectorAll(".box-input");
+
+	let answer = "";
+
+	inputs.forEach((input) => {
+		answer += input.value;
+	});
+
+	return answer
+}
+
 async function challengeCheck() {
 	let user = getFromLS("user");
 	let group = await getGroupById(`${JSON.parse(user).group}`);

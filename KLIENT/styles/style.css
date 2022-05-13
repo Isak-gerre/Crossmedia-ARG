@@ -171,6 +171,23 @@ input{
     -moz-box-shadow: -2px 2px 5px 0px var(--gray) inset; */
 }
 
+.box-space{
+    height: var(--l);
+
+    box-sizing:content-box;
+
+    padding: var(--xs);
+    border: none;
+    background-color: var(--black);
+    color: var(--black);
+
+    text-align: center;
+
+    box-shadow: -1px 1px 1px 0px var(--blackOp) inset;
+    /* -webkit-box-shadow: -2px 2px 5px 0px var(--gray) inset;
+    -moz-box-shadow: -2px 2px 5px 0px var(--gray) inset; */
+}
+
 button{
     cursor: pointer;
     

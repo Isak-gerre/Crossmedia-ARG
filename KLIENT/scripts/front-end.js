@@ -699,10 +699,10 @@ function createChallenge(challenge, answer) {
 	document.body.append(block);
 	document.body.append(button);
 
-	function checkAnswer(answer) {
+	function checkAnswer() {
 		let inputs = document.querySelectorAll(".box-input");
 
-		let submission = "";
+		let answer = "";
 
 		inputs.forEach((input) => {
 			answer += input.value;
@@ -731,36 +731,55 @@ function createChallenge(challenge, answer) {
 	}
 }
 
-function createInputBoxes(num) {
+function createInputBoxes(array) {
 	let wrap = createElemAndClass("div", "box-input-wrapper");
 
-	for (let i = 0; i < num; i++) {
-		let input = createElemAndClass("input", "box-input", "no-margin");
-		input.setAttribute("maxlength", 1);
+	array.forEach(element => {
+		for (let i = 0; i < element; i++) {
+			let input = createElemAndClass("input", "box-input", "no-margin");
+			input.setAttribute("maxlength", 1);
 
-		input.addEventListener("keyup", (e) => {
-			if (e.code == "Backspace") {
-				if (!input.previousSibling) return;
+			input.addEventListener("keyup", (e) => {
 
-				input.previousSibling.focus();
-				return;
-			}
-
-			if (input.value.length > 0) {
-				if (!input.nextElementSibling) {
-					input.blur();
+				if (e.code == "Backspace") {
+					if (!input.previousSibling) return;
+					if(input.previousSibling.tagName == "DIV"){
+						input.previousSibling.previousSibling.focus();
+					}
+					input.previousSibling.focus();
 					return;
 				}
-				input.nextElementSibling.focus();
-			}
-		});
+				
+				setTimeout(() => {
+					input.value = input.value.toUpperCase()
+				}, 1);
 
-		input.addEventListener("keydown", () => {
-			input.value = "";
-		});
+				if (input.value.length > 0) {
+					if (!input.nextElementSibling) {
+						input.blur();
+						return;
+					}
+					if(input.nextElementSibling.tagName == "DIV"){
+						input.nextElementSibling.nextElementSibling.focus();
+					}
+					else{
+						input.nextElementSibling.focus();
+					}
+				}
+			});
 
-		wrap.append(input);
-	}
+			input.addEventListener("keydown", () => {
+				input.value = "";
+			});
+			wrap.append(input);
+		}
+
+		if(array.indexOf(element) + 1 != array.length){
+			let space = createElemAndClass("div", "box-space", "no-margin");
+			wrap.append(space);
+		}
+
+	});
 
 	return wrap;
 }
