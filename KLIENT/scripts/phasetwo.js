@@ -18,10 +18,10 @@ var challengeData = "";
 		.then((data) => (challengeData = data));
 })();
 
-async function checkChallenge(task, linje, position) {
+async function checkChallenge(task, linje, position, lastPosition) {
 	for (let i = 0; i <= 15; i++) {
 		if (task == i) {
-			return await renderChallenge(i, i, position.latitude, position.longitude, linje);
+			return await renderChallenge(i, i, position, lastPosition, linje);
 		}
 	}
 }
@@ -31,8 +31,14 @@ phaseCheck(2, async () => {
 	let task = challenge.task;
 	let linje = challenge.linje;
 	let position = challengeData[task].position;
-
-	const content = await checkChallenge(task, linje, position);
+	let lastPosition;
+	if(task == 0){
+		lastPosition = challengeData[15].position;
+	}
+	else {
+		lastPosition = challengeData[task-1].position;	
+	}
+	const content = await checkChallenge(task, linje, position, lastPosition);
 	console.log(challenge);
 
 	// createChallengeEntries( [challenges], [progress] )
@@ -117,19 +123,43 @@ phaseCheck(2, async () => {
 	document.getElementById("phase-one-div").append(tabs);
 });
 
-async function renderChallenge(number, clueNumber, lat, long, linje = "0") {
+async function renderChallenge(number, clueNumber, position, lastPosition, linje = "0") {
+	setBodyState(["body-space-between"]);
+	console.log(position)
+	let distance = await getDiffrencePosition(position.latitude, position.longitude);
+
+	let startDistane = await getDiffrencePositionScanner(position.latitude, position.longitude, lastPosition.latitude, lastPosition.longitude);
+
+	console.log(startDistane);
+
+	let scannerStrength = scannerDistance(startDistane, distance);
+
+	let scannerArray = [createString(scannerStrength), "För att kunna gå vidare måste signal styrkan vara minst -30dBm"]	
+
+	let scannerButton = createButton("Skanna", () => {
+		document.querySelector(".scannerContent p").innerHTML = scannerDistance(startDistane, distance);
+	});
+
+	scannerArray.push(scannerButton);
+
+	let scanner = createContentBlock("Skanner", "h1", scannerArray, "scannerContent");
+
+	let content = [];
+
+	if(challengeData[number].img){
+		let img = document.createElement("img");
+		img.src = `${challengeData[number].img}`;
+		content.push(img);
+	}
+
+	content.push(challengeData[number].description);
 	
-	let img = document.createElement("img");
-	img.src = `../images/phase_2/nokia.png`;
-
-
-	let clue = createContentBlock(challengeData[number].title, "h1", challengeData[number].description);
 	let input = createInputBoxes(challengeData[number].answerLength);
-	let button = createButton("button text", async () => {
+
+	let clue = createContentBlock(challengeData[number].title, "h1", content, "center");
+	let button = createButton("skicka", async () => {
 		let guess = checkAnswerBox();
-		console.log(guess);
 		let answer = await checkAnswer("phase2", `${clueNumber}`, `${guess}`);
-		let distance = await getDiffrencePosition(lat, long);
 		console.log(distance);
 		if (distance < 25000) {
 			if (answer) {
@@ -141,7 +171,6 @@ async function renderChallenge(number, clueNumber, lat, long, linje = "0") {
 				let groupUpdates = { $set: { task: String(task) } };
 
 				if (task == 4 || task == 8 || task == 12 || task == 16) {
-					console.log("ye");
 					groupUpdates = { $set: { task: String(task), linje: String((linje + 1) % 4) } };
 				}
 
@@ -151,13 +180,21 @@ async function renderChallenge(number, clueNumber, lat, long, linje = "0") {
 				});
 				window.location.href = "phase.html";
 			} else {
-				alert("Wrong Answer Try Again");
+				button.textContent = "Fel svar, testa igen";
+				button.classList.add("button-accent");
+				button.style.pointerEvents = "none";
+
+				setTimeout(() => {
+					button.classList.remove("button-accent");
+					button.textContent = "skicka";
+					button.style.pointerEvents = "unset";
+				}, 1000);
 			}
 		} else {
 			alert("You are not close enought to the antenna");
 		}
 	});
 	let div = document.createElement("div");
-	div.append(clue, input, button);
+	div.append(clue,input, button, scanner);
 	return div;
 }
