@@ -483,9 +483,14 @@ function loadingButton() {
 	return wrapper;
 }
 
-function createContentBlock(label, labelType, content, grayed = false) {
+function createContentBlock(label, labelType, content, wrapperClass, grayed = false) {
 	let wrapper = document.createElement("div");
 
+
+	if(wrapperClass){
+		wrapper.classList.add(wrapperClass);
+	}
+	
 	let header = document.createElement(labelType);
 	header.textContent = label;
 	wrapper.append(header);
