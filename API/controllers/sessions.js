@@ -19,7 +19,6 @@ async function main() {
 
 export const getSessions = async (req, res) => {
 	const client = await main();
-	console.log(req.query);
 	if (req.query.sessionCode) {
 		try {
 			const session = await client
@@ -34,7 +33,6 @@ export const getSessions = async (req, res) => {
 		try {
 			const sessions = await client.db("CrossmediaARG").collection("sessions").find({}).toArray();
 			res.send(sessions);
-			console.log(sessions);
 		} catch (error) {
 			console.log(error);
 		}
