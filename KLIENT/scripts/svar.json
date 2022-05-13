@@ -88,579 +88,71 @@
             },
             {
                   "game": "E2",
-			"images": [
-	"s1.svg",
-	"T2.svg",
-	"s2.svg",
-
-	"",
-	"c1.svg",
-	"c1.svg",
-
-	"s2.svg",
-	"t3.svg",
-	"t3.svg",
-
-	"",
-	"c4.svg",
-	"c1.svg",
-]
+			"images": ["s1.svg","T2.svg","s2.svg","","c1.svg","c1.svg","s2.svg","t3.svg","t3.svg","","c4.svg","c1.svg"]
             },
+            {
+                  "game": "E3",
+			"images": ["c3.svg","c2.svg","","s1.svg","t4.svg","c4.svg","c3.svg","c2.svg","s1.svg","c1.svg","s3.svg",""]
+            },
+            {
+                  "game": "E4",
+			"images": ["s2.svg","c4.svg","c2.svg","c1.svg","c2.svg","c1.svg","t4.svg","c3.svg","c3.svg","c2.svg","t4.svg","c2.svg","","c4.svg","c1.svg","s1.svg"]
+            },
+            {
+                  "game": "E5",
+			"images": ["","c1.svg","t3.svg","s1.svg","","t2.svg","t3.svg","c1.svg","s3.svg","t3.svg","c3.svg","t4.svg","s3.svg","t2.svg","c2.svg","s2.svg"]
+            },
+            {
+                  "game": "E6",
+			"images": ["c2.svg","s4.svg","c2.svg","s4.svg","t1.svg","c3.svg","t3.svg","c3.svg","t3.svg","t2.svg","t2.svg","t2.svg","c4.svg","s2.svg","s3.svg","c2.svg"]
+            },
+            {
+                  "game": "M1",
+			"images": ["","c3.svg","t4.svg","t2.svg","c4.svg","s1.svg","cross.svg","t3.svg","cross.svg","c2.svg","s1.svg","c3.svg","t4.svg","cross.svg","c1.svg","t2.svg","t4.svg","cross.svg","cross.svg","c4.svg","s3.svg","s4.svg","s4.svg","s2.svg",""]
+            },
+            {
+                  "game": "M2",
+			"images": ["","s2.svg","s1.svg","c2.svg","c3.svg","s2.svg","t2.svg","t1.svg","t3.svg","t2.svg","c1.svg","cross.svg","c1.svg","c2.svg","c2.svg","s2.svg","c4.svg","c1.svg","c2.svg",""]
+            },
+            {
+                  "game": "M3",
+			"images": ["","c3.svg","c4.svg","c2.svg","s1.svg","","c3.svg","cross.svg","t3.svg","s1.svg","s4.svg","c1.svg","t3.svg","cross.svg","c1.svg","c3.svg","c3.svg","c3.svg","t4.svg","s1.svg","s3.svg","s3.svg","c1.svg","s2.svg",""]
+            },
+            {
+                  "game": "M4",
+			"images": ["c3.svg","s3.svg","c2.svg","s4.svg","","c2.svg","c2.svg","t2.svg","c1.svg","s3.svg","","t4.svg","t4.svg","cross.svg","t3.svg","","c4.svg","c4.svg","t2.svg","c4.svg","","s3.svg","t2.svg","c2.svg",""]
+            },
+            {
+                  "game": "M5",
+			"images":["s1.svg","c2.svg","c3.svg","t1.svg","c1.svg","s2.svg","t3.svg","t1.svg","t2.svg","s4.svg","c1.svg","t4.svg","t4.svg","t1.svg","c1.svg","s4.svg","t2.svg","cross.svg","c1.svg","s1.svg","","c4.svg","c4.svg","s4.svg",""]
+            },
+            {
+                  "game": "M6",
+			"images":["","","s3.svg","s2.svg","s4.svg","s4.svg","c3.svg","t3.svg","c1.svg","c2.svg","t3.svg","t4.svg","t3.svg","c3.svg","c1.svg","c3.svg","c1.svg","c1.svg","cross.svg","t3.svg","s4.svg","t4.svg","s3.svg","s1.svg","s3.svg"]
+            },
+            {
+                  "game": "H1",
+			"images":["","s2.svg","c3.svg","c2.svg","s4.svg","","s1.svg","t1.svg","t1.svg","c2.svg","t3.svg","c1.svg","c1.svg","t1.svg","c2.svg","s1.svg","c2.svg","t4.svg","t4.svg","cross.svg","t4.svg","t3.svg","c2.svg","s1.svg","t3.svg","t2.svg","s4.svg","c3.svg","t2.svg","s1.svg","s4.svg","s1.svg","s1.svg","s3.svg","",""]
+            },
+            {
+                  "game": "H2",
+			"images":["","s1.svg","s3.svg","c3.svg","s4.svg","","","c3.svg","t2.svg","t2.svg","s1.svg","c1.svg","s3.svg","t4.svg","cross.svg","c2.svg","s2.svg","s2.svg","s3.svg","t4.svg","t2.svg","t2.svg","t3.svg","s2.svg","","c3.svg","s1.svg","s4.svg","c2.svg","c3.svg"]
+            },
+            {
+                  "game": "H3",
+			"images":["","c1.svg","t4.svg","c4.svg","s2.svg","t2.svg","c2.svg","s2.svg","t2.svg","t4.svg","t3.svg","c1.svg","cross.svg","c4.svg","s2.svg","t3.svg","t1.svg","cross.svg","c2.svg","t4.svg","c3.svg","c4.svg","t2.svg","c1.svg","t2.svg","t4.svg","c2.svg","s1.svg","c1.svg","t4.svg","s4.svg","s4.svg","t2.svg","s3.svg",""]
+            },
+            {
+                  "game": "H4",
+			"images":["s2.svg","s3.svg","s1.svg","s4.svg","","","t3.svg","t1.svg","c3.svg","t4.svg","c1.svg","","t1.svg","c2.svg","s2.svg","c4.svg","cross.svg","c3.svg","s2.svg","s2.svg","s3.svg","","t2.svg","t3.svg","s1.svg","c1.svg","c1.svg","t1.svg","cross.svg","t1.svg","c1.svg","t4.svg","t2.svg","t3.svg","t1.svg","c2.svg","c2.svg","c2.svg","c3.svg","c4.svg","c3.svg","s4.svg"]
+            },
+            {
+                  "game": "H5",
+			"images":["s3.svg","c3.svg","t4.svg","c2.svg","","c2.svg","t2.svg","c3.svg","cross.svg","c1.svg","c3.svg","t2.svg","c1.svg","t4.svg","t1.svg","t1.svg","cross.svg","c2.svg","c1.svg","t2.svg","t2.svg","t4.svg","s1.svg","t3.svg","c2.svg","c2.svg","s3.svg","s1.svg","c1.svg",""]
+            },
+            {
+                  "game": "H6",
+			"images":["","s1.svg","c2.svg","c2.svg","c3.svg","","s3.svg","","c2.svg","t4.svg","cross.svg","c3.svg","c1.svg","s1.svg","c3.svg","t2.svg","t4.svg","s4.svg","c3.svg","c2.svg","t1.svg","cross.svg","c4.svg","s1.svg","t1.svg","t4.svg","t2.svg","t2.svg","s2.svg","t3.svg","t2.svg","t4.svg","t2.svg","t4.svg","t3.svg","t3.svg","c2.svg","t1.svg","c1.svg","","s2.svg","s2.svg"]
+            }
       ]
 }
-
-
-let easyGame2 = [
-	"s1.svg",
-	"T2.svg",
-	"s2.svg",
-
-	"",
-	"c1.svg",
-	"c1.svg",
-
-	"s2.svg",
-	"t3.svg",
-	"t3.svg",
-
-	"",
-	"c4.svg",
-	"c1.svg",
-];
-
-let easyGame3 = [
-	"c3.svg",
-	"c2.svg",
-	"",
-
-	"s1.svg",
-	"t4.svg",
-	"c4.svg",
-
-	"c3.svg",
-	"c2.svg",
-	"s1.svg",
-
-	"c1.svg",
-	"s3.svg",
-	"",
-];
-
-let easyGame4 = [
-	"s2.svg",
-	"c4.svg",
-	"c2.svg",
-	"c1.svg",
-
-	"c2.svg",
-	"c1.svg",
-	"t4.svg",
-	"c3.svg",
-
-	"c3.svg",
-	"c2.svg",
-	"t4.svg",
-	"c2.svg",
-
-	"",
-	"c4.svg",
-	"c1.svg",
-	"s1.svg",
-];
-
-let easyGame5 = [
-	"",
-	"c1.svg",
-	"t3.svg",
-	"s1.svg",
-
-	"",
-	"t2.svg",
-	"t3.svg",
-	"c1.svg",
-
-	"s3.svg",
-	"t3.svg",
-	"c3.svg",
-	"t4.svg",
-
-	"s3.svg",
-	"t2.svg",
-	"c2.svg",
-	"s2.svg",
-];
-
-let easyGame6 = [
-	"c2.svg",
-	"s4.svg",
-	"c2.svg",
-	"s4.svg",
-
-	"t1.svg",
-	"c3.svg",
-	"t3.svg",
-	"c3.svg",
-
-	"t3.svg",
-	"t2.svg",
-	"t2.svg",
-	"t2.svg",
-
-	"c4.svg",
-	"s2.svg",
-	"s3.svg",
-	"c2.svg",
-];
-
-// MEDIUM
-
-let mediumGame1 = [
-	"",
-	"c3.svg",
-	"t4.svg",
-	"t2.svg",
-	"c4.svg",
-
-	"s1.svg",
-	"cross.svg",
-	"t3.svg",
-	"cross.svg",
-	"c2.svg",
-
-	"s1.svg",
-	"c3.svg",
-	"t4.svg",
-	"cross.svg",
-	"c1.svg",
-
-	"t2.svg",
-	"t4.svg",
-	"cross.svg",
-	"cross.svg",
-	"c4.svg",
-
-	"s3.svg",
-	"s4.svg",
-	"s4.svg",
-	"s2.svg",
-	"",
-];
-
-let mediumGame2 = [
-	"",
-	"s2.svg",
-	"s1.svg",
-	"c2.svg",
-	"c3.svg",
-
-	"s2.svg",
-	"t2.svg",
-	"t1.svg",
-	"t3.svg",
-	"t2.svg",
-
-	"c1.svg",
-	"cross.svg",
-	"c1.svg",
-	"c2.svg",
-	"c2.svg",
-
-	"s2.svg",
-	"c4.svg",
-	"c1.svg",
-	"c2.svg",
-	"",
-];
-
-let mediumGame3 = [
-	"",
-	"c3.svg",
-	"c4.svg",
-	"c2.svg",
-	"s1.svg",
-
-	"",
-	"c3.svg",
-	"cross.svg",
-	"t3.svg",
-	"s1.svg",
-
-	"s4.svg",
-	"c1.svg",
-	"t3.svg",
-	"cross.svg",
-	"c1.svg",
-
-	"c3.svg",
-	"c3.svg",
-	"c3.svg",
-	"t4.svg",
-	"s1.svg",
-
-	"s3.svg",
-	"s3.svg",
-	"c1.svg",
-	"s2.svg",
-	"",
-];
-
-let mediumGame4 = [
-	"c3.svg",
-	"s3.svg",
-	"c2.svg",
-	"s4.svg",
-	"",
-
-	"c2.svg",
-	"c2.svg",
-	"t2.svg",
-	"c1.svg",
-	"s3.svg",
-
-	"",
-	"t4.svg",
-	"t4.svg",
-	"cross.svg",
-	"t3.svg",
-
-	"",
-	"c4.svg",
-	"c4.svg",
-	"t2.svg",
-	"c4.svg",
-
-	"",
-	"s3.svg",
-	"t2.svg",
-	"c2.svg",
-	"",
-];
-
-let mediumGame5 = [
-	"s1.svg",
-	"c2.svg",
-	"c3.svg",
-	"t1.svg",
-	"c1.svg",
-
-	"s2.svg",
-	"t3.svg",
-	"t1.svg",
-	"t2.svg",
-	"s4.svg",
-
-	"c1.svg",
-	"t4.svg",
-	"t4.svg",
-	"t1.svg",
-	"c1.svg",
-
-	"s4.svg",
-	"t2.svg",
-	"cross.svg",
-	"c1.svg",
-	"s1.svg",
-
-	"",
-	"c4.svg",
-	"c4.svg",
-	"s4.svg",
-	"",
-];
-
-let mediumGame6 = [
-	"",
-	"",
-	"s3.svg",
-	"s2.svg",
-	"s4.svg",
-
-	"s4.svg",
-	"c3.svg",
-	"t3.svg",
-	"c1.svg",
-	"c2.svg",
-
-	"t3.svg",
-	"t4.svg",
-	"t3.svg",
-	"c3.svg",
-	"c1.svg",
-
-	"c3.svg",
-	"c1.svg",
-	"c1.svg",
-	"cross.svg",
-	"t3.svg",
-
-	"s4.svg",
-	"t4.svg",
-	"s3.svg",
-	"s1.svg",
-	"s3.svg",
-];
-
-// HARD
-
-let hardGame1 = [
-	"",
-	"s2.svg",
-	"c3.svg",
-	"c2.svg",
-	"s4.svg",
-	"",
-
-	"s1.svg",
-	"t1.svg",
-	"t1.svg",
-	"c2.svg",
-	"t3.svg",
-	"c1.svg",
-
-	"c1.svg",
-	"t1.svg",
-	"c2.svg",
-	"s1.svg",
-	"c2.svg",
-	"t4.svg",
-
-	"t4.svg",
-	"cross.svg",
-	"t4.svg",
-	"t3.svg",
-	"c2.svg",
-	"s1.svg",
-
-	"t3.svg",
-	"t2.svg",
-	"s4.svg",
-	"c3.svg",
-	"t2.svg",
-	"s1.svg",
-
-	"s4.svg",
-	"s1.svg",
-	"s1.svg",
-	"s3.svg",
-	"",
-	"",
-];
-
-let hardGame2 = [
-	"",
-	"s1.svg",
-	"s3.svg",
-	"c3.svg",
-	"s4.svg",
-	"",
-
-	"",
-	"c3.svg",
-	"t2.svg",
-	"t2.svg",
-	"s1.svg",
-	"c1.svg",
-
-	"s3.svg",
-	"t4.svg",
-	"cross.svg",
-	"c2.svg",
-	"s2.svg",
-	"s2.svg",
-
-	"s3.svg",
-	"t4.svg",
-	"t2.svg",
-	"t2.svg",
-	"t3.svg",
-	"s2.svg",
-
-	"",
-	"c3.svg",
-	"s1.svg",
-	"s4.svg",
-	"c2.svg",
-	"c3.svg",
-];
-
-let hardGame3 = [
-	"",
-	"c1.svg",
-	"t4.svg",
-	"c4.svg",
-	"s2.svg",
-	"t2.svg",
-	"c2.svg",
-
-	"s2.svg",
-	"t2.svg",
-	"t4.svg",
-	"t3.svg",
-	"c1.svg",
-	"cross.svg",
-	"c4.svg",
-
-	"s2.svg",
-	"t3.svg",
-	"t1.svg",
-	"cross.svg",
-	"c2.svg",
-	"t4.svg",
-	"c3.svg",
-
-	"c4.svg",
-	"t2.svg",
-	"c1.svg",
-	"t2.svg",
-	"t4.svg",
-	"c2.svg",
-	"s1.svg",
-
-	"c1.svg",
-	"t4.svg",
-	"s4.svg",
-	"s4.svg",
-	"t2.svg",
-	"s3.svg",
-	"",
-];
-
-let hardGame4 = [
-	"s2.svg",
-	"s3.svg",
-	"s1.svg",
-	"s4.svg",
-	"",
-	"",
-
-	"t3.svg",
-	"t1.svg",
-	"c3.svg",
-	"t4.svg",
-	"c1.svg",
-	"",
-
-	"t1.svg",
-	"c2.svg",
-	"s2.svg",
-	"c4.svg",
-	"cross.svg",
-	"c3.svg",
-
-	"s2.svg",
-	"s2.svg",
-	"s3.svg",
-	"",
-	"t2.svg",
-	"t3.svg",
-
-	"s1.svg",
-	"c1.svg",
-	"c1.svg",
-	"t1.svg",
-	"cross.svg",
-	"t1.svg",
-
-	"c1.svg",
-	"t4.svg",
-	"t2.svg",
-	"t3.svg",
-	"t1.svg",
-	"c2.svg",
-
-	"c2.svg",
-	"c2.svg",
-	"c3.svg",
-	"c4.svg",
-	"c3.svg",
-	"s4.svg",
-];
-
-let hardGame5 = [
-	"s3.svg",
-	"c3.svg",
-	"t4.svg",
-	"c2.svg",
-	"",
-
-	"c2.svg",
-	"t2.svg",
-	"c3.svg",
-	"cross.svg",
-	"c1.svg",
-
-	"c3.svg",
-	"t2.svg",
-	"c1.svg",
-	"t4.svg",
-	"t1.svg",
-
-	"t1.svg",
-	"cross.svg",
-	"c2.svg",
-	"c1.svg",
-	"t2.svg",
-
-	"t2.svg",
-	"t4.svg",
-	"s1.svg",
-	"t3.svg",
-	"c2.svg",
-
-	"c2.svg",
-	"s3.svg",
-	"s1.svg",
-	"c1.svg",
-	"",
-];
-
-let hardGame6 = [
-	"",
-	"s1.svg",
-	"c2.svg",
-	"c2.svg",
-	"c3.svg",
-	"",
-
-	"s3.svg",
-	"",
-	"c2.svg",
-	"t4.svg",
-	"cross.svg",
-	"c3.svg",
-
-	"c1.svg",
-	"s1.svg",
-	"c3.svg",
-	"t2.svg",
-	"t4.svg",
-	"s4.svg",
-
-	"c3.svg",
-	"c2.svg",
-	"t1.svg",
-	"cross.svg",
-	"c4.svg",
-	"s1.svg",
-
-	"t1.svg",
-	"t4.svg",
-	"t2.svg",
-	"t2.svg",
-	"s2.svg",
-	"t3.svg",
-
-	"t2.svg",
-	"t4.svg",
-	"t2.svg",
-	"t4.svg",
-	"t3.svg",
-	"t3.svg",
-
-	"c2.svg",
-	"t1.svg",
-	"c1.svg",
-	"",
-	"s2.svg",
-	"s2.svg",
-];

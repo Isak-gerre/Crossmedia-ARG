@@ -26,6 +26,19 @@ export const getPhase3 = async (req, res) => {
 
 	await client.close();
 };
+export const getCable = async (req, res) => {
+	const client = await main();
+	const requestedGame = req.body.game;
+
+	const cableObject = await client.db("CrossmediaARG").collection("challenges_phase_3").findOne({ type: "cgames" });
+	const cablegames = cableObject.games;
+
+	const foundGame = cablegames.find((obj) => obj.game == requestedGame);
+
+	res.send(foundGame);
+
+	await client.close();
+};
 export const checkAnswer = async (req, res) => {
 	const client = await main();
 	const sentLevel = req.body.level;

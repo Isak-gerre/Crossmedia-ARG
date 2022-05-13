@@ -33,7 +33,12 @@ function makeDiv(arr) {
 	return div;
 }
 
-function game(arr, level, divClass) {
+async function game(level, divClass) {
+	const getGame = { game: level };
+	const game = await fetch(localhost + "challenges/cgame", postData(getGame));
+	const gameJson = await game.json();
+	const arrayOfGameImages = gameJson.images;
+
 	let div = document.createElement("div");
 	let button = document.createElement("button");
 
@@ -53,7 +58,7 @@ function game(arr, level, divClass) {
 
 	document.querySelector("body").append(div);
 	document.querySelector("body").append(button);
-	let arrayOfDivs = makeDiv(arr);
+	let arrayOfDivs = makeDiv(arrayOfGameImages);
 	arrayOfDivs.forEach((element) => {
 		div.append(element);
 	});
@@ -645,8 +650,8 @@ let hardGame6 = [
 
 // EASY
 
-game(easyGame1, "E1", "divEasy34");
-//game(easyGame2, "E2", "divEasy34");
+// game("E1", "divEasy34");
+game("E2", "divEasy34");
 //game(easyGame3, "E3", "divEasy34");
 //game(easyGame4, "E4", "divEasy44");
 //game(easyGame5, "E5", "divEasy44");
