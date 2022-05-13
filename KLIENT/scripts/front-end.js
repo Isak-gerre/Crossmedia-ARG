@@ -915,13 +915,16 @@ function createChallengeGrid(challenges, progress, currentTime) {
 
 	let gridWrapper = createElemAndClass("div", "challenges-grid");
 
-	renderChallenges(challenges);
-
+	let challangeGame = challenges.answers
+	console.log(challangeGame);
+	console.log(challenges);
+	renderChallenges(challangeGame);
 	wrapper.append(createChallengeHeader(), gridWrapper);
 
 	return wrapper;
 
 	function renderChallenges(chals) {
+		console.log
 		gridWrapper.innerHTML = "";
 		chals.forEach((challenge) => {
 			createChallenge(challenge);
@@ -934,19 +937,27 @@ function createChallengeGrid(challenges, progress, currentTime) {
 
 		let block = createElemAndClass("section", "challenge-block");
 
-		let type = challenge.type == "kabel" ? "cable" : "code";
+		let type = "cable";
 
 		block.classList.add(type + "-chall");
 
 		let difficulty = document.createElement("section");
 		block.append(difficulty);
 
-		for (let i = 1; i <= 3; i++) {
-			let star = i > challenge.difficulty ? "&#9734" : "&#9733";
-			difficulty.innerHTML += star;
+		let diff = 1;
+		if(challenge.game.includes("M")){
+			diff = 2;
+		}
+		if(challenge.game.includes("H")){
+			diff = 3;
 		}
 
-		wrapper.addEventListener("click", challenge.func);
+		for (let i = 1; i <= 3; i++) {
+			let star = i > diff ? "&#9734" : "&#9733";
+			difficulty.innerHTML += star;
+		}
+		console.log(challenge.style);
+		wrapper.addEventListener("click", () => {renderGame(challenge.game, challenge.style)});
 
 		wrapper.append(block, difficulty);
 		gridWrapper.append(wrapper);

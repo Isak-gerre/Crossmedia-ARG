@@ -72,6 +72,8 @@ async function getSvar(level, rotations) {
 	let res = await fetch(localhost + "challenges/cables", postData(pBody));
 	let data = await res.json();
 	console.log(data);
+
+	return data;
 }
 
 // EASY GAMES
@@ -651,8 +653,8 @@ let hardGame6 = [
 
 // EASY
 
-game("E1", "divEasy34");
-game("E2", "divEasy34");
+//game("E1", "divEasy34");
+//game("E2", "divEasy34");
 //game(easyGame3, "E3", "divEasy34");
 //game(easyGame4, "E4", "divEasy44");
 //game(easyGame5, "E5", "divEasy44");

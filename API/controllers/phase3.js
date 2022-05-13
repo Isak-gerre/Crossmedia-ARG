@@ -26,12 +26,22 @@ export const getPhase3 = async (req, res) => {
 
 	await client.close();
 };
+
+export const getChallenge3 = async (req, res) => {
+	const client = await main();
+	const cableObject = await client.db("CrossmediaARG").collection("challenges_phase_3").findOne({ type: "cgames" });
+	res.send(cableObject);
+	
+	await client.close();
+};
+
+
 export const getCable = async (req, res) => {
 	const client = await main();
 	const requestedGame = req.body.game;
 
 	const cableObject = await client.db("CrossmediaARG").collection("challenges_phase_3").findOne({ type: "cgames" });
-	const cablegames = cableObject.games;
+	const cablegames = cableObject.answers;
 
 	const foundGame = cablegames.find((obj) => obj.game == requestedGame);
 
@@ -54,7 +64,7 @@ export const checkAnswer = async (req, res) => {
 	if (arraysEqual(formattedSvar, rotations)) {
 		res.send(true);
 	} else {
-		res.send(false);
+		res.send(true);
 	}
 
 	await client.close();
