@@ -10,27 +10,25 @@ async function renderPhase3() {
 }
 
 async function renderGrid() {
-
 	let challanges;
 
-	await fetch("http://localhost:8000/challenges//phase3/get")
-		.then(response => response.json())
-		.then(data => challanges = data);
+	await fetch(`${localhost}challenges/phase3/get`)
+		.then((response) => response.json())
+		.then((data) => (challanges = data));
 
 	console.log(challanges);
 
 	let body = document.querySelector("body");
-	
+
 	body.append(createChallengeGrid(challanges, [0]));
 }
 
-function renderGame(gameID, style){
+function renderGame(gameID, style) {
 	console.log(style);
 	let body = document.querySelector("body");
 	body.innerHTML = "";
 	game(gameID, style);
 }
 
-renderGrid(); 
+renderGrid();
 renderPhase3();
-

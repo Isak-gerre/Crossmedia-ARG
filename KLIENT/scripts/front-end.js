@@ -487,21 +487,21 @@ function loadScreen(transitionTxt) {
 
 	let loadingCont = createElemAndClass("p", "lay1");
 
-	loadText( loadingCont, transitionTxt  )
+	loadText(loadingCont, transitionTxt);
 
-	wrapper.append( createElemAndClass("section", "lay01"), createElemAndClass("section", "lay0"), loadingCont );
-		
+	wrapper.append(createElemAndClass("section", "lay01"), createElemAndClass("section", "lay0"), loadingCont);
+
 	return wrapper;
 }
 
-function unloadScreen(){
+function unloadScreen() {
 	let load = document.getElementById("loading");
 	load.classList.remove("fadeIn");
 	load.classList.add("fadeOut");
 
-	setTimeout(()=>{
+	setTimeout(() => {
 		load.remove();
-	}, 1000)
+	}, 1000);
 }
 
 function loadButton(obj) {
@@ -515,44 +515,48 @@ function loadButton(obj) {
 	loadText(obj, "");
 }
 
-function unloadButton(txt){
+function unloadButton(txt) {
 	let obj = document.getElementById("loadButton");
 	obj.style.pointerEvents = "auto";
 	obj.classList.remove("gradient");
-	
-	console.log( intID );
-	
-	intID.forEach(elem => {
-		clearInterval( elem )
+
+	console.log(intID);
+
+	intID.forEach((elem) => {
+		clearInterval(elem);
 	});
 
 	obj.textContent = txt;
 }
 
-function loadText(obj, txt){
+function loadText(obj, txt) {
 	setText(txt);
 
 	let time = 750;
-	let timeTwo =  time * 1.5;
+	let timeTwo = time * 1.5;
 
 	let first = true;
 	for (let i = 0; i < 3; i++) {
-		let char = ". "
+		let char = ". ";
 
-		if( first ) { setText(`.${txt}`) }
+		if (first) {
+			setText(`.${txt}`);
+		}
 
-		setTimeout( ()=>{
-			if(!first){ setText(`${char.repeat(i + 1)}${txt}`) }
-				
-			intID[i] = setInterval( ()=>{
-				setText(`${char.repeat(i + 1)}${txt}`)
-			},timeTwo )
-		}, ( (i * time )/ 2) )
+		setTimeout(() => {
+			if (!first) {
+				setText(`${char.repeat(i + 1)}${txt}`);
+			}
+
+			intID[i] = setInterval(() => {
+				setText(`${char.repeat(i + 1)}${txt}`);
+			}, timeTwo);
+		}, (i * time) / 2);
 
 		first = false;
 	}
 
-	function setText(text){
+	function setText(text) {
 		obj.textContent = text;
 	}
 }
@@ -983,7 +987,7 @@ function createChallengeGrid(challenges, progress, currentTime) {
 
 	let gridWrapper = createElemAndClass("div", "challenges-grid");
 
-	let challangeGame = challenges.answers
+	let challangeGame = challenges.answers;
 	console.log(challangeGame);
 	console.log(challenges);
 	renderChallenges(challangeGame);
@@ -992,7 +996,7 @@ function createChallengeGrid(challenges, progress, currentTime) {
 	return wrapper;
 
 	function renderChallenges(chals) {
-		console.log
+		console.log;
 		gridWrapper.innerHTML = "";
 		chals.forEach((challenge) => {
 			createChallenge(challenge);
@@ -1013,10 +1017,10 @@ function createChallengeGrid(challenges, progress, currentTime) {
 		block.append(difficulty);
 
 		let diff = 1;
-		if(challenge.game.includes("M")){
+		if (challenge.game.includes("M")) {
 			diff = 2;
 		}
-		if(challenge.game.includes("H")){
+		if (challenge.game.includes("H")) {
 			diff = 3;
 		}
 
@@ -1025,7 +1029,9 @@ function createChallengeGrid(challenges, progress, currentTime) {
 			difficulty.innerHTML += star;
 		}
 		console.log(challenge.style);
-		wrapper.addEventListener("click", () => {renderGame(challenge.game, challenge.style)});
+		wrapper.addEventListener("click", () => {
+			renderGame(challenge.game, challenge.style);
+		});
 
 		wrapper.append(block, difficulty);
 		gridWrapper.append(wrapper);

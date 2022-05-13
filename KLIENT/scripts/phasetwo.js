@@ -13,7 +13,7 @@
 var challengeData = "";
 (async () => {
 	console.log("hej");
-	await fetch(localhost + "challenges/phase2")
+	await fetch(`${localhost}challenges/phase2`)
 		.then((response) => response.json())
 		.then((data) => (challengeData = data));
 })();
