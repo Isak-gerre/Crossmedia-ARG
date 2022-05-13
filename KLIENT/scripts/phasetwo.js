@@ -13,7 +13,7 @@
 var challengeData = "";
 (async () => {
 	console.log("hej");
-	await fetch("http://localhost:8000/challenges/phase2")
+	await fetch(localhost + "challenges/phase2")
 		.then((response) => response.json())
 		.then((data) => (challengeData = data));
 })();
@@ -32,11 +32,10 @@ phaseCheck(2, async () => {
 	let linje = challenge.linje;
 	let position = challengeData[task].position;
 	let lastPosition;
-	if(task == 0){
+	if (task == 0) {
 		lastPosition = challengeData[15].position;
-	}
-	else {
-		lastPosition = challengeData[task-1].position;	
+	} else {
+		lastPosition = challengeData[task - 1].position;
 	}
 	const content = await checkChallenge(task, linje, position, lastPosition);
 	console.log(challenge);
@@ -125,16 +124,21 @@ phaseCheck(2, async () => {
 
 async function renderChallenge(number, clueNumber, position, lastPosition, linje = "0") {
 	setBodyState(["body-space-between"]);
-	console.log(position)
+	console.log(position);
 	let distance = await getDiffrencePosition(position.latitude, position.longitude);
 
-	let startDistane = await getDiffrencePositionScanner(position.latitude, position.longitude, lastPosition.latitude, lastPosition.longitude);
+	let startDistane = await getDiffrencePositionScanner(
+		position.latitude,
+		position.longitude,
+		lastPosition.latitude,
+		lastPosition.longitude
+	);
 
 	console.log(startDistane);
 
 	let scannerStrength = scannerDistance(startDistane, distance);
 
-	let scannerArray = [createString(scannerStrength), "För att kunna gå vidare måste signal styrkan vara minst -30dBm"]	
+	let scannerArray = [createString(scannerStrength), "För att kunna gå vidare måste signal styrkan vara minst -30dBm"];
 
 	let scannerButton = createButton("Skanna", () => {
 		document.querySelector(".scannerContent p").innerHTML = scannerDistance(startDistane, distance);
@@ -146,14 +150,14 @@ async function renderChallenge(number, clueNumber, position, lastPosition, linje
 
 	let content = [];
 
-	if(challengeData[number].img){
+	if (challengeData[number].img) {
 		let img = document.createElement("img");
 		img.src = `${challengeData[number].img}`;
 		content.push(img);
 	}
 
 	content.push(challengeData[number].description);
-	
+
 	let input = createInputBoxes(challengeData[number].answerLength);
 
 	let clue = createContentBlock(challengeData[number].title, "h1", content, "center");
@@ -195,6 +199,6 @@ async function renderChallenge(number, clueNumber, position, lastPosition, linje
 		}
 	});
 	let div = document.createElement("div");
-	div.append(clue,input, button, scanner);
+	div.append(clue, input, button, scanner);
 	return div;
 }

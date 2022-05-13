@@ -2,8 +2,8 @@
 
 //LOCALSTORAGE FUNCTIONS
 //--------------------------------------------------
-if (getFromLS("user") == null && window.location.pathname != "/KLIENT/index.html") {
-	window.location.pathname = "/KLIENT/index.html";
+if (getFromLS("user") == null && window.location.pathname != "/index.html") {
+	window.location.pathname = "/index.html";
 }
 function saveToLS(getter, setter) {
 	if (typeof setter == "string") {
@@ -303,7 +303,7 @@ async function challengeCheck() {
 
 async function checkAnswer(phase, id, guess) {
 	let clue = "";
-	await fetch(`http://localhost:8000/challenges/${phase}/answer?id=${id}&guess=${guess}`)
+	await fetch(`${localhost}challenges/${phase}/answer?id=${id}&guess=${guess}`)
 		.then((response) => response.json())
 		.then((data) => {
 			clue = data;
@@ -315,23 +315,20 @@ async function checkAnswer(phase, id, guess) {
 //RANDOM FUNCTIONS
 //--------------------------------------------------
 
+function scannerDistance(start, distance) {
+	let gone = start - distance;
 
-function scannerDistance(start, distance){	
+	let scannerStrength = `${-(start - gone)}dBm`;
 
-	let gone = start-distance; 
-
-	let scannerStrength = `${(-(start-gone))}dBm`;
-
-	if(start-gone == 0){
-		scannerStrength = `${((start-gone))}dBm`;
+	if (start - gone == 0) {
+		scannerStrength = `${start - gone}dBm`;
 	}
 
-	if(start < distance){
+	if (start < distance) {
 		scannerStrength = "No signal return to last task!";
 	}
 
 	return scannerStrength;
-
 }
 
 function makeSessionCode(length) {
@@ -348,8 +345,8 @@ function displayLoginErrorMessage(error) {
 }
 
 async function getDiffrencePosition(latString, longString) {
-	let lat = parseFloat(latString)
-	let long = parseFloat(longString)
+	let lat = parseFloat(latString);
+	let long = parseFloat(longString);
 	console.log(latString);
 	async function getMyCoords() {
 		const getCoords = async () => {

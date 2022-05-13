@@ -344,9 +344,7 @@ function createReadyButton(initTxt, id, activeTxt, sessionCode) {
 
 	async function activate(sessionCode) {
 		setTimeout(() => {
-			const getSessionsLive = new EventSource(
-				`http://localhost:8000/sessions/live?sessionCode=${String(activeSession)}`
-			);
+			const getSessionsLive = new EventSource(`${localhost}sessions/live?sessionCode=${String(activeSession)}`);
 
 			getSessionsLive.onmessage = async function (event) {
 				let numberOfReadyPlayers = JSON.parse(event.data).readyPlayers;
@@ -562,11 +560,10 @@ function loadText(obj, txt){
 function createContentBlock(label, labelType, content, wrapperClass, grayed = false) {
 	let wrapper = document.createElement("div");
 
-
-	if(wrapperClass){
+	if (wrapperClass) {
 		wrapper.classList.add(wrapperClass);
 	}
-	
+
 	let header = document.createElement(labelType);
 	header.textContent = label;
 	wrapper.append(header);
@@ -649,7 +646,7 @@ function createString(string) {
 
 function createAccordion(header, content, open = false) {
 	let wrapper = createElemAndClass("section", "accordion-wrapper");
-	if( open ) wrapper.classList.add("open")
+	if (open) wrapper.classList.add("open");
 
 	let accordionHead = createElemAndClass("section", "accordion-head");
 	accordionHead.innerHTML = `
@@ -815,24 +812,23 @@ function createChallenge(challenge, answer) {
 function createInputBoxes(array) {
 	let wrap = createElemAndClass("div", "box-input-wrapper");
 
-	array.forEach(element => {
+	array.forEach((element) => {
 		for (let i = 0; i < element; i++) {
 			let input = createElemAndClass("input", "box-input", "no-margin");
 			input.setAttribute("maxlength", 1);
 
 			input.addEventListener("keyup", (e) => {
-
 				if (e.code == "Backspace") {
 					if (!input.previousSibling) return;
-					if(input.previousSibling.tagName == "DIV"){
+					if (input.previousSibling.tagName == "DIV") {
 						input.previousSibling.previousSibling.focus();
 					}
 					input.previousSibling.focus();
 					return;
 				}
-				
+
 				setTimeout(() => {
-					input.value = input.value.toUpperCase()
+					input.value = input.value.toUpperCase();
 				}, 1);
 
 				if (input.value.length > 0) {
@@ -840,10 +836,9 @@ function createInputBoxes(array) {
 						input.blur();
 						return;
 					}
-					if(input.nextElementSibling.tagName == "DIV"){
+					if (input.nextElementSibling.tagName == "DIV") {
 						input.nextElementSibling.nextElementSibling.focus();
-					}
-					else{
+					} else {
 						input.nextElementSibling.focus();
 					}
 				}
@@ -855,11 +850,10 @@ function createInputBoxes(array) {
 			wrap.append(input);
 		}
 
-		if(array.indexOf(element) + 1 != array.length){
+		if (array.indexOf(element) + 1 != array.length) {
 			let space = createElemAndClass("div", "box-space", "no-margin");
 			wrap.append(space);
 		}
-
 	});
 
 	return wrap;
@@ -964,11 +958,11 @@ const CHALL = [
 	},
 ];
 
-function createVideo(link){
+function createVideo(link) {
 	let wrapper = createElemAndClass("div", "video-wrapper");
 
 	let video = createElemAndClass("iframe", "video");
-	
+
 	wrapper.innerHTML = `
 	<iframe src="${link} &autoplay=1" 
 	title="YouTube video player" 
