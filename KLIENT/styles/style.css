@@ -1,3 +1,15 @@
+@font-face{
+    font-family: Cascadia;
+    src: url(font/CascadiaCode.woff2);
+    font-weight: normal;
+}
+
+@font-face{
+    font-family: CascadiaItalic;
+    src: url(font/CascadiaCodeItalic.woff2);
+    font-weight: italic;
+}
+
 :root{
     --black: #272727;
     --blackOp: #2727275a;
@@ -23,7 +35,7 @@
     --transSlow: 0.7s;
 }
 * {
-    font-family: 'cascadia code';
+    font-family: 'Cascadia';
     color: var(--white);
     position: relative;
     font-weight: normal;

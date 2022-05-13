@@ -982,8 +982,6 @@ function createVideo(link){
 
 const PROG = [2, 5];
 
-// document.body.append( createChallengeEntries(CHALL, PROG) );
-
 function createChallengeGrid(challenges, progress, currentTime) {
 	let wrapper = document.createElement("section");
 
@@ -1106,8 +1104,6 @@ function createChallengeGrid(challenges, progress, currentTime) {
 		return wrapper;
 	}
 }
-
-// document.body.append(createChallengeGrid(CHALL, PROG, "14:32"));
 
 //Text bak o fram
 function reverseString(string) {
