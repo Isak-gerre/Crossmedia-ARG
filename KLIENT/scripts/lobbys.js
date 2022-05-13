@@ -130,14 +130,35 @@ async function makeLobbyTwo(user, activeSession, session, usersInSession) {
 			},
 		]);
 	} else {
-		lobbyDiv.append(createList(usersInSession, 1));
+		// printTerminalText(["Ni har blivit tilldelade era grupper av Kuben"]);
+		// lobbyDiv.append(createList(usersInSession, 1));
 		let groups = await getGroups("session", activeSession);
-		console.log(groups);
 		groups.forEach((group) => {
 			let list = createList(group.users, 2);
 			lobbyDiv.append(createAccordion(group.groupName, list));
 		});
-		document.body.append(createReadyButton("Redo", "ready-btn", "Väntar på andra spelare", activeSession));
+		if (user.username == session.creator) {
+			document.body.append(
+				createConfirmButton(
+					"Starta Spelet",
+					"Starta",
+					async () => {
+						const sessionFilter = { sessionCode: activeSession };
+						const sessionUpdates = { $set: { phase: 2, lobby: false } };
+
+						let res = await updateSession({
+							filter: sessionFilter,
+							updates: sessionUpdates,
+						});
+						if (res.message == "Updated session") {
+							window.location.href = "phase.html";
+						}
+					},
+					"Se till så att alla spelare är redo innan du startar spelet. Är du säker på att du vill fortsätta?"
+				)
+			);
+		}
+		// document.body.append(createReadyButton("Redo", "ready-btn", "Väntar på andra spelare", activeSession));
 	}
 }
 async function makeLobbyThree(user, activeSession, session, usersInSession) {
@@ -200,9 +221,14 @@ async function joinTeam(username, teamID, sessionCode) {
 			filter: playerFilter,
 			updates: playerUpdates,
 		});
+		saveToLS("user", resPlayer);
 		let resTeam = await updateTeam({
 			filter: teamFilter,
 			updates: teamUpdates,
 		});
+
+		if (resTeam != null && resPlayer != null) {
+			window.location.reload();
+		}
 	} catch (error) {}
 }

@@ -90,7 +90,7 @@ phaseCheck(2, async () => {
 		{
 			id: 1,
 			prog: currentTask(task, 1) != 4 && currentTask(task, 1) != 0 ? currentTask(task, 1) - 1 : currentTask(task, 1),
-			started: isStarted(task, 1),
+			started: true,
 		},
 		{
 			id: 2,
