@@ -21,6 +21,16 @@
 
 // unloadScreen()/
 // removes load
+// funktion hittar själv laddande element
+
+// loadButton( OBJ: button)
+// event.target fungerar för mig
+// state som läggs på knapp. Lägg i början av knappens callbackfunktion
+
+// unloadButton( "button text" )
+// hittar laddande knapp själv
+// button text = ny text som läggs på knapp
+// problem: knapp kan inte unloadas inom 1.125s då texten så fuckas....
 
 // createInput( "label text" ; "id" ; "name" ; ("value") )
 // return DOM
@@ -471,37 +481,17 @@ function createForm(inputs, method, action, id) {
 	return form;
 }
 
-// not done
+let intID = [];
+
 function loadScreen(transitionTxt) {
 	let wrapper = createElemAndClass("section", "loading-screen-wrapper", "fadeIn");
 	wrapper.setAttribute("id", "loading");
 
 	let loadingCont = createElemAndClass("p", "lay1");
 
+	loadText( loadingCont, transitionTxt  )
+
 	wrapper.append( createElemAndClass("section", "lay01"), createElemAndClass("section", "lay0"), loadingCont );
-
-	setText(transitionTxt);
-
-	function setText(text){
-		loadingCont.textContent = text;
-	}
-
-	let first = true;
-		for (let i = 0; i < 3; i++) {
-			let char = ". "
-	
-			if( first ) { setText(`.${transitionTxt}`) }
-	
-			setTimeout( ()=>{
-				if(!first){ setText(`${char.repeat(i + 1)}${transitionTxt}`) }
-					
-				setInterval( ()=>{
-					setText(`${char.repeat(i + 1)}${transitionTxt}`)
-				},1500 )
-			}, ( (i * 1000 )/ 2) )
-	
-			first = false;
-		}
 		
 	return wrapper;
 }
@@ -516,12 +506,57 @@ function unloadScreen(){
 	}, 1000)
 }
 
-// not done
-function loadingButton() {
-	let wrapper = createElemAndClass("div", "loading-icon-wrapper");
-	wrapper.setAttribute("id", "loading");
+function loadButton(obj) {
+	console.log(obj);
+	obj.setAttribute("id", "loadButton");
 
-	return wrapper;
+	obj.style.pointerEvents = "none";
+
+	obj.classList.add("gradient");
+
+	loadText(obj, "");
+}
+
+function unloadButton(txt){
+	let obj = document.getElementById("loadButton");
+	obj.style.pointerEvents = "auto";
+	obj.classList.remove("gradient");
+	
+	console.log( intID );
+	
+	intID.forEach(elem => {
+		clearInterval( elem )
+	});
+
+	obj.textContent = txt;
+}
+
+function loadText(obj, txt){
+	setText(txt);
+
+	let time = 750;
+	let timeTwo =  time * 1.5;
+
+	let first = true;
+	for (let i = 0; i < 3; i++) {
+		let char = ". "
+
+		if( first ) { setText(`.${txt}`) }
+
+		setTimeout( ()=>{
+			if(!first){ setText(`${char.repeat(i + 1)}${txt}`) }
+				
+			intID[i] = setInterval( ()=>{
+				setText(`${char.repeat(i + 1)}${txt}`)
+			},timeTwo )
+		}, ( (i * time )/ 2) )
+
+		first = false;
+	}
+
+	function setText(text){
+		obj.textContent = text;
+	}
 }
 
 function createContentBlock(label, labelType, content, grayed = false) {

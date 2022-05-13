@@ -330,6 +330,10 @@ body .button-accent{
     animation: 1s ease 0s 1 fadeOut;
 }
 
+.gradient{
+    animation: 20s ease 0s infinite col;
+}
+
 
 
 .loading-icon-wrapper{
