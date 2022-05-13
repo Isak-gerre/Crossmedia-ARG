@@ -344,9 +344,7 @@ function createReadyButton(initTxt, id, activeTxt, sessionCode) {
 
 	async function activate(sessionCode) {
 		setTimeout(() => {
-			const getSessionsLive = new EventSource(
-				`http://localhost:8000/sessions/live?sessionCode=${String(activeSession)}`
-			);
+			const getSessionsLive = new EventSource(`${localhost}sessions/live?sessionCode=${String(activeSession)}`);
 
 			getSessionsLive.onmessage = async function (event) {
 				let numberOfReadyPlayers = JSON.parse(event.data).readyPlayers;
@@ -489,21 +487,21 @@ function loadScreen(transitionTxt) {
 
 	let loadingCont = createElemAndClass("p", "lay1");
 
-	loadText( loadingCont, transitionTxt  )
+	loadText(loadingCont, transitionTxt);
 
-	wrapper.append( createElemAndClass("section", "lay01"), createElemAndClass("section", "lay0"), loadingCont );
-		
+	wrapper.append(createElemAndClass("section", "lay01"), createElemAndClass("section", "lay0"), loadingCont);
+
 	return wrapper;
 }
 
-function unloadScreen(){
+function unloadScreen() {
 	let load = document.getElementById("loading");
 	load.classList.remove("fadeIn");
 	load.classList.add("fadeOut");
 
-	setTimeout(()=>{
+	setTimeout(() => {
 		load.remove();
-	}, 1000)
+	}, 1000);
 }
 
 function loadButton(obj) {
@@ -517,44 +515,48 @@ function loadButton(obj) {
 	loadText(obj, "");
 }
 
-function unloadButton(txt){
+function unloadButton(txt) {
 	let obj = document.getElementById("loadButton");
 	obj.style.pointerEvents = "auto";
 	obj.classList.remove("gradient");
-	
-	console.log( intID );
-	
-	intID.forEach(elem => {
-		clearInterval( elem )
+
+	console.log(intID);
+
+	intID.forEach((elem) => {
+		clearInterval(elem);
 	});
 
 	obj.textContent = txt;
 }
 
-function loadText(obj, txt){
+function loadText(obj, txt) {
 	setText(txt);
 
 	let time = 750;
-	let timeTwo =  time * 1.5;
+	let timeTwo = time * 1.5;
 
 	let first = true;
 	for (let i = 0; i < 3; i++) {
-		let char = ". "
+		let char = ". ";
 
-		if( first ) { setText(`.${txt}`) }
+		if (first) {
+			setText(`.${txt}`);
+		}
 
-		setTimeout( ()=>{
-			if(!first){ setText(`${char.repeat(i + 1)}${txt}`) }
-				
-			intID[i] = setInterval( ()=>{
-				setText(`${char.repeat(i + 1)}${txt}`)
-			},timeTwo )
-		}, ( (i * time )/ 2) )
+		setTimeout(() => {
+			if (!first) {
+				setText(`${char.repeat(i + 1)}${txt}`);
+			}
+
+			intID[i] = setInterval(() => {
+				setText(`${char.repeat(i + 1)}${txt}`);
+			}, timeTwo);
+		}, (i * time) / 2);
 
 		first = false;
 	}
 
-	function setText(text){
+	function setText(text) {
 		obj.textContent = text;
 	}
 }
@@ -562,11 +564,10 @@ function loadText(obj, txt){
 function createContentBlock(label, labelType, content, wrapperClass, grayed = false) {
 	let wrapper = document.createElement("div");
 
-
-	if(wrapperClass){
+	if (wrapperClass) {
 		wrapper.classList.add(wrapperClass);
 	}
-	
+
 	let header = document.createElement(labelType);
 	header.textContent = label;
 	wrapper.append(header);
@@ -649,7 +650,7 @@ function createString(string) {
 
 function createAccordion(header, content, open = false) {
 	let wrapper = createElemAndClass("section", "accordion-wrapper");
-	if( open ) wrapper.classList.add("open")
+	if (open) wrapper.classList.add("open");
 
 	let accordionHead = createElemAndClass("section", "accordion-head");
 	accordionHead.innerHTML = `
@@ -815,24 +816,23 @@ function createChallenge(challenge, answer) {
 function createInputBoxes(array) {
 	let wrap = createElemAndClass("div", "box-input-wrapper");
 
-	array.forEach(element => {
+	array.forEach((element) => {
 		for (let i = 0; i < element; i++) {
 			let input = createElemAndClass("input", "box-input", "no-margin");
 			input.setAttribute("maxlength", 1);
 
 			input.addEventListener("keyup", (e) => {
-
 				if (e.code == "Backspace") {
 					if (!input.previousSibling) return;
-					if(input.previousSibling.tagName == "DIV"){
+					if (input.previousSibling.tagName == "DIV") {
 						input.previousSibling.previousSibling.focus();
 					}
 					input.previousSibling.focus();
 					return;
 				}
-				
+
 				setTimeout(() => {
-					input.value = input.value.toUpperCase()
+					input.value = input.value.toUpperCase();
 				}, 1);
 
 				if (input.value.length > 0) {
@@ -840,10 +840,9 @@ function createInputBoxes(array) {
 						input.blur();
 						return;
 					}
-					if(input.nextElementSibling.tagName == "DIV"){
+					if (input.nextElementSibling.tagName == "DIV") {
 						input.nextElementSibling.nextElementSibling.focus();
-					}
-					else{
+					} else {
 						input.nextElementSibling.focus();
 					}
 				}
@@ -855,11 +854,10 @@ function createInputBoxes(array) {
 			wrap.append(input);
 		}
 
-		if(array.indexOf(element) + 1 != array.length){
+		if (array.indexOf(element) + 1 != array.length) {
 			let space = createElemAndClass("div", "box-space", "no-margin");
 			wrap.append(space);
 		}
-
 	});
 
 	return wrap;
@@ -964,11 +962,11 @@ const CHALL = [
 	},
 ];
 
-function createVideo(link){
+function createVideo(link) {
 	let wrapper = createElemAndClass("div", "video-wrapper");
 
 	let video = createElemAndClass("iframe", "video");
-	
+
 	wrapper.innerHTML = `
 	<iframe src="${link} &autoplay=1" 
 	title="YouTube video player" 
@@ -989,7 +987,7 @@ function createChallengeGrid(challenges, progress, currentTime) {
 
 	let gridWrapper = createElemAndClass("div", "challenges-grid");
 
-	let challangeGame = challenges.answers
+	let challangeGame = challenges.answers;
 	console.log(challangeGame);
 	console.log(challenges);
 	renderChallenges(challangeGame);
@@ -998,7 +996,7 @@ function createChallengeGrid(challenges, progress, currentTime) {
 	return wrapper;
 
 	function renderChallenges(chals) {
-		console.log
+		console.log;
 		gridWrapper.innerHTML = "";
 		chals.forEach((challenge) => {
 			createChallenge(challenge);
@@ -1019,10 +1017,10 @@ function createChallengeGrid(challenges, progress, currentTime) {
 		block.append(difficulty);
 
 		let diff = 1;
-		if(challenge.game.includes("M")){
+		if (challenge.game.includes("M")) {
 			diff = 2;
 		}
-		if(challenge.game.includes("H")){
+		if (challenge.game.includes("H")) {
 			diff = 3;
 		}
 
@@ -1031,7 +1029,9 @@ function createChallengeGrid(challenges, progress, currentTime) {
 			difficulty.innerHTML += star;
 		}
 		console.log(challenge.style);
-		wrapper.addEventListener("click", () => {renderGame(challenge.game, challenge.style)});
+		wrapper.addEventListener("click", () => {
+			renderGame(challenge.game, challenge.style);
+		});
 
 		wrapper.append(block, difficulty);
 		gridWrapper.append(wrapper);

@@ -7,7 +7,7 @@ phaseCheck(1, async () => {
 async function renderChallenge_1() {
 	let challengeData = "";
 
-	await fetch("http://localhost:8000/challenges/phase1")
+	await fetch(`${localhost}challenges/phase1`)
 		.then((response) => response.json())
 		.then((data) => (challengeData = data));
 
