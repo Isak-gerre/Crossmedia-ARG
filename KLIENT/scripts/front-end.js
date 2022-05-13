@@ -16,6 +16,12 @@
 
 // OTHER --------------------------
 
+// loadScreen("load text")
+// return DOM
+
+// unloadScreen()/
+// removes load
+
 // createInput( "label text" ; "id" ; "name" ; ("value") )
 // return DOM
 
@@ -466,41 +472,49 @@ function createForm(inputs, method, action, id) {
 }
 
 // not done
-function loadingScreen(style) {
-	let wrapper = createElemAndClass("section", "loading-screen-wrapper", "style-"+ style);
+function loadScreen(transitionTxt) {
+	let wrapper = createElemAndClass("section", "loading-screen-wrapper", "fadeIn");
 	wrapper.setAttribute("id", "loading");
 
-	if(style == "one") {
-		wrapper.append( createElemAndClass("section", "lay0"), createElemAndClass("section", "lay1") );
-	} else if( style == "two") {
-		wrapper.append(createElemAndClass("section", "lay0"), createElemAndClass("section", "lay1"), createElemAndClass("section", "lay2"), createElemAndClass("section", "lay3"));
+	let loadingCont = createElemAndClass("p", "lay1");
 
-	} else if( style == "three"){
+	wrapper.append( createElemAndClass("section", "lay01"), createElemAndClass("section", "lay0"), loadingCont );
 
-		let obj = createElemAndClass("section", "lay0");
+	setText(transitionTxt);
 
-		let newChild;
-		for (let i = 1; i < 6; i++) {
-			let section;
-
-			if( i == 1 ){
-				newChild = createElemAndClass("section", "lay"+i);
-				obj.append( newChild );
-			} else {
-				section = createElemAndClass("section", "lay"+i);
-				newChild.append(section);
-				newChild = section;
-			}
-		}
-
-		wrapper.append(createElemAndClass("section", "base"), obj);
-
+	function setText(text){
+		loadingCont.textContent = text;
 	}
+
+	let first = true;
+		for (let i = 0; i < 3; i++) {
+			let char = ". "
+	
+			if( first ) { setText(`.${transitionTxt}`) }
+	
+			setTimeout( ()=>{
+				if(!first){ setText(`${char.repeat(i + 1)}${transitionTxt}`) }
+					
+				setInterval( ()=>{
+					setText(`${char.repeat(i + 1)}${transitionTxt}`)
+				},1500 )
+			}, ( (i * 1000 )/ 2) )
+	
+			first = false;
+		}
 		
 	return wrapper;
 }
 
-document.body.append( loadingScreen("three") );
+function unloadScreen(){
+	let load = document.getElementById("loading");
+	load.classList.remove("fadeIn");
+	load.classList.add("fadeOut");
+
+	setTimeout(()=>{
+		load.remove();
+	}, 1000)
+}
 
 // not done
 function loadingButton() {
