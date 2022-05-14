@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	const session = await getSessions("sessionCode", activeSession);
 	const usersInSession = session.users;
 	if (!session.lobby) {
+		document.body.append(loadScreen(""));
 		window.location.href = "phase.html";
 	}
 	console.log(session.phase);
@@ -88,9 +89,10 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 						filter: sessionFilter,
 						updates: sessionUpdates,
 					});
-					// if (res.message == "Updated session") {
-					// 	window.location.href = "phase.html";
-					// }
+					if (res.message == "Updated session") {
+						document.body.append(loadScreen(""));
+						window.location.href = "phase.html";
+					}
 				},
 				"Efter spelet har startat kan inte nya spelare gå med. Är du säker på att du vill fortsätta?"
 			)
@@ -125,6 +127,8 @@ async function makeLobbyTwo(user, activeSession, session, usersInSession) {
 				txt: "Fortsätt",
 				func: async () => {
 					saveToLS("seenPhase2", { seen: true });
+					document.body.append(loadScreen(""));
+
 					window.location.reload();
 				},
 			},
@@ -151,6 +155,8 @@ async function makeLobbyTwo(user, activeSession, session, usersInSession) {
 							updates: sessionUpdates,
 						});
 						if (res.message == "Updated session") {
+							document.body.append(loadScreen(""));
+
 							window.location.href = "phase.html";
 						}
 					},
@@ -182,6 +188,7 @@ async function makeLobbyThree(user, activeSession, session, usersInSession) {
 							updates: sessionUpdates,
 						});
 						if (res.message == "Updated session") {
+							document.body.append(loadScreen(""));
 							window.location.href = "phase.html";
 						}
 					},
@@ -228,6 +235,7 @@ async function joinTeam(username, teamID, sessionCode) {
 		});
 
 		if (resTeam != null && resPlayer != null) {
+			document.body.append(loadScreen(""));
 			window.location.reload();
 		}
 	} catch (error) {}

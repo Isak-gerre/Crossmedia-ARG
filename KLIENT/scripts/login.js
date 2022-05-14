@@ -93,8 +93,8 @@ function createLogin() {
 			setTimeout(() => {
 				window.location.replace(loginToLocation);
 			}, 2000);
+			console.log(true);
 		} else {
-			console.log(false);
 			displayLoginErrorMessage("Username and Passwords does not match!");
 		}
 	});
