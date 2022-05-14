@@ -46,7 +46,8 @@ async function createPlayer() {
 	formData.append("group", "0");
 	formData.append("team", "0");
 	formData.append("session", "0");
-	formData.append("points", "0");
+	formData.append("points", []);
+	formData.append("completed", []);
 	formData.append("power", "1");
 
 	let res = await fetch(localhost + "players", postFormData(formData));
@@ -431,4 +432,16 @@ async function whereTo(player) {
 		return "html/phase.html";
 	}
 	return "html/sessions.html";
+}
+
+function getCurrentTime() {
+	const currentTime = new Date();
+	const hours = currentTime.getHours();
+	const minutes = currentTime.getMinutes();
+	let seconds = currentTime.getSeconds();
+	if (seconds < 10) {
+		seconds = `0${seconds}`;
+	}
+
+	return `${hours}:${minutes}:${seconds}`;
 }
