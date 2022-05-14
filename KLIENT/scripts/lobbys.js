@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	const session = await getSessions("sessionCode", activeSession);
 	const usersInSession = session.users;
 	if (!session.lobby) {
+		document.body.append(loadScreen(""));
 		window.location.href = "phase.html";
 	}
 	console.log(session.phase);
@@ -88,9 +89,10 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 						filter: sessionFilter,
 						updates: sessionUpdates,
 					});
-					// if (res.message == "Updated session") {
-					// 	window.location.href = "phase.html";
-					// }
+					if (res.message == "Updated session") {
+						document.body.append(loadScreen(""));
+						window.location.href = "phase.html";
+					}
 				},
 				"Efter spelet har startat kan inte nya spelare gå med. Är du säker på att du vill fortsätta?"
 			)

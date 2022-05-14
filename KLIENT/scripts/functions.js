@@ -64,8 +64,9 @@ async function updatePlayer(update) {
 	try {
 		let res = await fetch(localhost + "players", postData(update, "PATCH"));
 		if (res.ok) {
-			return await res.json();
-			// await saveToLS("user", JSON.stringify(data));
+			let data = await res.json();
+			saveToLS("user", JSON.stringify(data));
+			return data;
 		}
 	} catch (error) {
 		return error;
@@ -98,10 +99,10 @@ async function joinSession(sessionCode) {
 	const player = JSON.parse(getFromLS("user"));
 	console.log(player);
 	const playerFilter = { username: player.username, password: player.password };
-	const playerUpdates = { session: sessionCode };
+	const playerUpdates = { $set: { session: sessionCode } };
 
 	const sessionFilter = { sessionCode: sessionCode };
-	const sessionUpdates = { $push: { user: player.username } };
+	const sessionUpdates = { $push: { users: player.username } };
 
 	try {
 		await updatePlayer({
