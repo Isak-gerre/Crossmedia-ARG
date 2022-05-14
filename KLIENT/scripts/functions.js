@@ -1,5 +1,11 @@
 "use strict";
 
+document.body.append(loadScreen(""));
+document.addEventListener("DOMContentLoaded", async () => {
+	setTimeout(() => {
+		unloadScreen();
+	}, 2000);
+});
 //LOCALSTORAGE FUNCTIONS
 //--------------------------------------------------
 if (getFromLS("user") == null && window.location.pathname != "/index.html") {
@@ -25,7 +31,7 @@ async function logInPlayer(player) {
 	let playerData = await res.json();
 
 	loggedin ? saveToLS("user", playerData) : null;
-	return loggedin;
+	return { loggedin: loggedin, player: playerData };
 }
 async function updateUserLS() {
 	let player = JSON.parse(getFromLS("user"));
@@ -36,16 +42,19 @@ async function updateUserLS() {
 
 async function createPlayer() {
 	let formData = new FormData(document.getElementById("sign-in-form"));
+	formData.delete("confirmPassword");
 	formData.append("group", "0");
 	formData.append("team", "0");
 	formData.append("session", "0");
 	formData.append("points", "0");
+	formData.append("power", "1");
 
 	let res = await fetch(localhost + "players", postFormData(formData));
 	console.log(res);
 	if (res.ok) {
 		let data = await res.json();
 		saveToLS("user", data.player);
+		return data;
 	} else {
 		displayLoginErrorMessage("A user with that username already exits!");
 	}
@@ -410,4 +419,15 @@ async function getDiffrencePositionScanner(latStartString, longStartString, latG
 	console.log(c * r);
 
 	return c * r;
+}
+async function whereTo(player) {
+	let session = await getSessions("sessionCode", player.session);
+
+	if (session.lobby && player.session != "0") {
+		return "html/lobby.html";
+	}
+	if (session.lobby == false && player.session != "0") {
+		return "html/phase.html";
+	}
+	return "html/sessions.html";
 }
