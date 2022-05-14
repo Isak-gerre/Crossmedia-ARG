@@ -918,22 +918,23 @@ function createChallengeGrid(challenges, progress, currentTime) {
 	let challangeGame = challenges.answers
 	console.log(challangeGame);
 	console.log(challenges);
-	renderChallenges(challangeGame);
+	renderChallenges(challangeGame, progress);
 	wrapper.append(createChallengeHeader(), gridWrapper);
 
 	return wrapper;
 
-	function renderChallenges(chals) {
+	function renderChallenges(chals, progress = []) {
 		console.log
 		gridWrapper.innerHTML = "";
 		chals.forEach((challenge) => {
-			createChallenge(challenge);
+			createChallenge(challenge, progress);
 		});
 	}
 
-	function createChallenge(challenge) {
+	function createChallenge(challenge, progress) {
+		console.log(challenge);
 		let wrapper = document.createElement("section");
-		if (progress.includes(challenge.id)) wrapper.classList.add("completed");
+		if (progress.includes(challenge.game)) wrapper.classList.add("completed");
 
 		let block = createElemAndClass("section", "challenge-block");
 
@@ -956,7 +957,6 @@ function createChallengeGrid(challenges, progress, currentTime) {
 			let star = i > diff ? "&#9734" : "&#9733";
 			difficulty.innerHTML += star;
 		}
-		console.log(challenge.style);
 		wrapper.addEventListener("click", () => {renderGame(challenge.game, challenge.style)});
 
 		wrapper.append(block, difficulty);
