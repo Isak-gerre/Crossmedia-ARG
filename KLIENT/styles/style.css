@@ -329,6 +329,7 @@ body .button-accent{
 
 @keyframes slide {
 	0% {background-position: 0% 50%}
+	/* 45% {background-position: 0% 0%} */
 	50% {background-position: 100% 50%}
 	100% {background-position: 0% 50%}
 }
@@ -352,7 +353,7 @@ body .button-accent{
     100%{opacity: 0;}
 }
 .fadeIn{
-    animation: 1s ease 0s 1 fade;
+    animation: 0s ease 0s 1 fade;
 }
 
 .fadeOut{
