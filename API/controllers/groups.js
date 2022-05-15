@@ -24,6 +24,7 @@ async function main() {
 export const getGroup = async (req, res) => {
 	const client = await main();
 	const foundGroups = await client.db("CrossmediaARG").collection("groups").find(req.query).toArray();
+	console.log(req.query);
 	res.send(foundGroups);
 	await client.close();
 };
@@ -62,8 +63,8 @@ export const updateGroup = async (req, res) => {
 	const client = await main();
 
 	let filter = req.body.filter;
-	if(req.body.filter._id){
-		filter = {"_id" : ObjectId(req.body.filter._id)};
+	if (req.body.filter._id) {
+		filter = { _id: ObjectId(req.body.filter._id) };
 	}
 	const updates = req.body.updates;
 	console.log(filter, updates);

@@ -94,31 +94,40 @@ phaseCheck(2, async () => {
 	let progress = [
 		{
 			id: 1,
-			prog: currentTask(task, 1) != 4 && currentTask(task, 1) != 0 ? currentTask(task, 1) - 1 : currentTask(task, 1),
+			prog: currentTask(task, 1) != 4 && currentTask(task, 1) != 0 ? currentTask(task, 1) : currentTask(task, 1),
 			started: true,
 		},
 		{
 			id: 2,
-			prog: currentTask(task, 2) != 4 && currentTask(task, 2) != 0 ? currentTask(task, 2) - 1 : currentTask(task, 2),
+			prog: currentTask(task, 2) != 4 && currentTask(task, 2) != 0 ? currentTask(task, 2) : currentTask(task, 2),
 			started: isStarted(task, 2),
 		},
 		{
 			id: 3,
-			prog: currentTask(task, 3) != 4 && currentTask(task, 3) != 0 ? currentTask(task, 3) - 1 : currentTask(task, 3),
+			prog: currentTask(task, 3) != 4 && currentTask(task, 3) != 0 ? currentTask(task, 3) : currentTask(task, 3),
 			started: isStarted(task, 3),
 		},
 		{
 			id: 4,
-			prog: currentTask(task, 4) != 4 && currentTask(task, 4) != 0 ? currentTask(task, 4) - 1 : currentTask(task, 4),
+			prog: currentTask(task, 4) != 4 && currentTask(task, 4) != 0 ? currentTask(task, 4) : currentTask(task, 4),
 			started: isStarted(task, 4),
 		},
 	];
 	let challengeEntries = createChallengeEntries(challenges, progress);
 
+	const groupInfo = await getGroups("session", JSON.parse(getFromLS("user")).session);
+	const groupInfoArray = groupInfo.map((group) => {
+		return [group.groupName, parseInt(group.task)];
+	});
+	console.log(groupInfoArray);
+	const progressInfo = createProgressionSection(groupInfoArray, 16);
+	challengeEntries.append(progressInfo);
+
 	const tabs = createTabs([
 		{ header: "Overview", content: challengeEntries },
 		{ header: "Utmaningar", content: content },
 	]);
+
 	document.getElementById("phase-one-div").append(tabs);
 });
 

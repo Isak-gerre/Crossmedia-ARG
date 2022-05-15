@@ -31,10 +31,9 @@ export const getChallenge3 = async (req, res) => {
 	const client = await main();
 	const cableObject = await client.db("CrossmediaARG").collection("challenges_phase_3").findOne({ type: "cgames" });
 	res.send(cableObject);
-	
+
 	await client.close();
 };
-
 
 export const getCable = async (req, res) => {
 	const client = await main();
@@ -64,7 +63,7 @@ export const checkAnswer = async (req, res) => {
 	if (arraysEqual(formattedSvar, rotations)) {
 		res.send(true);
 	} else {
-		res.send(true);
+		res.send(false);
 	}
 
 	await client.close();
