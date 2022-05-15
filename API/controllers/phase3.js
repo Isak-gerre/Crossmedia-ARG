@@ -52,13 +52,11 @@ export const checkAnswer = async (req, res) => {
 	const client = await main();
 	const sentLevel = req.body.level;
 	const rotations = req.body.rotations;
-
 	const cables = await client.db("CrossmediaARG").collection("challenges_phase_3").findOne({ type: "cable" });
 	const answers = cables.answers;
 
 	let foundAnswer = answers.find(({ level }) => level == "svar" + sentLevel);
 	let formattedSvar = formatSvar(foundAnswer.answer);
-	console.log(rotations);
 
 	if (arraysEqual(formattedSvar, rotations)) {
 		res.send(true);
