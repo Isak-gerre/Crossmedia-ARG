@@ -79,5 +79,27 @@ export const updateGroup = async (req, res) => {
 
 	await client.close();
 };
+export const updatePlayers = async (req, res) => {
+	const client = await main();
+
+	const sessionCode = req.body.sessionCode;
+
+	try {
+		const foundGroups = await client.db("CrossmediaARG").collection("groups").find({ session: sessionCode }).toArray();
+		console.log(foundGroups);
+		foundGroups.forEach(async (group) => {
+			group.users.forEach(async (user) => {
+				const filter = { username: user };
+				const updates = { $set: { group: group._id } };
+				let updated = await client.db("CrossmediaARG").collection("groups").updateOne(filter, updates);
+				console.log(updated);
+			});
+		});
+	} catch (error) {
+		console.log(error);
+	}
+
+	await client.close();
+};
 //----------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------

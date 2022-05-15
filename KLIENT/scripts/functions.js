@@ -22,13 +22,14 @@ function getFromLS(getter) {
 	return localStorage.getItem(getter);
 }
 async function checkLoggedInPlayer() {
-	let player = JSON.parse(localStorage.getItem("loggedInUser"));
+	let player = JSON.parse(localStorage.getItem("user"));
 	return (await logInPlayer(postData(player))) ? true : false;
 }
 async function logInPlayer(player) {
 	let res = await fetch(`${localhost}players/login`, player);
 	let loggedin = res.ok ? true : false;
 	let playerData = await res.json();
+	console.log(playerData);
 
 	loggedin ? saveToLS("user", playerData) : null;
 	return { loggedin: loggedin, player: playerData };
@@ -97,8 +98,10 @@ async function getSessions(query, value) {
 }
 
 async function joinSession(sessionCode) {
+	saveToLS("seenPhase2", false);
+
 	const player = JSON.parse(getFromLS("user"));
-	console.log(player);
+
 	const playerFilter = { username: player.username, password: player.password };
 	const playerUpdates = { $set: { session: sessionCode } };
 
@@ -125,6 +128,7 @@ async function updateSession(update) {
 	return res.json();
 }
 async function createSession(userID) {
+	saveToLS("seenPhase2", false);
 	let postBody = {
 		creator: userID,
 		users: [userID],
@@ -189,6 +193,10 @@ async function updateGroup(update) {
 	let res = await fetch(localhost + "groups", postData(update, "PATCH"));
 	return res.json();
 }
+async function updatePlayerInGroups(sessionCode) {
+	let res = await fetch(localhost + "groups/updateplayers", postData({ sessionCode: sessionCode }, "PATCH"));
+	return res.json();
+}
 async function joinGroup(update) {
 	console.log(localhost + "groups", postData(update, "PATCH"));
 	let res = await fetch(localhost + "groups", postData(update, "PATCH"));
@@ -201,6 +209,7 @@ async function createGroup(groupName = "", sessionCode) {
 		task: "0",
 		linje: "0",
 		session: sessionCode,
+		completedChallenges: [],
 	};
 	let res = await fetch(`${localhost}groups`, postData(postBody));
 	if (res.ok) {
