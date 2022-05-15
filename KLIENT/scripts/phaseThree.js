@@ -24,47 +24,41 @@ async function renderGrid() {
 	let upToDateuser = await getPlayer("username", player.username);
 
 	let body = document.querySelector("body");
-	
+
 	body.append(createChallengeGrid(challanges, upToDateuser.completed));
 }
 
-
-async function renderGame(gameID, style){
+async function renderGame(gameID, style) {
 	const player = JSON.parse(getFromLS("user"));
 	let body = document.querySelector("body");
 	body.innerHTML = "";
-	
+
 	let answer = await game(gameID, style);
-	
-	if(answer == true){
+
+	if (answer == true) {
 		let points = 100;
-		if(gameID.includes("M")){
+		if (gameID.includes("M")) {
 			points = 200;
 		}
-		if(gameID.includes("H")){
+		if (gameID.includes("H")) {
 			points = 300;
 		}
 		body.innerHTML = "";
 
-		const playerFilter = { username: player.username}
-		const playerUpdates = { $push : { points: points * player.power, completed: gameID}}
+		const playerFilter = { username: player.username };
+		const playerUpdates = { $push: { points: points * player.power, completed: gameID } };
 
 		console.log(player.username, player.points);
 
 		updatePlayer({
 			filter: playerFilter,
-			updates: playerUpdates
+			updates: playerUpdates,
 		});
 
 		renderGrid();
 	}
 }
 
-
 // async function calculateTeamPoints() {
 
 // }
-
-renderGrid();
-renderPhase3();
-
