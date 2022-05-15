@@ -88,7 +88,7 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 					let groups = await getGroups("session", activeSession);
 					groups.forEach(async (group, index) => {
 						const groupFilter = { session: activeSession, groupName: group.groupName };
-						const groupUpdates = { $set: { users: groupedPlayers[index], linje: linjeArray[index], task: taskArray[index] } };
+						const groupUpdates = { $set: { users: groupedPlayers[index], linje: linjeArray[index], task: taskArray[index]} };
 						const res = await updateGroup({
 							filter: groupFilter,
 							updates: groupUpdates,
