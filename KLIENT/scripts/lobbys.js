@@ -67,10 +67,28 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 						groupedPlayers[`${(index + 1) % 4}`].push(user);
 					});
 
+					let linjeArray = shuffleArray([0,1,2,3]);
+					let taskArray = [];
+					linjeArray.forEach(e => {
+						if(e == 0){
+							taskArray.push(0);
+						}
+						else if(e == 1){
+							taskArray.push(4);
+						}
+						else if(e == 2){
+							taskArray.push(8);
+						}
+						else if(e == 3){
+							taskArray.push(12);
+						}
+					});
+
+
 					let groups = await getGroups("session", activeSession);
 					groups.forEach(async (group, index) => {
 						const groupFilter = { session: activeSession, groupName: group.groupName };
-						const groupUpdates = { $set: { users: groupedPlayers[index] } };
+						const groupUpdates = { $set: { users: groupedPlayers[index], linje: linjeArray[index], task: taskArray[index] } };
 						const res = await updateGroup({
 							filter: groupFilter,
 							updates: groupUpdates,

@@ -8,6 +8,9 @@ async function renderPhase3() {
 	const activeSession = await getSessions("sessionCode", sessionCode);
 	if (activeSession.phase == 3) {
 		// createChallengeGrid();
+		renderGrid();
+		renderPhase3();
+
 	}
 }
 
@@ -64,7 +67,4 @@ async function renderGame(gameID, style){
 // async function calculateTeamPoints() {
 
 // }
-
-renderGrid();
-renderPhase3();
 
