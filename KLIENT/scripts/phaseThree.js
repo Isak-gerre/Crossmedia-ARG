@@ -11,13 +11,13 @@ async function renderPhase3() {
 	}
 }
 
-async function renderGrid(progress, currentTime) {
+async function renderGrid() {
 	const player = JSON.parse(getFromLS("user"));
 	let challanges;
 
-	await fetch("http://localhost:8000/challenges//phase3/get")
-		.then(response => response.json())
-		.then(data => challanges = data);
+	await fetch(`${localhost}challenges/phase3/get`)
+		.then((response) => response.json())
+		.then((data) => (challanges = data));
 
 	console.log(challanges);
 
@@ -61,9 +61,9 @@ async function renderGame(gameID, style){
 }
 
 
-async function calculateTeamPoints() {
+// async function calculateTeamPoints() {
 
-}
+// }
 
 renderGrid();
 renderPhase3();
