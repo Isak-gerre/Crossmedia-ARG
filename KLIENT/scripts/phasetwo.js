@@ -20,9 +20,28 @@ var challengeData = "";
 
 const areWeDone = async () => {
 	let group = await getGroupById(JSON.parse(getFromLS("user")).group);
+	let session = await getSessions("sessionCode", group.session);
 	console.log(group);
 	if (group.completedChallenges.length == 15) {
 		console.log("BAJJSSJKORV");
+		console.log(session);
+		if (session.phaseTwoTime == undefined) {
+			let date = new Date();
+			let time = date.getTime();
+			time = time + 1000 * 60 * 15;
+			await updateSession({
+				filter: { sessionCode: session.sessionCode },
+				updates: { $set: { phaseTwoTime: time } },
+			});
+		}
+	}
+	if (session.phaseTwoTime) {
+		let phaseTwoTime = session.phaseTwoTime;
+		let date = new Date();
+		let currentTime = date.getTime();
+
+		let seconds = (phaseTwoTime - currentTime) / 1000;
+		console.log(seconds);
 	}
 };
 areWeDone();

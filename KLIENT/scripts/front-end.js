@@ -988,15 +988,12 @@ function createChallengeGrid(challenges, progress, currentTime) {
 	let gridWrapper = createElemAndClass("div", "challenges-grid");
 
 	let challangeGame = challenges.answers;
-	console.log(challangeGame);
-	console.log(challenges);
 	renderChallenges(challangeGame, progress);
 	wrapper.append(createChallengeHeader(), gridWrapper);
 
 	return wrapper;
 
 	function renderChallenges(chals, progress = []) {
-		console.log
 		gridWrapper.innerHTML = "";
 		chals.forEach((challenge) => {
 			createChallenge(challenge, progress);
@@ -1004,7 +1001,6 @@ function createChallengeGrid(challenges, progress, currentTime) {
 	}
 
 	function createChallenge(challenge, progress) {
-		console.log(challenge);
 		let wrapper = document.createElement("section");
 		if (progress.includes(challenge.game)) wrapper.classList.add("completed");
 
