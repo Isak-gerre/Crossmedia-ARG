@@ -16,8 +16,16 @@ var challengeData = "";
 		.then((response) => response.json())
 		.then((data) => (challengeData = data));
 })();
-checkLoggedInPlayer();
+// checkLoggedInPlayer();
 
+const areWeDone = async () => {
+	let group = await getGroupById(JSON.parse(getFromLS("user")).group);
+	console.log(group);
+	if (group.completedChallenges.length == 15) {
+		console.log("BAJJSSJKORV");
+	}
+};
+areWeDone();
 async function checkChallenge(task, linje, position, lastPosition) {
 	for (let i = 0; i <= 15; i++) {
 		if (task == i) {
@@ -45,36 +53,27 @@ phaseCheck(2, async () => {
 		{
 			id: 1,
 			stages: [4],
-			func: () => {
-				console.log("one");
-			},
+			func: () => {},
 		},
 		{
 			id: 2,
 			stages: [4],
-			func: () => {
-				console.log("two");
-			},
+			func: () => {},
 		},
 		{
 			id: 3,
 			stages: [4],
-			func: () => {
-				console.log("one");
-			},
+			func: () => {},
 		},
 		{
 			id: 4,
 			stages: [4],
-			func: () => {
-				console.log("two");
-			},
+			func: () => {},
 		},
 	];
 	const currentTask = (task, id) => {
 		task++;
 		let roof = id * 4;
-		console.log(task % roof);
 		if (roof < task) {
 			return 4;
 		}
@@ -123,7 +122,6 @@ phaseCheck(2, async () => {
 		}
 		return [group.groupName, parseInt(group.task)];
 	});
-	console.log(groupInfo);
 	const progressInfo = createProgressionSection(groupInfoArray, 16);
 	challengeEntries.prepend(createString(userGroupname));
 	challengeEntries.append(progressInfo);
@@ -138,7 +136,6 @@ phaseCheck(2, async () => {
 
 async function renderChallenge(number, clueNumber, position, lastPosition, linje = "0") {
 	setBodyState(["body-space-between"]);
-	console.log(position);
 	let distance = await getDiffrencePosition(position.latitude, position.longitude);
 
 	let startDistane = await getDiffrencePositionScanner(
@@ -147,8 +144,6 @@ async function renderChallenge(number, clueNumber, position, lastPosition, linje
 		lastPosition.latitude,
 		lastPosition.longitude
 	);
-
-	console.log(startDistane);
 
 	let scannerStrength = scannerDistance(startDistane, distance);
 

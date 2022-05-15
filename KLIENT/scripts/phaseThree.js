@@ -2,15 +2,16 @@
 
 let progress = [];
 
+renderPhase3();
+
 async function renderPhase3() {
+	console.count();
 	const sessionCode = JSON.parse(getFromLS("user")).session;
 	const player = JSON.parse(getFromLS("user"));
 	const activeSession = await getSessions("sessionCode", sessionCode);
 	if (activeSession.phase == 3) {
 		// createChallengeGrid();
 		renderGrid();
-		renderPhase3();
-
 	}
 }
 
