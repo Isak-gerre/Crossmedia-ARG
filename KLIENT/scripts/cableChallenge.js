@@ -43,25 +43,34 @@ async function game(level, divClass) {
 	let button = document.createElement("button");
 
 	div.classList.add("divCableParent", divClass);
+	div.setAttribute("id", getGame.game);
 	button.classList.add("cableButton");
 	button.setAttribute("game", level);
-	button.addEventListener("click", (e) => {
-		let element = e.target;
-		let divs = document.querySelectorAll(".tile");
-		let rotations = [];
-		divs.forEach((tile) => {
-			rotations.push(`${tile.style.transform}`);
-		});
-		let svar = getSvar(element.getAttribute("game"), rotations);
-		console.log(svar);
-	});
-
+	
 	document.querySelector("body").append(div);
 	document.querySelector("body").append(button);
 	let arrayOfDivs = makeDiv(arrayOfGameImages);
 	arrayOfDivs.forEach((element) => {
 		div.append(element);
 	});
+	return await btnClick(button, div);
+}	
+
+
+async function btnClick(button, div){
+	let answer = await returnAnswer(div);
+	
+	return new Promise(resolve =>  button.onclick = () => resolve(answer));
+}
+
+async function returnAnswer(div){
+	let divs = document.querySelectorAll(".tile");
+		let rotations = [];
+		divs.forEach((tile) => {
+			rotations.push(`${tile.style.transform}`);
+		});
+		let svar = await getSvar(div.id, rotations);
+		return svar;
 }
 
 async function getSvar(level, rotations) {
@@ -71,8 +80,6 @@ async function getSvar(level, rotations) {
 	};
 	let res = await fetch(localhost + "challenges/cables", postData(pBody));
 	let data = await res.json();
-	console.log(data);
-
 	return data;
 }
 

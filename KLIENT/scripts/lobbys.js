@@ -67,10 +67,28 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 						groupedPlayers[`${(index + 1) % 4}`].push(user);
 					});
 
+					let linjeArray = shuffleArray([0,1,2,3]);
+					let taskArray = [];
+					linjeArray.forEach(e => {
+						if(e == 0){
+							taskArray.push(0);
+						}
+						else if(e == 1){
+							taskArray.push(4);
+						}
+						else if(e == 2){
+							taskArray.push(8);
+						}
+						else if(e == 3){
+							taskArray.push(12);
+						}
+					});
+
+
 					let groups = await getGroups("session", activeSession);
 					groups.forEach(async (group, index) => {
 						const groupFilter = { session: activeSession, groupName: group.groupName };
-						const groupUpdates = { $set: { users: groupedPlayers[index] } };
+						const groupUpdates = { $set: { users: groupedPlayers[index], linje: linjeArray[index], task: taskArray[index]} };
 						const res = await updateGroup({
 							filter: groupFilter,
 							updates: groupUpdates,
@@ -119,20 +137,29 @@ async function makeLobbyTwo(user, activeSession, session, usersInSession) {
 	sessionH1.innerText = "Fas 2";
 	const seen = JSON.parse(getFromLS("seenPhase2")).seen;
 	if (seen == null || !seen) {
-		printTerminalText([
-			"Bevisa din värdighet.",
-			"Lös utmaningar för att samla bitar till en större gåta.",
-			"Första laget att knäcka koden belönas i slutspelet.",
-			{
-				txt: "Fortsätt",
-				func: async () => {
-					saveToLS("seenPhase2", { seen: true });
-					document.body.append(loadScreen(""));
+		let videoWrapper = document.createElement("div");
+		videoWrapper.setAttribute("id", "videoWrapper");
+		videoWrapper.append(
+			createVideo("https://www.youtube.com/watch?v=9xa3HLPhINA"),
+			createButton("Fortsätt", () => {
+				document.getElementById("videoWrapper").remove();
+				printTerminalText([
+					"Bevisa din värdighet.",
+					"Lös utmaningar för att samla bitar till en större gåta.",
+					"Första laget att knäcka koden belönas i slutspelet.",
+					{
+						txt: "Fortsätt",
+						func: async () => {
+							saveToLS("seenPhase2", { seen: true });
+							document.body.append(loadScreen(""));
 
-					window.location.reload();
-				},
-			},
-		]);
+							window.location.reload();
+						},
+					},
+				]);
+			})
+		);
+		document.body.append(videoWrapper);
 	} else {
 		// printTerminalText(["Ni har blivit tilldelade era grupper av Kuben"]);
 		// lobbyDiv.append(createList(usersInSession, 1));
@@ -147,6 +174,19 @@ async function makeLobbyTwo(user, activeSession, session, usersInSession) {
 					"Starta Spelet",
 					"Starta",
 					async () => {
+						let groups = await getGroups("session", activeSession);
+						console.log(groups);
+						groups.forEach(async (group) => {
+							if (group.users.length != 0) {
+								group.users.forEach(async (user) => {
+									await updatePlayer({
+										filter: { username: user },
+										updates: { $set: { group: group._id } },
+									});
+								});
+							}
+						});
+
 						const sessionFilter = { sessionCode: activeSession };
 						const sessionUpdates = { $set: { phase: 2, lobby: false } };
 

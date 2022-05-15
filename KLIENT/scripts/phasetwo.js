@@ -12,11 +12,11 @@
 
 var challengeData = "";
 (async () => {
-	console.log("hej");
 	await fetch(`${localhost}challenges/phase2`)
 		.then((response) => response.json())
 		.then((data) => (challengeData = data));
 })();
+checkLoggedInPlayer();
 
 async function checkChallenge(task, linje, position, lastPosition) {
 	for (let i = 0; i <= 15; i++) {
@@ -38,7 +38,6 @@ phaseCheck(2, async () => {
 		lastPosition = challengeData[task - 1].position;
 	}
 	const content = await checkChallenge(task, linje, position, lastPosition);
-	console.log(challenge);
 
 	// createChallengeEntries( [challenges], [progress] )
 	// skapad utefter följande array struktur:
@@ -73,6 +72,7 @@ phaseCheck(2, async () => {
 		},
 	];
 	const currentTask = (task, id) => {
+		task++;
 		let roof = id * 4;
 		console.log(task % roof);
 		if (roof < task) {
@@ -94,33 +94,38 @@ phaseCheck(2, async () => {
 	let progress = [
 		{
 			id: 1,
-			prog: currentTask(task, 1) != 4 && currentTask(task, 1) != 0 ? currentTask(task, 1) : currentTask(task, 1),
+			prog: currentTask(task, 1) != 4 && currentTask(task, 1) != 0 ? currentTask(task, 1) - 1 : currentTask(task, 1),
 			started: true,
 		},
 		{
 			id: 2,
-			prog: currentTask(task, 2) != 4 && currentTask(task, 2) != 0 ? currentTask(task, 2) : currentTask(task, 2),
+			prog: currentTask(task, 2) != 4 && currentTask(task, 2) != 0 ? currentTask(task, 2) - 1 : currentTask(task, 2),
 			started: isStarted(task, 2),
 		},
 		{
 			id: 3,
-			prog: currentTask(task, 3) != 4 && currentTask(task, 3) != 0 ? currentTask(task, 3) : currentTask(task, 3),
+			prog: currentTask(task, 3) != 4 && currentTask(task, 3) != 0 ? currentTask(task, 3) - 1 : currentTask(task, 3),
 			started: isStarted(task, 3),
 		},
 		{
 			id: 4,
-			prog: currentTask(task, 4) != 4 && currentTask(task, 4) != 0 ? currentTask(task, 4) : currentTask(task, 4),
+			prog: currentTask(task, 4) != 4 && currentTask(task, 4) != 0 ? currentTask(task, 4) - 1 : currentTask(task, 4),
 			started: isStarted(task, 4),
 		},
 	];
 	let challengeEntries = createChallengeEntries(challenges, progress);
 
 	const groupInfo = await getGroups("session", JSON.parse(getFromLS("user")).session);
+	let userGroupname = "";
 	const groupInfoArray = groupInfo.map((group) => {
+		if (group._id == JSON.parse(getFromLS("user")).group) {
+			userGroupname = group.groupName;
+		}
 		return [group.groupName, parseInt(group.task)];
 	});
-	console.log(groupInfoArray);
+	console.log(groupInfo);
 	const progressInfo = createProgressionSection(groupInfoArray, 16);
+	challengeEntries.prepend(createString(userGroupname));
 	challengeEntries.append(progressInfo);
 
 	const tabs = createTabs([
@@ -173,18 +178,20 @@ async function renderChallenge(number, clueNumber, position, lastPosition, linje
 	let button = createButton("skicka", async () => {
 		let guess = checkAnswerBox();
 		let answer = await checkAnswer("phase2", `${clueNumber}`, `${guess}`);
-		console.log(distance);
-		if (distance < 25000) {
+		if (distance < 250000) {
 			if (answer) {
 				let group = JSON.parse(getFromLS("user")).group;
 
 				let task = (clueNumber + 1) % 15;
 
 				const groupFilter = { _id: group };
-				let groupUpdates = { $set: { task: String(task) } };
+				let groupUpdates = { $push: { completedChallenges: String(task) }, $set: { task: String(task) } };
 
 				if (task == 4 || task == 8 || task == 12 || task == 16) {
-					groupUpdates = { $set: { task: String(task), linje: String((linje + 1) % 4) } };
+					groupUpdates = {
+						$push: { completedChallenges: String(task) },
+						$set: { task: String(task), linje: String((linje + 1) % 4) },
+					};
 				}
 
 				let res = await updateGroup({
