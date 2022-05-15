@@ -58,12 +58,17 @@ function createLogin() {
 	const confirmPassword = createInput("Bekräfta lösenord", "confirm-password", "confirmPassword", "");
 	const signInButton = createButton("Skapa Konto", async (e) => {
 		e.preventDefault();
-
+		loadButton(e.target);
 		const username = document.querySelector("#username");
 		const password = document.querySelector("#password");
 		const confirmPassword = document.querySelector("#confirm-password");
+		if (username == "" || confirmPassword == "" || password == "") {
+			displayLoginErrorMessage("Please fill in every field");
+			return false;
+		}
 		if (password.value == confirmPassword.value && username != "") {
 			await createPlayer();
+			unloadButton("Välkommen");
 			window.location.href = "html/sessions.html";
 		} else {
 			if (password.value != confirmPassword.value) {
@@ -77,12 +82,19 @@ function createLogin() {
 	});
 	const loginButton = createButton("Logga in", async (e) => {
 		e.preventDefault();
+		loadButton(e.target);
 		let formData = new FormData(document.getElementById("login-form"));
-		if (await logInPlayer(postFormData(formData))) {
+		const loginData = await logInPlayer(postFormData(formData));
+		const player = loginData.player;
+		let loginToLocation = await whereTo(player);
+		if (loginData.loggedin) {
+			unloadButton("Välkommen");
+			document.body.append(loadScreen("Välkommen"));
+			setTimeout(() => {
+				window.location.replace(loginToLocation);
+			}, 2000);
 			console.log(true);
-			window.location.replace("html/sessions.html");
 		} else {
-			console.log(false);
 			displayLoginErrorMessage("Username and Passwords does not match!");
 		}
 	});

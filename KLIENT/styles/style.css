@@ -1,3 +1,15 @@
+@font-face{
+    font-family: Cascadia;
+    src: url(font/CascadiaCode.woff2);
+    font-weight: normal;
+}
+
+@font-face{
+    font-family: CascadiaItalic;
+    src: url(font/CascadiaCodeItalic.woff2);
+    font-weight: italic;
+}
+
 :root{
     --black: #272727;
     --blackOp: #2727275a;
@@ -11,6 +23,7 @@
 
     --xs: 5px;
     --s: 13px;
+    --negS: -13px; 
     --m: 16px;
     --l: 20px;
     --xl: 26px;
@@ -22,7 +35,7 @@
     --transSlow: 0.7s;
 }
 * {
-    font-family: 'cascadia code';
+    font-family: 'Cascadia';
     color: var(--white);
     position: relative;
     font-weight: normal;
@@ -271,9 +284,87 @@ body .button-accent{
 
 }
 
-/* .loading-screen-wrapper{ */
+
+/* TRANSITION SCREEN -------------------- */
+
+.loading-screen-wrapper{ 
     /* wip */
-/* } */
+    background-color: var(--black);
+
+    position: absolute;
+    top: var(--negS) ;
+    left: var(--negS) ;
+    height: 100vh;
+    width: 100vw;
+
+    padding: var(--s);
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+
+    z-index: 100;
+    overflow: hidden;
+
+}
+
+.loading-screen-wrapper > section{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-size: 400%;
+    top: 0;
+    left: 0;
+}
+
+.loading-screen-wrapper .lay01{
+    animation: 20s ease 0s infinite col;
+
+}
+
+.loading-screen-wrapper .lay0{
+    background: linear-gradient(-45deg, var(--main), transparent);
+}
+
+
+@keyframes slide {
+	0% {background-position: 0% 50%}
+	/* 45% {background-position: 0% 0%} */
+	50% {background-position: 100% 50%}
+	100% {background-position: 0% 50%}
+}
+
+@keyframes col{
+    0%{background-color: var(--main)}               
+    20%{background-color: var(--suppTwo)}
+    40%{background-color: var(--sub)}
+    60%{background-color: var(--accent)}
+    80%{background-color: var(--suppTwo)}
+    100%{background-color: var(--main)}
+}
+
+
+@keyframes fade{
+    0%{opacity: 0; }
+    100%{opacity: 1;}
+}
+@keyframes fadeOut{
+    0%{opacity: 1; }
+    100%{opacity: 0;}
+}
+.fadeIn{
+    animation: 0s ease 0s 1 fade;
+}
+
+.fadeOut{
+    animation: 1s ease 0s 1 fadeOut;
+}
+
+.gradient{
+    animation: 20s ease 0s infinite col;
+}
+
+
 
 .loading-icon-wrapper{
     /* wip */

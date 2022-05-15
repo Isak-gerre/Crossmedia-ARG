@@ -1,5 +1,11 @@
 "use strict";
 
+document.body.append(loadScreen(""));
+document.addEventListener("DOMContentLoaded", async () => {
+	setTimeout(() => {
+		unloadScreen();
+	}, 2000);
+});
 //LOCALSTORAGE FUNCTIONS
 //--------------------------------------------------
 if (getFromLS("user") == null && window.location.pathname != "/KLIENT/index.html") {
@@ -25,7 +31,7 @@ async function logInPlayer(player) {
 	let playerData = await res.json();
 
 	loggedin ? saveToLS("user", playerData) : null;
-	return loggedin;
+	return { loggedin: loggedin, player: playerData };
 }
 async function updateUserLS() {
 	let player = JSON.parse(getFromLS("user"));
@@ -36,16 +42,20 @@ async function updateUserLS() {
 
 async function createPlayer() {
 	let formData = new FormData(document.getElementById("sign-in-form"));
+	formData.delete("confirmPassword");
 	formData.append("group", "0");
 	formData.append("team", "0");
 	formData.append("session", "0");
-	formData.append("points", "0");
+	formData.append("points", []);
+	formData.append("completed", []);
+	formData.append("power", "1");
 
 	let res = await fetch(localhost + "players", postFormData(formData));
 	console.log(res);
 	if (res.ok) {
 		let data = await res.json();
 		saveToLS("user", data.player);
+		return data;
 	} else {
 		displayLoginErrorMessage("A user with that username already exits!");
 	}
@@ -55,8 +65,9 @@ async function updatePlayer(update) {
 	try {
 		let res = await fetch(localhost + "players", postData(update, "PATCH"));
 		if (res.ok) {
-			return await res.json();
-			// await saveToLS("user", JSON.stringify(data));
+			let data = await res.json();
+			saveToLS("user", JSON.stringify(data));
+			return data;
 		}
 	} catch (error) {
 		return error;
@@ -89,10 +100,10 @@ async function joinSession(sessionCode) {
 	const player = JSON.parse(getFromLS("user"));
 	console.log(player);
 	const playerFilter = { username: player.username, password: player.password };
-	const playerUpdates = { session: sessionCode };
+	const playerUpdates = { $set: { session: sessionCode } };
 
 	const sessionFilter = { sessionCode: sessionCode };
-	const sessionUpdates = { $push: { user: player.username } };
+	const sessionUpdates = { $push: { users: player.username } };
 
 	try {
 		await updatePlayer({
@@ -303,7 +314,7 @@ async function challengeCheck() {
 
 async function checkAnswer(phase, id, guess) {
 	let clue = "";
-	await fetch(`http://localhost:8000/challenges/${phase}/answer?id=${id}&guess=${guess}`)
+	await fetch(`${localhost}challenges/${phase}/answer?id=${id}&guess=${guess}`)
 		.then((response) => response.json())
 		.then((data) => {
 			clue = data;
@@ -315,23 +326,20 @@ async function checkAnswer(phase, id, guess) {
 //RANDOM FUNCTIONS
 //--------------------------------------------------
 
+function scannerDistance(start, distance) {
+	let gone = start - distance;
 
-function scannerDistance(start, distance){	
+	let scannerStrength = `${-(start - gone)}dBm`;
 
-	let gone = start-distance; 
-
-	let scannerStrength = `${(-(start-gone))}dBm`;
-
-	if(start-gone == 0){
-		scannerStrength = `${((start-gone))}dBm`;
+	if (start - gone == 0) {
+		scannerStrength = `${start - gone}dBm`;
 	}
 
-	if(start < distance){
+	if (start < distance) {
 		scannerStrength = "No signal return to last task!";
 	}
 
 	return scannerStrength;
-
 }
 
 function makeSessionCode(length) {
@@ -348,8 +356,8 @@ function displayLoginErrorMessage(error) {
 }
 
 async function getDiffrencePosition(latString, longString) {
-	let lat = parseFloat(latString)
-	let long = parseFloat(longString)
+	let lat = parseFloat(latString);
+	let long = parseFloat(longString);
 	console.log(latString);
 	async function getMyCoords() {
 		const getCoords = async () => {
@@ -413,4 +421,27 @@ async function getDiffrencePositionScanner(latStartString, longStartString, latG
 	console.log(c * r);
 
 	return c * r;
+}
+async function whereTo(player) {
+	let session = await getSessions("sessionCode", player.session);
+
+	if (session.lobby && player.session != "0") {
+		return "html/lobby.html";
+	}
+	if (session.lobby == false && player.session != "0") {
+		return "html/phase.html";
+	}
+	return "html/sessions.html";
+}
+
+function getCurrentTime() {
+	const currentTime = new Date();
+	const hours = currentTime.getHours();
+	const minutes = currentTime.getMinutes();
+	let seconds = currentTime.getSeconds();
+	if (seconds < 10) {
+		seconds = `0${seconds}`;
+	}
+
+	return `${hours}:${minutes}:${seconds}`;
 }
