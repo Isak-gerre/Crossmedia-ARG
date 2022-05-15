@@ -30,5 +30,5 @@ function renderGame(gameID, style) {
 	game(gameID, style);
 }
 
-renderGrid();
-renderPhase3();
+// renderGrid();
+// renderPhase3();

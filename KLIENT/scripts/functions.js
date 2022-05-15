@@ -167,9 +167,12 @@ async function phaseCheck(phaseCheck, callbackfunction) {
 //--------------------------------------------------
 async function getGroups(query, value) {
 	let res = await fetch(`${localhost}groups?${query}=${value}`);
+	console.log(res);
 	if (res.ok) {
 		let data = await res.json();
 		return data;
+	} else {
+		return "false";
 	}
 }
 
