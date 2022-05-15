@@ -16,7 +16,12 @@ var challengeData = "";
 		.then((response) => response.json())
 		.then((data) => (challengeData = data));
 })();
-checkLoggedInPlayer();
+
+const playerLS = async () => {
+	let player = await getPlayer("username", JSON.parse(getFromLS("user")).username);
+	saveToLS("user", player);
+};
+playerLS();
 
 async function checkChallenge(task, linje, position, lastPosition) {
 	for (let i = 0; i <= 15; i++) {
