@@ -138,7 +138,7 @@ async function makeLobbyTwo(user, activeSession, session, usersInSession) {
 		let videoWrapper = document.createElement("div");
 		videoWrapper.setAttribute("id", "videoWrapper");
 		videoWrapper.append(
-			createVideo("https://www.youtube.com/watch?v=9xa3HLPhINA"),
+			createVideo("https://www.youtube.com/embed/4aWGxWyJ5Tw"),
 			createButton("Fortsätt", () => {
 				document.getElementById("videoWrapper").remove();
 				printTerminalText([

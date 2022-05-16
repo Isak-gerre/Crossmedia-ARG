@@ -968,11 +968,7 @@ function createVideo(link) {
 	let video = createElemAndClass("iframe", "video");
 
 	wrapper.innerHTML = `
-	<iframe src="${link} &autoplay=1" 
-	title="YouTube video player" 
-	width="720" height="405"
-	frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-	allowfullscreen></iframe>
+	<iframe width="560" height="315" src="${link}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 	`;
 
 	return wrapper;
