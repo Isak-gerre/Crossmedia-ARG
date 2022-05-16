@@ -90,6 +90,7 @@ phaseCheck(2, async () => {
 
 	// createChallengeEntries( [challenges], [progress] )
 	// skapad utefter följande array struktur:
+	//test
 	let challenges = [
 		{
 			id: 1,
