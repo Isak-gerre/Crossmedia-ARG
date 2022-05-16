@@ -20,9 +20,43 @@ var challengeData = "";
 
 const areWeDone = async () => {
 	let group = await getGroupById(JSON.parse(getFromLS("user")).group);
+	let session = await getSessions("sessionCode", group.session);
 	console.log(group);
 	if (group.completedChallenges.length == 15) {
 		console.log("BAJJSSJKORV");
+		console.log(session);
+		if (session.phaseTwoTime == undefined) {
+			let date = new Date();
+			let time = date.getTime();
+			time = time + 1000 * 60 * 14;
+			await updateSession({
+				filter: { sessionCode: session.sessionCode },
+				updates: { $set: { phaseTwoTime: time } },
+			});
+		}
+	}
+	if (session.phaseTwoTime) {
+		let phaseTwoTime = session.phaseTwoTime;
+		let timerDiv = createElemAndClass("div", "timer");
+		timerDiv.setAttribute("id", "timer");
+		document.body.prepend(timerDiv);
+		const timerInterval = setInterval(async () => {
+			let date = new Date();
+			let currentTime = date.getTime();
+			let difference = phaseTwoTime - currentTime;
+
+			let seconds = Math.round((difference / 1000) % 59);
+			let minutes = Math.round((difference / (1000 * 60)) % 60);
+			console.log(minutes + ":" + seconds);
+			document.getElementById("timer").textContent = "You have: " + Math.round(difference / 1000) + " seconds left";
+			if (minutes < 0 && seconds < 0) {
+				await updateSession({
+					filter: { sessionCode: session.sessionCode },
+					updates: { $set: { phaseTwoTime: 0 } },
+				});
+				clearInterval(timerInterval);
+			}
+		}, 1000);
 	}
 };
 areWeDone();
@@ -35,6 +69,13 @@ async function checkChallenge(task, linje, position, lastPosition) {
 }
 
 phaseCheck(2, async () => {
+	let session = await getSessions("sessionCode", JSON.parse(getFromLS("user")).session);
+	console.log(session);
+	if (session.phaseTwoTime == 0) {
+		printTerminalText(["Denna fasen är över, återvänd till kuben"]);
+		//SCANNER HÄR
+		return;
+	}
 	let challenge = await challengeCheck();
 	let task = challenge.task;
 	let linje = challenge.linje;

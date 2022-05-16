@@ -67,28 +67,26 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 						groupedPlayers[`${(index + 1) % 4}`].push(user);
 					});
 
-					let linjeArray = shuffleArray([0,1,2,3]);
+					let linjeArray = shuffleArray([0, 1, 2, 3]);
 					let taskArray = [];
-					linjeArray.forEach(e => {
-						if(e == 0){
+					linjeArray.forEach((e) => {
+						if (e == 0) {
 							taskArray.push(0);
-						}
-						else if(e == 1){
+						} else if (e == 1) {
 							taskArray.push(4);
-						}
-						else if(e == 2){
+						} else if (e == 2) {
 							taskArray.push(8);
-						}
-						else if(e == 3){
+						} else if (e == 3) {
 							taskArray.push(12);
 						}
 					});
 
-
 					let groups = await getGroups("session", activeSession);
 					groups.forEach(async (group, index) => {
 						const groupFilter = { session: activeSession, groupName: group.groupName };
-						const groupUpdates = { $set: { users: groupedPlayers[index], linje: linjeArray[index], task: taskArray[index]} };
+						const groupUpdates = {
+							$set: { users: groupedPlayers[index], linje: linjeArray[index], task: taskArray[index] },
+						};
 						const res = await updateGroup({
 							filter: groupFilter,
 							updates: groupUpdates,
@@ -140,7 +138,7 @@ async function makeLobbyTwo(user, activeSession, session, usersInSession) {
 		let videoWrapper = document.createElement("div");
 		videoWrapper.setAttribute("id", "videoWrapper");
 		videoWrapper.append(
-			createVideo("https://www.youtube.com/watch?v=9xa3HLPhINA"),
+			createVideo("https://www.youtube.com/embed/4aWGxWyJ5Tw"),
 			createButton("Fortsätt", () => {
 				document.getElementById("videoWrapper").remove();
 				printTerminalText([
@@ -166,7 +164,7 @@ async function makeLobbyTwo(user, activeSession, session, usersInSession) {
 		let groups = await getGroups("session", activeSession);
 		groups.forEach((group) => {
 			let list = createList(group.users, 2);
-			lobbyDiv.append(createAccordion(group.groupName, list));
+			lobbyDiv.append(createAccordion(group.groupName, list, true));
 		});
 		if (user.username == session.creator) {
 			document.body.append(
