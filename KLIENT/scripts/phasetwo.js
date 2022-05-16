@@ -50,7 +50,6 @@ const areWeDone = async () => {
 			console.log(minutes + ":" + seconds);
 			document.getElementById("timer").textContent = "You have: " + Math.round(difference / 1000) + " seconds left";
 			if (minutes < 0 && seconds < 0) {
-				console.log(true);
 				await updateSession({
 					filter: { sessionCode: session.sessionCode },
 					updates: { $set: { phaseTwoTime: 0 } },
@@ -74,6 +73,7 @@ phaseCheck(2, async () => {
 	console.log(session);
 	if (session.phaseTwoTime == 0) {
 		printTerminalText(["Denna fasen är över, återvänd till kuben"]);
+		//SCANNER HÄR
 		return;
 	}
 	let challenge = await challengeCheck();
