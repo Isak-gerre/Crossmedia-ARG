@@ -77,7 +77,7 @@ phaseCheck(2, async () => {
 		return;
 	}
 	let challenge = await challengeCheck();
-	let task = challenge.completedChallenges.length;
+	let task = challenge.task;
 	let linje = challenge.linje;
 	let position = challengeData[task].position;
 	let lastPosition;

@@ -306,7 +306,6 @@ async function challengeCheck() {
 	let task = {
 		task: group.task,
 		linje: group.linje,
-		completedChallenges: group.completedChallenges,
 	};
 	return task;
 }
