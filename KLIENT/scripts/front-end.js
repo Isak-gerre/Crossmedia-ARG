@@ -696,7 +696,7 @@ function createProgressionSection(data, max) {
 
 		let prog = document.createElement("span");
 		prog.style.textAlign = "right";
-		percent = (team[1] / max) * 100;
+		percent = (team[2] / max) * 100;
 
 		prog.textContent = Math.floor(percent) + "%";
 

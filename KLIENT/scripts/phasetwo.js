@@ -162,7 +162,7 @@ phaseCheck(2, async () => {
 		if (group._id == JSON.parse(getFromLS("user")).group) {
 			userGroupname = group.groupName;
 		}
-		return [group.groupName, parseInt(group.task)];
+		return [group.groupName, parseInt(group.task), group.completedChallenges.length];
 	});
 	const progressInfo = createProgressionSection(groupInfoArray, 16);
 	challengeEntries.prepend(createString(userGroupname));
