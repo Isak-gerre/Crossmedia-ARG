@@ -121,24 +121,6 @@ let textArr = [
 			}
 		},
 	},
-	"Eller gå med startad session:"
-	// {
-	// 	txt: "Mata in spelkod",
-	// 	func: () => {
-	// 		document.querySelector("body").append(createInput("", "gamecode", "gamecode"));
-	// 		document.querySelector("body").append(
-	// 			createButton("gå med", async () => {
-	// 				console.log("test");
-	// 				let gamecode = document.getElementById("gamecode").value;
-	// 				const sessions = await getSessions();
-	// 				if (sessions.find((session) => session.sessionCode == gamecode)) {
-	// 					await joinSession(gamecode);
-	// 					window.location.href = "lobby.html";
-	// 				}
-	// 			})
-	// 		);
-	// 	},
-	// },
 ];
 
 // EXEMPEL HUR TAB KAN SKAPAS
@@ -222,7 +204,7 @@ function createButton(text, callback, id) {
 
 	if (callback) button.addEventListener("click", callback);
 
-	if( id ) button.setAttribute("id", "join-session");
+	if (id) button.setAttribute("id", "join-session");
 
 	// click animation, remove?
 	// button.addEventListener("click", ()=>{
@@ -305,7 +287,7 @@ function createConditionalButton(txt, heardObj, condFunc, callback) {
 	// condFunc should check if condition is met.
 	//Returns true or false
 
-	if(heardObj == false){
+	if (heardObj == false) {
 		if (condFunc()) {
 			button.classList.remove("button-disabled");
 		} else {
@@ -406,7 +388,7 @@ function createInput(labelText, id, name, value = false) {
 	label.textContent = labelText + ":";
 	label.setAttribute("for", id);
 
-	if(labelText !== ""){
+	if (labelText !== "") {
 		wrapper.append(label);
 	}
 
@@ -419,7 +401,7 @@ function createInput(labelText, id, name, value = false) {
 		input.setAttribute("value", value);
 	}
 
-	wrapper.append( input);
+	wrapper.append(input);
 
 	return wrapper;
 }
@@ -458,31 +440,26 @@ function createTabs(tabArr) {
 			updateLineWidth(100);
 			tabContent.style.transform = "scaleY(0)";
 
-			setTimeout( ()=>{
+			setTimeout(() => {
 				document.querySelector(".active").classList.remove("active");
 				tabTitle.classList.add("active");
 
 				updateLineWidth();
 
-				if( active == document.querySelector(".tab-head-wrapper >*:first-child") ){
+				if (active == document.querySelector(".tab-head-wrapper >*:first-child")) {
 					line.style.alignSelf = "flex-start";
 					tabTitle.style.transformOrigin = "bottom left";
 				} else {
 					line.style.alignSelf = "flex-end";
 					tabTitle.style.transformOrigin = "bottom right";
 				}
-				
-				setTimeout( ()=>{
+
+				setTimeout(() => {
 					tabContent.innerHTML = ``;
 					tabContent.append(tab.content);
 					tabContent.style.transform = "scaleX(1)";
-
-				}, 200 );
-
-				
-
-			}, 100 )
-			
+				}, 200);
+			}, 100);
 		});
 
 		count = "two";
@@ -493,21 +470,20 @@ function createTabs(tabArr) {
 
 	updateLineWidth();
 
-	header.append( tabHeadWrapper, line, lineTwo )
+	header.append(tabHeadWrapper, line, lineTwo);
 
-	
 	wrapper.append(header, tabContent);
 
-	setTimeout(()=>{
+	setTimeout(() => {
 		updateLineWidth();
-	}, 100)
+	}, 100);
 
 	return wrapper;
 
-	function updateLineWidth( w ){
-		let width = `calc(${ getComputedStyle(active).getPropertyValue('width') } + var(--xl))`;
-		if(w) width = "100%"; 
-		document.documentElement.style.setProperty('--headerLineWidth', width);
+	function updateLineWidth(w) {
+		let width = `calc(${getComputedStyle(active).getPropertyValue("width")} + var(--xl))`;
+		if (w) width = "100%";
+		document.documentElement.style.setProperty("--headerLineWidth", width);
 	}
 }
 
@@ -1082,31 +1058,28 @@ function createChallengeGrid(challenges, progress, currentTime) {
 
 		let difficultyWrapper = createElemAndClass("div", "button-confirm-wrapper", "button-confirm-gap");
 
-		if(createChallengeInfo == 0){
+		if (createChallengeInfo == 0) {
 			createChallengeInfo = 1;
 
-			let info = createElemAndClass("div")
-	
+			let info = createElemAndClass("div");
+
 			info.innerHTML = `
 			
 			Du har 10 minuter på att lösa så många utmaningar du kan, 
 			det finns tre nivåer. De svårare övningarna ger mer poäng!
 			Vinnade laget utses i slutet! 
 			`;
-	
+
 			let info2 = createString("Lycka till!");
-	
-			
-	
+
 			let button = document.createElement("button");
 			button.innerHTML = "sätt igång";
 			button.addEventListener("click", () => {
 				infoDiv.remove();
 			});
 			button.style.zIndex = 300;
-			
-			let infoDiv = createContentBlock("Utmaningar", "h1", [info,info2,button], "infoText");
-			
+
+			let infoDiv = createContentBlock("Utmaningar", "h1", [info, info2, button], "infoText");
 		}
 
 		wrapper.append(time, difficultyWrapper);
@@ -1299,9 +1272,8 @@ function cipher(key, data) {
 	return data;
 }
 
-
-function updateWindowHeight(){
-	document.documentElement.style.setProperty('--window', window.innerHeight + "px");
+function updateWindowHeight() {
+	document.documentElement.style.setProperty("--window", window.innerHeight + "px");
 }
 
 updateWindowHeight();
