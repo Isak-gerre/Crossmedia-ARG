@@ -194,6 +194,7 @@ label, li{
 input{
     background: none;
     border: 1px solid var(--white);
+    padding: var(--xs);
 }
 
 .box-input-wrapper{
