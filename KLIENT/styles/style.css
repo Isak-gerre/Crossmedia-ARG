@@ -194,6 +194,7 @@ label, li{
 input{
     background: none;
     border: 1px solid var(--white);
+    padding: var(--xs);
 }
 
 .box-input-wrapper{
@@ -309,16 +310,16 @@ body .button-accent{
 
 .fold{
     overflow: hidden;
-    height: 0px;
     margin-bottom: 0;
+    transform-origin: bottom;
+    transform: scaleY(0);
     
-
+    
     transition: var(--transFast);
 }
 .unfold{
-    height: 50px;
     margin-bottom: var(--xl);
-
+    transform: scaleY(1);
 }
 
 
