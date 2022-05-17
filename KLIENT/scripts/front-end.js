@@ -193,7 +193,7 @@ function setBodyState(c) {
 
 function createElemAndClass(type, className, classNameTwo) {
 	let wrapper = document.createElement(type);
-	wrapper.classList.add(className);
+	if (className) wrapper.classList.add(className);
 	if (classNameTwo) wrapper.classList.add(classNameTwo);
 	return wrapper;
 }
@@ -666,16 +666,7 @@ function createList(items, height = 4) {
 function printTerminalText(input) {
 	if (Array.isArray(input)) {
 		input.forEach((message) => {
-			let parag = createElemAndClass("p", "");
-			document.querySelector("body").append(parag);
-
-			message.forEach(lett => {
-				setTimeout(()=>{
-					parag.textContent += lett;
-
-				}, 50)
-			});
-
+			document.querySelector("body").append(createString(message));
 		});
 	} else {
 		document.querySelector("body").append(createString(input));
