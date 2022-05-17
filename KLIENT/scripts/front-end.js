@@ -2,7 +2,7 @@
 
 // BUTTONS ----------------------------
 
-// createButton( "button text" ; func: callback)
+// createButton( "button text" ; func: callback, id)
 // return DOM
 
 // createConfirmButton( "button text" ; "button text after click" ; func: callback ; "warning text")
@@ -117,24 +117,24 @@ let textArr = [
 			}
 		},
 	},
-	"Eller",
-	{
-		txt: "Mata in spelkod",
-		func: () => {
-			document.querySelector("body").append(createInput("Mata in spelkod", "gamecode", "gamecode"));
-			document.querySelector("body").append(
-				createButton("gå med", async () => {
-					console.log("test");
-					let gamecode = document.getElementById("gamecode").value;
-					const sessions = await getSessions();
-					if (sessions.find((session) => session.sessionCode == gamecode)) {
-						await joinSession(gamecode);
-						window.location.href = "lobby.html";
-					}
-				})
-			);
-		},
-	},
+	"Eller gå med startad session:"
+	// {
+	// 	txt: "Mata in spelkod",
+	// 	func: () => {
+	// 		document.querySelector("body").append(createInput("", "gamecode", "gamecode"));
+	// 		document.querySelector("body").append(
+	// 			createButton("gå med", async () => {
+	// 				console.log("test");
+	// 				let gamecode = document.getElementById("gamecode").value;
+	// 				const sessions = await getSessions();
+	// 				if (sessions.find((session) => session.sessionCode == gamecode)) {
+	// 					await joinSession(gamecode);
+	// 					window.location.href = "lobby.html";
+	// 				}
+	// 			})
+	// 		);
+	// 	},
+	// },
 ];
 
 // EXEMPEL HUR TAB KAN SKAPAS
@@ -212,11 +212,13 @@ function createSection(array) {
 	return section;
 }
 
-function createButton(text, callback) {
+function createButton(text, callback, id) {
 	let button = document.createElement("button");
 	if (text) button.textContent = text;
 
 	if (callback) button.addEventListener("click", callback);
+
+	if( id ) button.setAttribute("id", "join-session");
 
 	// click animation, remove?
 	// button.addEventListener("click", ()=>{
@@ -299,31 +301,21 @@ function createConditionalButton(txt, heardObj, condFunc, callback) {
 	// condFunc should check if condition is met.
 	//Returns true or false
 
-	heardObj.addEventListener("keyup", () => {
+	if(heardObj == false){
 		if (condFunc()) {
 			button.classList.remove("button-disabled");
 		} else {
 			button.classList.add("button-disabled");
 		}
-	});
-
-	return button;
-}
-
-function createConditionalButton(txt, heardObj, condFunc, callback) {
-	let button = createButton(txt, callback);
-	button.classList.add("button-disabled");
-
-	// condFunc should check if condition is met.
-	//Returns true or false
-
-	heardObj.addEventListener("keyup", () => {
-		if (condFunc()) {
-			button.classList.remove("button-disabled");
-		} else {
-			button.classList.add("button-disabled");
-		}
-	});
+	} else {
+		heardObj.addEventListener("keyup", () => {
+			if (condFunc()) {
+				button.classList.remove("button-disabled");
+			} else {
+				button.classList.add("button-disabled");
+			}
+		});
+	}
 
 	return button;
 }
@@ -410,6 +402,10 @@ function createInput(labelText, id, name, value = false) {
 	label.textContent = labelText + ":";
 	label.setAttribute("for", id);
 
+	if(labelText !== ""){
+		wrapper.append(label);
+	}
+
 	let input = document.createElement("input");
 	input.setAttribute("type", "text");
 	input.setAttribute("id", id);
@@ -419,7 +415,7 @@ function createInput(labelText, id, name, value = false) {
 		input.setAttribute("value", value);
 	}
 
-	wrapper.append(label, input);
+	wrapper.append( input);
 
 	return wrapper;
 }
