@@ -10,8 +10,14 @@
 // 	}
 // });
 
-let challengeData = "";
+const ws = new WebSocket("ws://localhost:8002");
 
+ws.addEventListener("open", () => {
+	console.log("New Client Connected"); 
+})
+
+let challengeData = "";
+let timerOn = false;
 
 fetch(`${localhost}challenges/phase2`)
 .then((response) => response.json())
@@ -21,13 +27,15 @@ challengeData = data;
 console.log(challengeData);
 let challenge = await challengeCheck();
 // checkLoggedInPlayer();
-console.log("hej", challenge.completedChallenges.length);
 const areWeDone = async () => {
 	let group = await getGroupById(JSON.parse(getFromLS("user")).group);
 	let session = await getSessions("sessionCode", group.session);
 	console.log(group);
-	if (group.completedChallenges.length == 15) {
-		console.log(session);
+	if (group.completedChallenges.length == 0) {
+		ws.send("done");
+		if (timerOn){
+			return;
+		}
 		if (session.phaseTwoTime == undefined) {
 			let date = new Date();
 			let time = date.getTime();
@@ -50,7 +58,6 @@ const areWeDone = async () => {
 
 			let seconds = Math.round((difference / 1000) % 59);
 			let minutes = Math.round((difference / (1000 * 60)) % 60);
-			console.log(minutes + ":" + seconds);
 			document.getElementById("timer").textContent = "You have: " + Math.round(difference / 1000) + " seconds left";
 			if (minutes < 0 && seconds < 0) {
 				await updateSession({
@@ -61,7 +68,15 @@ const areWeDone = async () => {
 			}
 		}, 1000);
 	}
+	timerOn = true;
 };
+
+ws.addEventListener("message", (data) => {
+	if(data.data == "timer"){
+		// areWeDone();
+	}
+});
+
 areWeDone();
 async function checkChallenge(task, linje, position, lastPosition) {
 	for (let i = 0; i <= 15; i++) {
