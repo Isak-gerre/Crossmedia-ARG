@@ -44,8 +44,6 @@ fetch(`${localhost}challenges/phase2`)
 					let currentTime = date.getTime();
 					let difference = phaseTwoTime - currentTime;
 
-					let seconds = Math.round((difference / 1000) % 59);
-					let minutes = Math.round((difference / (1000 * 60)) % 60);
 					document.getElementById("timer").textContent =
 						"You have: " + Math.round(difference / (1000 * 60)) + " minutes left";
 					if (Math.round(difference / (1000 * 60)) < 0) {
@@ -77,6 +75,24 @@ fetch(`${localhost}challenges/phase2`)
 			let task = challenge.task;
 
 			let completed = challenge.completedChallenges.length;
+			if (completed >= 16) {
+				document.getElementById("phase-one-div").innerHTML = "";
+				printTerminalText([
+					"Du har lyckats lösa alla Uppdrag!",
+					"Bra jobbat!!",
+					"De andra lagen har nu kortare tid på sig att lösa uppdragen",
+					"När tiden runnit ut kan vi återsamlas vid kuben",
+				]);
+				let date = new Date();
+				let time = date.getTime();
+				let minutes = 1000 * 20;
+				time = time + minutes;
+				await updateSession({
+					filter: { sessionCode: session.sessionCode },
+					updates: { $set: { phaseTwoTime: time, oneGroupDone: true } },
+				});
+				return;
+			}
 			console.log("TASK", completed);
 
 			let linje = challenge.linje;
@@ -179,7 +195,14 @@ fetch(`${localhost}challenges/phase2`)
 			});
 			const progressInfo = createProgressionSection(groupInfoArray, 16);
 			challengeEntries.prepend(createString(userGroupname));
-			challengeEntries.append(progressInfo);
+			if (session.oneGroupDone === true) {
+				challengeEntries.append(
+					createString("En annan grupp är har klarat alla uppdrag! Skynda er för att hinna lösa så många ni kan!"),
+					progressInfo
+				);
+			} else {
+				challengeEntries.append(progressInfo);
+			}
 
 			const tabs = createTabs([
 				{ header: "Overview", content: challengeEntries },
@@ -266,12 +289,7 @@ fetch(`${localhost}challenges/phase2`)
 							updates: groupUpdates,
 						});
 
-						let newGroup = await getGroupById(group);	
-
-						if(newGroup.completedChallenges.length >= 16){
-							let body = document.querySelector("body");
-							//Hej här ska allt tömmas
-						}
+						let newGroup = await getGroupById(group);
 
 						window.location.href = "phase.html";
 					} else {
@@ -359,7 +377,7 @@ fetch(`${localhost}challenges/phase2`)
 			);
 
 			scannerStrength = await scannerDistance(startDistane, distance);
-			if(document.querySelector("button").innerHTML != "jag är framme"){
+			if (document.querySelector("button").innerHTML != "jag är framme") {
 				document.querySelector("p").innerHTML = scannerStrength;
 			}
 			distance = 30;
