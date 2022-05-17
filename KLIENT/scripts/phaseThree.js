@@ -128,4 +128,4 @@ async function calculateTeamPoints() {
 
 }
 
-calculateTeamPoints();
+// calculateTeamPoints();

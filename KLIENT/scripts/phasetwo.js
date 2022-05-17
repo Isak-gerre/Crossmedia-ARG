@@ -10,12 +10,6 @@
 // 	}
 // });
 
-const ws = new WebSocket("ws://localhost:8002");
-
-ws.addEventListener("open", () => {
-	console.log("New Client Connected"); 
-})
-
 let challengeData = "";
 let timerOn = false;
 
@@ -32,10 +26,6 @@ const areWeDone = async () => {
 	let session = await getSessions("sessionCode", group.session);
 	console.log(group);
 	if (group.completedChallenges.length == 16) {
-		ws.send("done");
-		if (timerOn){
-			return;
-		}
 		if (session.phaseTwoTime == undefined) {
 			let date = new Date();
 			let time = date.getTime();
@@ -68,14 +58,7 @@ const areWeDone = async () => {
 			}
 		}, 1000);
 	}
-	timerOn = true;
 };
-
-ws.addEventListener("message", (data) => {
-	if(data.data == "timer"){
-		// areWeDone();
-	}
-});
 
 areWeDone();
 async function checkChallenge(task, linje, position, lastPosition) {
