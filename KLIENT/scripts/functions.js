@@ -2,6 +2,15 @@
 
 document.body.append(loadScreen(""));
 document.addEventListener("DOMContentLoaded", async () => {
+	if (getFromLS("seenPhase1") == null) {
+		saveToLS("seenPhase1", { seen: false });
+	}
+	if (getFromLS("seenPhase2") == null) {
+		saveToLS("seenPhase2", { seen: false });
+	}
+	if (getFromLS("seenPhase3") == null) {
+		saveToLS("seenPhase3", { seen: false });
+	}
 	setTimeout(() => {
 		unloadScreen();
 	}, 2000);
@@ -67,6 +76,18 @@ async function updatePlayer(update) {
 		if (res.ok) {
 			let data = await res.json();
 			saveToLS("user", JSON.stringify(data));
+			return data;
+		}
+	} catch (error) {
+		return error;
+	}
+}
+async function updateManyPlayers(update) {
+	console.log(update);
+	try {
+		let res = await fetch(localhost + "players", postData(update, "PATCH"));
+		if (res.ok) {
+			let data = await res.json();
 			return data;
 		}
 	} catch (error) {
