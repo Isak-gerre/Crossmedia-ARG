@@ -460,15 +460,9 @@ function createTabs(tabArr) {
 
 			setTimeout( ()=>{
 				document.querySelector(".active").classList.remove("active");
-	
 				tabTitle.classList.add("active");
-				
-				setTimeout( ()=>{
-					tabContent.innerHTML = ``;
-					tabContent.append(tab.content);
-					tabContent.style.transform = "scaleX(1)";
 
-				}, 200 )
+				updateLineWidth();
 
 				if( active == document.querySelector(".tab-head-wrapper >*:first-child") ){
 					line.style.alignSelf = "flex-start";
@@ -477,9 +471,17 @@ function createTabs(tabArr) {
 					line.style.alignSelf = "flex-end";
 					tabTitle.style.transformOrigin = "bottom right";
 				}
+				
+				setTimeout( ()=>{
+					tabContent.innerHTML = ``;
+					tabContent.append(tab.content);
+					tabContent.style.transform = "scaleX(1)";
 
-				updateLineWidth();
-			}, 200 )
+				}, 200 );
+
+				
+
+			}, 100 )
 			
 		});
 
