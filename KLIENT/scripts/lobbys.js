@@ -109,15 +109,25 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 								updates: groupUpdates,
 							});
 							groupedPlayers[index].forEach(async (player) => {
+
+								if(JSON.parse(getFromLS("user")).username == player){
+									let user = JSON.parse(getFromLS("user"));
+									user.group = group._id;
+									saveToLS("user", user);
+								}
+
 								console.log(res);
 								const playerFilter = { username: player };
 								const playerUpdates = { $set: { group: group._id } };
+								console.log(group._id);
 								await updateManyPlayers({
 									filter: playerFilter,
 									updates: playerUpdates,
 								});
 							});
 						});
+
+						
 						let res = await updateSession({
 							filter: sessionFilter,
 							updates: sessionUpdates,

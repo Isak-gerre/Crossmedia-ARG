@@ -365,7 +365,7 @@ function scannerDistance(start, distance) {
 	}
 
 	if (start < distance) {
-		scannerStrength = "OJDÅ! Du verkar ha kommit fel och har ingen signal! Gå tillbaka till förra uppgiften!";
+		scannerStrength = "OJDÅ! Du verkar ha kommit fel och har ingen signal! Gå tillbaka till förra uppgiften och testa ett annat håll!";
 	}
 
 	return scannerStrength;
