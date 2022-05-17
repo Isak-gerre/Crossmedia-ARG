@@ -2,7 +2,7 @@
 
 // BUTTONS ----------------------------
 
-// createButton( "button text" ; func: callback)
+// createButton( "button text" ; func: callback, id)
 // return DOM
 
 // createConfirmButton( "button text" ; "button text after click" ; func: callback ; "warning text")
@@ -121,24 +121,24 @@ let textArr = [
 			}
 		},
 	},
-	"Eller",
-	{
-		txt: "Mata in spelkod",
-		func: () => {
-			document.querySelector("body").append(createInput("Mata in spelkod", "gamecode", "gamecode"));
-			document.querySelector("body").append(
-				createButton("gå med", async () => {
-					console.log("test");
-					let gamecode = document.getElementById("gamecode").value;
-					const sessions = await getSessions();
-					if (sessions.find((session) => session.sessionCode == gamecode)) {
-						await joinSession(gamecode);
-						window.location.href = "lobby.html";
-					}
-				})
-			);
-		},
-	},
+	"Eller gå med startad session:"
+	// {
+	// 	txt: "Mata in spelkod",
+	// 	func: () => {
+	// 		document.querySelector("body").append(createInput("", "gamecode", "gamecode"));
+	// 		document.querySelector("body").append(
+	// 			createButton("gå med", async () => {
+	// 				console.log("test");
+	// 				let gamecode = document.getElementById("gamecode").value;
+	// 				const sessions = await getSessions();
+	// 				if (sessions.find((session) => session.sessionCode == gamecode)) {
+	// 					await joinSession(gamecode);
+	// 					window.location.href = "lobby.html";
+	// 				}
+	// 			})
+	// 		);
+	// 	},
+	// },
 ];
 
 // EXEMPEL HUR TAB KAN SKAPAS
@@ -195,7 +195,7 @@ function setBodyState(c) {
 
 function createElemAndClass(type, className, classNameTwo) {
 	let wrapper = document.createElement(type);
-	wrapper.classList.add(className);
+	if (className) wrapper.classList.add(className);
 	if (classNameTwo) wrapper.classList.add(classNameTwo);
 	return wrapper;
 }
@@ -216,11 +216,13 @@ function createSection(array) {
 	return section;
 }
 
-function createButton(text, callback) {
+function createButton(text, callback, id) {
 	let button = document.createElement("button");
 	if (text) button.textContent = text;
 
 	if (callback) button.addEventListener("click", callback);
+
+	if( id ) button.setAttribute("id", "join-session");
 
 	// click animation, remove?
 	// button.addEventListener("click", ()=>{
@@ -244,7 +246,7 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt) {
 
 	let confirmWrapper = createElemAndClass("section", "button-confirm-wrapper");
 
-	confirmWrapper.append(createButton(ultTxt, callback), createButton("cancel", close));
+	confirmWrapper.append(createButton(ultTxt, callback), createButton("avbryt", close));
 
 	const time = 200;
 
@@ -303,31 +305,21 @@ function createConditionalButton(txt, heardObj, condFunc, callback) {
 	// condFunc should check if condition is met.
 	//Returns true or false
 
-	heardObj.addEventListener("keyup", () => {
+	if(heardObj == false){
 		if (condFunc()) {
 			button.classList.remove("button-disabled");
 		} else {
 			button.classList.add("button-disabled");
 		}
-	});
-
-	return button;
-}
-
-function createConditionalButton(txt, heardObj, condFunc, callback) {
-	let button = createButton(txt, callback);
-	button.classList.add("button-disabled");
-
-	// condFunc should check if condition is met.
-	//Returns true or false
-
-	heardObj.addEventListener("keyup", () => {
-		if (condFunc()) {
-			button.classList.remove("button-disabled");
-		} else {
-			button.classList.add("button-disabled");
-		}
-	});
+	} else {
+		heardObj.addEventListener("keyup", () => {
+			if (condFunc()) {
+				button.classList.remove("button-disabled");
+			} else {
+				button.classList.add("button-disabled");
+			}
+		});
+	}
 
 	return button;
 }
@@ -414,6 +406,10 @@ function createInput(labelText, id, name, value = false) {
 	label.textContent = labelText + ":";
 	label.setAttribute("for", id);
 
+	if(labelText !== ""){
+		wrapper.append(label);
+	}
+
 	let input = document.createElement("input");
 	input.setAttribute("type", "text");
 	input.setAttribute("id", id);
@@ -423,15 +419,17 @@ function createInput(labelText, id, name, value = false) {
 		input.setAttribute("value", value);
 	}
 
-	wrapper.append(label, input);
+	wrapper.append( input);
 
 	return wrapper;
 }
 
 function createTabs(tabArr) {
-	let wrapper = createElemAndClass("div", "tab-wrapper");
+	let wrapper = createElemAndClass("section", "tab-wrapper");
 
-	let tabHeadWrapper = createElemAndClass("section", "tab-head-wrapper", "header");
+	let header = createElemAndClass("div", "header");
+
+	let tabHeadWrapper = createElemAndClass("section", "tab-head-wrapper");
 
 	let tabContent = document.createElement("section");
 	tabContent.setAttribute("id", "tabContent");
@@ -460,21 +458,11 @@ function createTabs(tabArr) {
 			updateLineWidth(100);
 			tabContent.style.transform = "scaleY(0)";
 
-
 			setTimeout( ()=>{
-
-	
 				document.querySelector(".active").classList.remove("active");
-	
 				tabTitle.classList.add("active");
-	
-				
-				setTimeout( ()=>{
-					tabContent.innerHTML = ``;
-					tabContent.append(tab.content);
-					tabContent.style.transform = "scaleX(1)";
 
-				}, 200 )
+				updateLineWidth();
 
 				if( active == document.querySelector(".tab-head-wrapper >*:first-child") ){
 					line.style.alignSelf = "flex-start";
@@ -483,9 +471,17 @@ function createTabs(tabArr) {
 					line.style.alignSelf = "flex-end";
 					tabTitle.style.transformOrigin = "bottom right";
 				}
+				
+				setTimeout( ()=>{
+					tabContent.innerHTML = ``;
+					tabContent.append(tab.content);
+					tabContent.style.transform = "scaleX(1)";
 
-				updateLineWidth();
-			}, 200 )
+				}, 200 );
+
+				
+
+			}, 100 )
 			
 		});
 
@@ -497,8 +493,10 @@ function createTabs(tabArr) {
 
 	updateLineWidth();
 
+	header.append( tabHeadWrapper, line, lineTwo )
+
 	
-	wrapper.append(tabHeadWrapper, line, lineTwo, tabContent);
+	wrapper.append(header, tabContent);
 
 	setTimeout(()=>{
 		updateLineWidth();
@@ -507,12 +505,8 @@ function createTabs(tabArr) {
 	return wrapper;
 
 	function updateLineWidth( w ){
-		let width = `calc(${ getComputedStyle(active).getPropertyValue('width') } + var(--l))`;
-
-		if(w){
-			width = "100%";
-		} 
-
+		let width = `calc(${ getComputedStyle(active).getPropertyValue('width') } + var(--xl))`;
+		if(w) width = "100%"; 
 		document.documentElement.style.setProperty('--headerLineWidth', width);
 	}
 }
@@ -1307,7 +1301,7 @@ function cipher(key, data) {
 
 
 function updateWindowHeight(){
-	document.documentElement.style.setProperty('--windowHeight', window.innerHeight + "px");
+	document.documentElement.style.setProperty('--window', window.innerHeight + "px");
 }
 
 updateWindowHeight();
