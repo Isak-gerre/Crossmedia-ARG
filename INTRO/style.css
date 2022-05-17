@@ -57,6 +57,7 @@ body {
     display: flex;
     flex-direction: column;
     margin: var(--s);
+    padding: 30px;
 }
 
 .tab-header svg{

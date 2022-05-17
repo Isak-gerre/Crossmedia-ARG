@@ -458,23 +458,18 @@ function createTabs(tabArr) {
 			updateLineWidth(100);
 			tabContent.style.transform = "scaleY(0)";
 
-
-			setTimeout( ()=>{
-
-	
+			setTimeout(() => {
 				document.querySelector(".active").classList.remove("active");
-	
+
 				tabTitle.classList.add("active");
-	
-				
-				setTimeout( ()=>{
+
+				setTimeout(() => {
 					tabContent.innerHTML = ``;
 					tabContent.append(tab.content);
 					tabContent.style.transform = "scaleX(1)";
+				}, 200);
 
-				}, 200 )
-
-				if( active == document.querySelector(".tab-head-wrapper >*:first-child") ){
+				if (active == document.querySelector(".tab-head-wrapper >*:first-child")) {
 					line.style.alignSelf = "flex-start";
 					tabTitle.style.transformOrigin = "bottom left";
 				} else {
@@ -483,8 +478,7 @@ function createTabs(tabArr) {
 				}
 
 				updateLineWidth();
-			}, 200 )
-			
+			}, 200);
 		});
 
 		count = "two";
@@ -495,23 +489,22 @@ function createTabs(tabArr) {
 
 	updateLineWidth();
 
-	
 	wrapper.append(tabHeadWrapper, line, lineTwo, tabContent);
 
-	setTimeout(()=>{
+	setTimeout(() => {
 		updateLineWidth();
-	}, 100)
+	}, 100);
 
 	return wrapper;
 
-	function updateLineWidth( w ){
-		let width = `calc(${ getComputedStyle(active).getPropertyValue('width') } + var(--l))`;
+	function updateLineWidth(w) {
+		let width = `calc(${getComputedStyle(active).getPropertyValue("width")} + var(--l))`;
 
-		if(w){
+		if (w) {
 			width = "100%";
-		} 
+		}
 
-		document.documentElement.style.setProperty('--headerLineWidth', width);
+		document.documentElement.style.setProperty("--headerLineWidth", width);
 	}
 }
 
@@ -817,11 +810,6 @@ function createChallenge(challenge, answer) {
 	let button = createButton("skicka", checkAnswer(answer));
 
 	let objs = [text, input];
-
-	if (challenge.övrigt) {
-		let obj = document.createElement("div");
-		objs.push(obj);
-	}
 
 	let content = createSection(objs);
 
@@ -1331,9 +1319,8 @@ function cipher(key, data) {
 	return data;
 }
 
-
-function updateWindowHeight(){
-	document.documentElement.style.setProperty('--windowHeight', window.innerHeight + "px");
+function updateWindowHeight() {
+	document.documentElement.style.setProperty("--windowHeight", window.innerHeight + "px");
 }
 
 updateWindowHeight();

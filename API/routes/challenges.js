@@ -1,11 +1,12 @@
 import express from "express";
-import { getPhase1 } from "../controllers/phase1.js";
+import { getPhase1, checkintro } from "../controllers/phase1.js";
 import { getPhase2, getChallenge2 } from "../controllers/phase2.js";
-import { getPhase3, checkAnswer, getCable, getChallenge3} from "../controllers/phase3.js";
+import { getPhase3, checkAnswer, getCable, getChallenge3 } from "../controllers/phase3.js";
 
 const router = express.Router();
 
 // Starting with /challenges
+router.post("/intro", checkintro);
 router.get("/phase1", getPhase1);
 
 router.get("/phase2", getPhase2);

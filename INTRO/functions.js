@@ -2,6 +2,7 @@
 
 document.body.append(loadScreen(""));
 document.addEventListener("DOMContentLoaded", async () => {
+	// window.location.href = "https://intelligenstest.isakgerre.se/";
 	setTimeout(() => {
 		unloadScreen();
 	}, 2000);
