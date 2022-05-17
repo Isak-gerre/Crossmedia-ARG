@@ -1,0 +1,581 @@
+@font-face{
+    font-family: Cascadia;
+    src: url(font/CascadiaCode.woff2);
+    font-weight: normal;
+}
+
+@font-face{
+    font-family: CascadiaItalic;
+    src: url(font/CascadiaCodeItalic.woff2);
+    font-weight: italic;
+}
+
+:root{
+    --black: #272727;
+    --blackOp: #2727275a;
+    --white: #FBFBFB;
+    --gray: #7B7B7B;
+    --main: #517EEE;
+    --sub: #8EE4EB;
+    --accent: #D13767;
+    --suppOne: #A8E5B7;
+    --suppTwo: #875fff;
+
+    font-size: 16px;
+
+    --xs: 0.5rem;
+    --s: 0.9rem;
+    --negS: -0.9rem; 
+    --m: 1rem;
+    --l: 1.2rem;
+    --xl: 1.3rem;
+    --xxl: 1.5rem;
+
+    /* --xxl: 100px; */
+
+    --transFast: 0.2s;
+    --transSlow: 0.7s;
+
+    /* specific elements */
+    --headerLineWidth: 100%;
+
+    --windowHeight: 100vh;
+
+}
+* {
+    font-family: 'Cascadia';
+    color: var(--white);
+    position: relative;
+    font-weight: normal;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--black);
+    min-height: calc( var(--windowHeight) - (var(--s) *2) );
+
+    display: flex;
+    flex-direction: column;
+    margin: var(--s);
+}
+
+.tab-header svg{
+    height: var(--xl);
+    width: var(--xl);
+}
+
+.body-space-between{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.body-main{
+    background-color: var(--main);
+    color: var(--white);
+}
+
+.body-challenge{
+    background-color: var(--suppTwo);
+    color: var(--white);
+}
+
+.no-margin{
+    margin: 0;
+}
+
+.createPlayer > form {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column; 
+    height: 300px;
+    
+}
+.selected-session{
+    text-decoration: underline;
+    color: white;
+}
+
+
+h1{ font-size: var(--xl); margin: var(--xl) 0 var(--m);}
+h2{ font-size: var(--l); margin: var(--xl) 0 var(--m);}
+
+.main-color{color: var(--main);}
+.main-back{background-color: var(--main);}
+.acc-color{ color: var(--accent);}
+.sub-color, .sub-color *{color: var(--sub)}
+.small-txt{ font-size: var(--s); }
+.grayed, .grayed *{ color: var(--gray);}
+
+.flex{display: flex;}
+
+.space-between{justify-content: space-between;}
+
+form{
+    display: flex;
+    flex-direction: column;
+}
+
+form > *:last-child{
+    margin-top: var(--l);
+}
+
+/* SECTION ANVÄNDS SOM WRAPPERS. GER INGEN PADDING ELLER MARGIN */
+label, p, span, div, button, input{
+    line-height: var(--xl);
+    font-size: var(--m);
+    margin: 0;
+    margin-bottom: var(--xl);
+}
+
+span{
+    margin: 0;
+}
+
+label{
+    margin-bottom: var(--s);
+}
+
+.header{
+    margin-bottom: var(--m);
+    margin-top: var(--l);
+}
+
+.tab-head-wrapper{
+    display: flex;
+    justify-content: space-between;
+}
+
+.tab-wrapper{
+    display: flex;
+    flex-direction: column;
+}
+
+.tab-header{
+    font-size: var(--m);
+    transform: scale(1);
+    transition: transform var(--transFast);
+}
+
+.tab-wrapper .active{
+    /* font-size: var(--l); */
+    transform: scale(1.2);
+    transform-origin: bottom left;
+    pointer-events: none;
+}
+
+.tab-wrapper >*:last-child{
+    transition: transform var(--transFast);
+    transform-origin: top;
+}
+
+.tab-wrapper .line{
+    border-bottom: 1px solid var(--white);
+    width: var(--headerLineWidth);
+    transition: width var(--transFast);
+}
+.tab-wrapper .line-two{
+    border-top: 1px solid var(--white);
+    width: 100%;
+    padding-bottom: var(--xxl);
+    /* transition: width var(--transFast); */
+}
+
+.input-wrapper {
+   display: flex;
+   flex-direction: column;
+}
+
+label, li{
+    text-transform: capitalize;
+}
+
+input{
+    background: none;
+    border: 1px solid var(--white);
+    padding: var(--xs);
+}
+
+.box-input-wrapper{
+    display: flex;
+    gap: var(--m);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.box-input-wrapper input{
+    width: var(--l);
+    height: var(--l);
+
+    box-sizing:content-box;
+
+    padding: var(--xs);
+    border: none;
+    background-color: var(--white);
+    color: var(--black);
+
+    text-align: center;
+
+    box-shadow: -1px 1px 1px 0px var(--blackOp) inset;
+    /* -webkit-box-shadow: -2px 2px 5px 0px var(--gray) inset;
+    -moz-box-shadow: -2px 2px 5px 0px var(--gray) inset; */
+}
+
+.box-space{
+    height: var(--l);
+
+    box-sizing:content-box;
+
+    padding: var(--xs);
+    border: none;
+    background-color: var(--black);
+    color: var(--black);
+
+    text-align: center;
+
+    box-shadow: -1px 1px 1px 0px var(--blackOp) inset;
+    /* -webkit-box-shadow: -2px 2px 5px 0px var(--gray) inset;
+    -moz-box-shadow: -2px 2px 5px 0px var(--gray) inset; */
+}
+
+button{
+    cursor: pointer;
+    
+    outline: none;
+    border: none;
+
+    background-color: var(--main);
+    padding: var(--s);
+    text-transform: lowercase;
+
+    display: block;
+    width: 100%;
+
+    color: inherit;
+
+    transition: background-color var(--transFast), color var(--transSlow);
+}
+
+.string-button{
+    color: var(--sub);
+    cursor: pointer;
+}
+
+.button-small{
+    line-height: var(--xs);
+    border-radius: var(--m);
+}
+
+.button-active{
+    background-color: var(--sub);
+    color: var(--black);
+    transition: background-color var(--transSlow);
+}
+
+.button-disabled{
+    background-color: var(--gray);
+    color: var(--black);
+}
+
+.button-confirm-wrapper{
+    display: flex;
+    gap: 0;
+    width: 100%;
+    top: 0;
+    right: 0;
+    color: var(--main);
+
+    transition: gap var(--transFast);
+}
+
+.button-confirm-gap{
+    gap:var(--l);
+    color: var(--white);
+}
+
+.body-challenge button{
+    background-color: var(--white);
+    color: var(--black);
+
+    transition: background-color var(--transSlow), color var(--transSlow);
+}
+
+body .button-accent{
+    background-color: var(--accent);
+    color: var(--white) ;
+    
+    transition: 0s;
+}
+
+.fold{
+    overflow: hidden;
+    margin-bottom: 0;
+    transform-origin: bottom;
+    transform: scaleY(0);
+    
+    
+    transition: var(--transFast);
+}
+.unfold{
+    margin-bottom: var(--xl);
+    transform: scaleY(1);
+}
+
+
+/* TRANSITION SCREEN -------------------- */
+
+.loading-screen-wrapper{ 
+    /* wip */
+    background-color: var(--black);
+
+    position: absolute;
+    top: var(--negS) ;
+    left: var(--negS) ;
+    height: var(--windowHeight);
+    width: 100vw;
+
+    padding: var(--s);
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+
+    z-index: 100;
+    overflow: hidden;
+
+}
+
+.loading-screen-wrapper > section{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-size: 400%;
+    top: 0;
+    left: 0;
+}
+
+.loading-screen-wrapper .lay01{
+    animation: 20s ease 0s infinite col;
+
+}
+
+.loading-screen-wrapper .lay0{
+    background: linear-gradient(-45deg, var(--main), transparent);
+}
+
+
+@keyframes slide {
+	0% {background-position: 0% 50%}
+	/* 45% {background-position: 0% 0%} */
+	50% {background-position: 100% 50%}
+	100% {background-position: 0% 50%}
+}
+
+@keyframes col{
+    0%{background-color: var(--main)}               
+    20%{background-color: var(--suppTwo)}
+    40%{background-color: var(--sub)}
+    60%{background-color: var(--accent)}
+    80%{background-color: var(--suppTwo)}
+    100%{background-color: var(--main)}
+}
+
+
+@keyframes fade{
+    0%{opacity: 0; }
+    100%{opacity: 1;}
+}
+@keyframes fadeOut{
+    0%{opacity: 1; }
+    100%{opacity: 0;}
+}
+.fadeIn{
+    animation: 0s ease 0s 1 fade;
+}
+
+.fadeOut{
+    animation: 1s ease 0s 1 fadeOut;
+}
+
+.gradient{
+    animation: 20s ease 0s infinite col;
+}
+
+
+
+.loading-icon-wrapper{
+    /* wip */
+    background-color: var(--black);
+    opacity: 0.2;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    height: 100%;
+    width: 100%;
+}
+
+.list-wrapper{
+    display: flex;
+    overflow: scroll;
+
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll; 
+}
+
+.list-wrapper::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+}
+
+
+.list-wrapper > section p {
+    margin-right: var(--xl);
+}
+
+.accordion-body, .accordion-head{
+    display: flex;
+
+}
+
+.accordion-line, .accordion-arrow{
+    display: flex;
+    justify-content: center;
+    width: var(--xl);
+    transition: var(--transFast);
+}
+
+.accordion-arrow{
+    height: var(--xl);
+}
+
+.accordion-line .line{
+    width: 1px;
+    background-color: var(--white);
+    height: 100%;
+    
+}
+
+.open .accordion-arrow{
+    transform: rotate(90deg);
+    transition: 0s;
+}
+
+.accordion-body{
+    height: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+}
+
+.open .accordion-body{
+    height: auto;
+    transform: scaleY(1);
+    transition: var(--transFast);
+}
+.started {
+    opacity: .5;
+}
+
+.progress-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* gap: var(--xl) */
+}
+
+.progress-wrapper > *{
+    flex-basis: calc( var(--xxl) + var(--l) );
+}
+
+.progress-wrapper .line{
+    flex-grow: 1;
+    background-color: var(--white);
+    height: 1px;
+}
+
+.challenge-entry{
+    display: flex;
+    justify-content: space-between;
+    padding: var(--s);
+    background-color: var(--gray);
+
+}
+
+.challenge-entry > *:last-child{
+    border-left: 1px solid var(--white);
+    padding-left: var(--m);
+}
+
+.challenges-wrapper .active{ background-color: var(--accent);}
+.challenges-wrapper .completed{ background-color: var(--main);}
+
+.challenges-grid{
+    display: flex;
+    flex-wrap: wrap;
+    
+    gap: var(--m);
+}
+
+.challenges-grid .completed{
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.challenges-grid .easy{border: 2px solid var(--suppOne)}
+.challenges-grid .med{border: 2px solid var(--accent)}
+.challenges-grid .hard{border: 2px solid var(--suppTwo)}
+
+.challenge-block{
+    --size: calc( (100vw - var(--s) * 2 - var(--m) * 2) / 3);
+    height: var(--size);
+    width: var(--size);
+
+    background-color: var(--sub);
+
+    background-size: cover;
+    cursor: pointer;
+}
+
+
+.cable-chall{
+    background-image: url("../images/cable.png");
+}
+
+.code-chall{
+    background-image: url("../images/code.png");
+}
+
+.challenge-header{
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: var(--black);
+    padding-top: var(--s);
+}
+
+.timer {
+    font-size: var(--xl);
+    font-weight: bold;
+    text-align: center;
+}
+
+.video-wrapper{
+    text-align: center;
+}
+
+iframe{
+    width: 100%;
+}
+
+.center{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+img {
+    width: 50%;
+    height: auto;
+}
