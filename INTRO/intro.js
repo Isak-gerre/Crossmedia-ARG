@@ -4,8 +4,9 @@ main.append(
 	createInput("När sitter du i 84 111 109 115 32 68 105 110 101 114?"),
 	createButton("Skicka svar", async () => {
 		let svar = document.getElementById("undefined").value;
-		console.log(await postSvar(svar));
-		if (svar) {
+		let isCorrect = await postSvar(svar);
+		console.log(isCorrect);
+		if (isCorrect) {
 			main.innerHTML = "";
 			main.append(
 				createVideo("https://www.youtube.com/embed/UOIe18S1tmo"),
@@ -32,6 +33,8 @@ main.append(
 					);
 				})
 			);
+		} else {
+			document.getElementsByTagName("button")[0].innerText = "Prova Igen";
 		}
 	})
 );
@@ -42,7 +45,7 @@ async function postSvar(svar) {
 		let data = await res.json();
 		return data;
 	} else {
-		return "fel svar";
+		return false;
 	}
 }
 async function createPlayer(username, password) {
