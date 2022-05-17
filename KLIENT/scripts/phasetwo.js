@@ -10,12 +10,6 @@
 // 	}
 // });
 
-const ws = new WebSocket("ws://localhost:8002");
-
-ws.addEventListener("open", () => {
-	console.log("New Client Connected");
-});
-
 let challengeData = "";
 let timerOn = false;
 
@@ -65,12 +59,6 @@ fetch(`${localhost}challenges/phase2`)
 			}
 			timerOn = true;
 		};
-
-		ws.addEventListener("message", (data) => {
-			if (data.data == "timer") {
-				// areWeDone();
-			}
-		});
 
 		areWeDone();
 		async function checkChallenge(task, linje, position, lastPosition) {
