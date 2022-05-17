@@ -46,6 +46,16 @@ async function game(level, divClass) {
 	div.setAttribute("id", getGame.game);
 	button.classList.add("cableButton");
 	button.setAttribute("game", level);
+	button.addEventListener("click", (e) => {
+		let id = e.target.game;
+		let divs = document.querySelectorAll(".tile");
+		let rotations = [];
+		divs.forEach((tile) => {
+			rotations.push(`${tile.style.transform}`);
+		});
+		let svar = getSvar(id, rotations);
+		console.log(svar)
+	})
 	
 	document.querySelector("body").append(div);
 	document.querySelector("body").append(button);
@@ -53,25 +63,7 @@ async function game(level, divClass) {
 	arrayOfDivs.forEach((element) => {
 		div.append(element);
 	});
-	return await btnClick(button, div);
 }	
-
-
-async function btnClick(button, div){
-	let answer = await returnAnswer(div);
-	
-	return new Promise(resolve =>  button.onclick = () => resolve(answer));
-}
-
-async function returnAnswer(div){
-	let divs = document.querySelectorAll(".tile");
-		let rotations = [];
-		divs.forEach((tile) => {
-			rotations.push(`${tile.style.transform}`);
-		});
-		let svar = await getSvar(div.id, rotations);
-		return svar;
-}
 
 async function getSvar(level, rotations) {
 	let pBody = {
