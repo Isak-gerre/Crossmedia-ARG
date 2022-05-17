@@ -30,20 +30,15 @@ fetch(`${localhost}challenges/phase2`)
 			let group = await getGroupById(JSON.parse(getFromLS("user")).group);
 			let session = await getSessions("sessionCode", group.session);
 			console.log(group);
-			if (group.completedChallenges.length == 16) {
-				ws.send("done");
-				if (timerOn) {
-					return;
-				}
-				if (session.phaseTwoTime == undefined) {
-					let date = new Date();
-					let time = date.getTime();
-					time = time + 1000 * 60 * 14;
-					await updateSession({
-						filter: { sessionCode: session.sessionCode },
-						updates: { $set: { phaseTwoTime: time } },
-					});
-				}
+			if (session.phaseTwoTime == undefined) {
+				let date = new Date();
+				let time = date.getTime();
+				let hours = 1000 * 60 * 60;
+				time = time + hours * 3;
+				await updateSession({
+					filter: { sessionCode: session.sessionCode },
+					updates: { $set: { phaseTwoTime: time } },
+				});
 			}
 			if (session.phaseTwoTime) {
 				let phaseTwoTime = session.phaseTwoTime;
@@ -57,7 +52,8 @@ fetch(`${localhost}challenges/phase2`)
 
 					let seconds = Math.round((difference / 1000) % 59);
 					let minutes = Math.round((difference / (1000 * 60)) % 60);
-					document.getElementById("timer").textContent = "You have: " + Math.round(difference / 1000) + " seconds left";
+					document.getElementById("timer").textContent =
+						"You have: " + Math.round(difference / (1000 * 60)) + " minutes left";
 					if (minutes < 0 && seconds < 0) {
 						await updateSession({
 							filter: { sessionCode: session.sessionCode },
