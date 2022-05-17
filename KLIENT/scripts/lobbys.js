@@ -174,6 +174,19 @@ async function makeLobbyTwo(user, activeSession, session, usersInSession) {
 					"Starta Spelet",
 					"Starta",
 					async () => {
+						let group = await getGroupById(JSON.parse(getFromLS("user")).group);
+						let session = await getSessions("sessionCode", group.session);
+						console.log(group);
+						if (session.phaseTwoTime == undefined) {
+							let date = new Date();
+							let time = date.getTime();
+							let hours = 1000 * 60 * 60;
+							time = time + hours * 3;
+							await updateSession({
+								filter: { sessionCode: session.sessionCode },
+								updates: { $set: { phaseTwoTime: time } },
+							});
+						}
 						let groups = await getGroups("session", activeSession);
 						console.log(groups);
 						groups.forEach(async (group) => {
