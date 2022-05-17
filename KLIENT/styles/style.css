@@ -189,7 +189,7 @@ label{
 .input-wrapper {
    display: flex;
    flex-direction: column;
-   margin-bottom: var(--m);
+   margin-bottom: var(--xs);
 }
 
 label, li{
@@ -246,19 +246,16 @@ input{
 
 button{
     cursor: pointer;
-    
     outline: none;
     border: none;
 
     background-color: var(--main);
     padding: var(--s);
     text-transform: lowercase;
-
     display: block;
     width: 100%;
-
     color: inherit;
-
+    
     transition: background-color var(--transFast), color var(--transSlow);
 }
 

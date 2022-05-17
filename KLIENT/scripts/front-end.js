@@ -240,7 +240,7 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt) {
 
 	let confirmWrapper = createElemAndClass("section", "button-confirm-wrapper");
 
-	confirmWrapper.append(createButton(ultTxt, callback), createButton("cancel", close));
+	confirmWrapper.append(createButton(ultTxt, callback), createButton("avbryt", close));
 
 	const time = 200;
 
@@ -668,7 +668,16 @@ function createList(items, height = 4) {
 function printTerminalText(input) {
 	if (Array.isArray(input)) {
 		input.forEach((message) => {
-			document.querySelector("body").append(createString(message));
+			let parag = createElemAndClass("p", "");
+			document.querySelector("body").append(parag);
+
+			message.forEach(lett => {
+				setTimeout(()=>{
+					parag.textContent += lett;
+
+				}, 50)
+			});
+
 		});
 	} else {
 		document.querySelector("body").append(createString(input));
