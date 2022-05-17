@@ -429,20 +429,23 @@ function createInput(labelText, id, name, value = false) {
 function createTabs(tabArr) {
 	let wrapper = createElemAndClass("div", "tab-wrapper");
 
-	let tabHeadWrapper = createElemAndClass("div", "tab-head-wrapper", "header");
+	let tabHeadWrapper = createElemAndClass("section", "tab-head-wrapper", "header");
 
 	let tabContent = document.createElement("section");
 	tabContent.setAttribute("id", "tabContent");
 
+	let active;
+
 	let count = "one";
 	tabArr.forEach((tab) => {
-		let tabTitle = createElemAndClass("p", "tab-header");
+		let tabTitle = createElemAndClass("p", "tab-header", "no-margin");
 
 		tabTitle.innerHTML = tab.header;
 
 		if (count == "one") {
 			tabTitle.classList.add("active");
 			tabContent.append(tab.content);
+			active = tabTitle;
 		}
 
 		tabTitle.setAttribute("id", `tab-button-${count}`);
@@ -450,22 +453,66 @@ function createTabs(tabArr) {
 		tabHeadWrapper.append(tabTitle);
 
 		tabTitle.addEventListener("click", () => {
-			if (tabTitle.classList.contains("active")) return;
+			active = tabTitle;
 
-			document.querySelector(".active").classList.remove("active");
+			updateLineWidth(100);
+			tabContent.style.transform = "scaleY(0)";
 
-			tabTitle.classList.add("active");
 
-			tabContent.innerHTML = ``;
-			tabContent.append(tab.content);
+			setTimeout( ()=>{
+
+	
+				document.querySelector(".active").classList.remove("active");
+	
+				tabTitle.classList.add("active");
+	
+				
+				setTimeout( ()=>{
+					tabContent.innerHTML = ``;
+					tabContent.append(tab.content);
+					tabContent.style.transform = "scaleX(1)";
+
+				}, 200 )
+
+				if( active == document.querySelector(".tab-head-wrapper >*:first-child") ){
+					line.style.alignSelf = "flex-start";
+					tabTitle.style.transformOrigin = "bottom left";
+				} else {
+					line.style.alignSelf = "flex-end";
+					tabTitle.style.transformOrigin = "bottom right";
+				}
+
+				updateLineWidth();
+			}, 200 )
+			
 		});
 
 		count = "two";
 	});
 
-	wrapper.append(tabHeadWrapper, tabContent);
+	let line = createElemAndClass("section", "line");
+	let lineTwo = createElemAndClass("section", "line-two");
+
+	updateLineWidth();
+
+	
+	wrapper.append(tabHeadWrapper, line, lineTwo, tabContent);
+
+	setTimeout(()=>{
+		updateLineWidth();
+	}, 100)
 
 	return wrapper;
+
+	function updateLineWidth( w ){
+		let width = `calc(${ getComputedStyle(active).getPropertyValue('width') } + var(--l))`;
+
+		if(w){
+			width = "100%";
+		} 
+
+		document.documentElement.style.setProperty('--headerLineWidth', width);
+	}
 }
 
 function createForm(inputs, method, action, id) {
@@ -1283,3 +1330,10 @@ function cipher(key, data) {
 
 	return data;
 }
+
+
+function updateWindowHeight(){
+	document.documentElement.style.setProperty('--windowHeight', window.innerHeight + "px");
+}
+
+updateWindowHeight();
