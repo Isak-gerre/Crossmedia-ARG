@@ -160,7 +160,6 @@ label{
 
 .tab-wrapper .active{
     /* font-size: var(--l); */
-    transform: scale(1.2);
     transform-origin: bottom left;
     pointer-events: none;
 }
