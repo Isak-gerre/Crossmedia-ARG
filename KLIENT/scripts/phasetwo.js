@@ -246,7 +246,7 @@ fetch(`${localhost}challenges/phase2`)
 					if (answer) {
 						let group = JSON.parse(getFromLS("user")).group;
 
-						let task = (clueNumber + 1) % 15;
+						let task = (clueNumber + 1) % 16;
 
 						const groupFilter = { _id: group };
 						let groupUpdates = { $push: { completedChallenges: String(task) }, $set: { task: String(task) } };
@@ -265,6 +265,14 @@ fetch(`${localhost}challenges/phase2`)
 							filter: groupFilter,
 							updates: groupUpdates,
 						});
+
+						let newGroup = await getGroupById(group);	
+
+						if(newGroup.completedChallenges.length >= 16){
+							let body = document.querySelector("body");
+							//Hej här ska allt tömmas
+						}
+
 						window.location.href = "phase.html";
 					} else {
 						button.textContent = "Fel svar, testa igen";
