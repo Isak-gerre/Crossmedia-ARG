@@ -56,7 +56,7 @@ fetch(`${localhost}challenges/phase2`)
 						clearInterval(timerInterval);
 						window.location.reload();
 					}
-				}, 1000);
+				}, 10000);
 			}
 			timerOn = true;
 		};

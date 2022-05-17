@@ -575,6 +575,9 @@ iframe{
     flex-direction: column;
     align-items: center;
 }
+div .center{
+    word-wrap: anywhere;
+}
 
 img {
     width: 50%;
