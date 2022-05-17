@@ -15,7 +15,7 @@ async function main() {
 		await client.connect();
 		return client;
 	} catch (error) {
-		console.log(error);
+
 	}
 }
 //----------------------------------------------------------------------------------------------
@@ -24,14 +24,14 @@ async function main() {
 export const getGroup = async (req, res) => {
 	const client = await main();
 	const foundGroups = await client.db("CrossmediaARG").collection("groups").find(req.query).toArray();
-	console.log(req.query);
+
 	res.send(foundGroups);
 	await client.close();
 };
 
 export const getGroupId = async (req, res) => {
 	const client = await main();
-	console.log(req.params.id);
+
 	const foundGroup = await client.db("CrossmediaARG").collection("groups").findOne(ObjectId(req.params.id));
 	res.send(foundGroup);
 	await client.close();
@@ -43,6 +43,7 @@ export const getGroupId = async (req, res) => {
 export const createGroup = async (req, res) => {
 	const client = await main();
 	const group = req.body;
+	group.completedChallenges = [];
 	const foundGroup = await client.db("CrossmediaARG").collection("groups").findOne({ _id: req.body._id });
 	if (foundGroup != null) {
 		res.status(400).send({ message: "Group already exists" });
@@ -67,14 +68,14 @@ export const updateGroup = async (req, res) => {
 		filter = { _id: ObjectId(req.body.filter._id) };
 	}
 	const updates = req.body.updates;
-	console.log(filter, updates);
+
 
 	try {
 		let group = await client.db("CrossmediaARG").collection("groups").updateOne(filter, updates);
-		console.log(group);
+
 		res.status(201).send(group);
 	} catch (error) {
-		console.log(error);
+
 	}
 
 	await client.close();
@@ -86,17 +87,16 @@ export const updatePlayers = async (req, res) => {
 
 	try {
 		const foundGroups = await client.db("CrossmediaARG").collection("groups").find({ session: sessionCode }).toArray();
-		console.log(foundGroups);
+
 		foundGroups.forEach(async (group) => {
 			group.users.forEach(async (user) => {
 				const filter = { username: user };
 				const updates = { $set: { group: group._id } };
 				let updated = await client.db("CrossmediaARG").collection("groups").updateOne(filter, updates);
-				console.log(updated);
+
 			});
 		});
 	} catch (error) {
-		console.log(error);
 	}
 
 	await client.close();

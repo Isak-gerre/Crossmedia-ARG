@@ -36,6 +36,8 @@ export const getPlayer = async (req, res) => {
 export const createPlayer = async (req, res) => {
 	const client = await main();
 	const player = req.body;
+	player.completed = [];
+	player.points = [];
 	console.log(req);
 	const foundUser = await client.db("CrossmediaARG").collection("players").findOne({ username: req.body.username });
 	if (foundUser != null) {

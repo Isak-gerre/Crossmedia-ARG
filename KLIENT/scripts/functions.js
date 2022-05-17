@@ -133,6 +133,7 @@ async function createSession(userID) {
 		lobby: true,
 	};
 	let res = await fetch(`${localhost}sessions`, postData(postBody));
+	console.log("here");
 	if (res.ok) {
 		const data = await res.json();
 		let groupNames = ["Alpha", "Beta", "Gamma", "Omega"];
@@ -209,6 +210,14 @@ async function createGroup(groupName = "", sessionCode) {
 //--------------------------------------------------
 async function getTeam(query, value) {
 	let res = await fetch(`${localhost}teams?${query}=${value}`);
+	if (res.ok) {
+		let data = await res.json();
+		return data;
+	}
+}
+
+async function getAllTeams() {
+	let res = await fetch(`${localhost}teams/`);
 	if (res.ok) {
 		let data = await res.json();
 		return data;
@@ -306,6 +315,7 @@ async function challengeCheck() {
 	let task = {
 		task: group.task,
 		linje: group.linje,
+		completedChallenges: group.completedChallenges,
 	};
 	return task;
 }
@@ -334,7 +344,7 @@ function scannerDistance(start, distance) {
 	}
 
 	if (start < distance) {
-		scannerStrength = "No signal return to last task!";
+		scannerStrength = "OJDÅ! Du verkar ha kommit fel och har ingen signal! Gå tillbaka till förra uppgiften!";
 	}
 
 	return scannerStrength;

@@ -86,7 +86,11 @@ function createLogin() {
 		let formData = new FormData(document.getElementById("login-form"));
 		const loginData = await logInPlayer(postFormData(formData));
 		const player = loginData.player;
-		let loginToLocation = await whereTo(player);
+		console.log(loginData.loggedin);
+		let loginToLocation = "html/sessions.html";
+		if (player.session != 0) {
+			loginToLocation = await whereTo(player);
+		}
 		if (loginData.loggedin) {
 			unloadButton("Välkommen");
 			document.body.append(loadScreen("Välkommen"));
