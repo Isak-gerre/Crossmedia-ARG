@@ -4,6 +4,15 @@ document.body.append(loadScreen(""));
 document.addEventListener("DOMContentLoaded", async () => {
 	// window.location.href = "https://intelligenstest.isakgerre.se/";
 
+	if (getFromLS("seenPhase1") == null) {
+		saveToLS("seenPhase1", { seen: false });
+	}
+	if (getFromLS("seenPhase2") == null) {
+		saveToLS("seenPhase2", { seen: false });
+	}
+	if (getFromLS("seenPhase3") == null) {
+		saveToLS("seenPhase3", { seen: false });
+	}
 	setTimeout(() => {
 		unloadScreen();
 	}, 2000);
@@ -59,7 +68,7 @@ async function createPlayer() {
 		saveToLS("user", data.player);
 		return data;
 	} else {
-		displayLoginErrorMessage("A user with that username already exits!");
+		displayLoginErrorMessage("En användare med samma namn finns redan!");
 	}
 }
 async function updatePlayer(update) {
@@ -69,6 +78,18 @@ async function updatePlayer(update) {
 		if (res.ok) {
 			let data = await res.json();
 			saveToLS("user", JSON.stringify(data));
+			return data;
+		}
+	} catch (error) {
+		return error;
+	}
+}
+async function updateManyPlayers(update) {
+	console.log(update);
+	try {
+		let res = await fetch(localhost + "players", postData(update, "PATCH"));
+		if (res.ok) {
+			let data = await res.json();
 			return data;
 		}
 	} catch (error) {
@@ -346,7 +367,8 @@ function scannerDistance(start, distance) {
 	}
 
 	if (start < distance) {
-		scannerStrength = "OJDÅ! Du verkar ha kommit fel och har ingen signal! Gå tillbaka till förra uppgiften!";
+		scannerStrength =
+			"OJDÅ! Du verkar ha kommit fel och har ingen signal! Gå tillbaka till förra uppgiften och testa ett annat håll!";
 	}
 
 	return scannerStrength;

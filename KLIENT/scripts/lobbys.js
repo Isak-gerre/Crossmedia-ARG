@@ -47,74 +47,100 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 function makeLobbyOne(user, activeSession, session, usersInSession) {
 	sessionH1.innerText = activeSession;
-	lobbyDiv.append(createList(usersInSession, 8));
-	saveToLS("seenPhase2", { seen: false });
-	saveToLS("seenPhase3", { seen: false });
+	const seen = JSON.parse(getFromLS("seenPhase1")).seen;
+	if (seen == null || !seen) {
+		printTerminalText([
+			"För att kuben ska kunna kommunicera med er måste ni etablera en koppling med den. ",
+			"Härnäst kommer du att kunna se vilka som är med i lobbyn.",
+			"Användarna i lobbyn behöver gemensamt ta sig till kuben genom att lösa gåtorna.",
+			{
+				txt: "Fortsätt",
+				func: async () => {
+					saveToLS("seenPhase1", { seen: true });
+					document.body.append(loadScreen(""));
 
-	if (user.username == session.creator) {
-		document.body.append(
-			createConfirmButton(
-				"Starta Spelet",
-				"Starta",
-				async () => {
-					const sessionFilter = { sessionCode: activeSession };
-					const sessionUpdates = { $set: { phase: 1, lobby: false } };
+					window.location.reload();
+				},
+			},
+		]);
+	} else {
+		lobbyDiv.append(createList(usersInSession, 8));
 
-					await createTeams(activeSession, "1");
-					await createTeams(activeSession, "2");
+		if (user.username == session.creator) {
+			document.body.append(
+				createConfirmButton(
+					"Starta Spelet",
+					"Starta",
+					async () => {
+						const sessionFilter = { sessionCode: activeSession };
+						const sessionUpdates = { $set: { phase: 1, lobby: false } };
 
-					let groupedPlayers = [[], [], [], []];
-					let shuffeldUsers = shuffleArray(usersInSession);
-					shuffeldUsers.forEach((user, index) => {
-						groupedPlayers[`${(index + 1) % 4}`].push(user);
-					});
+						await createTeams(activeSession, "1");
+						await createTeams(activeSession, "2");
 
-					let linjeArray = shuffleArray([0, 1, 2, 3]);
-					let taskArray = [];
-					linjeArray.forEach((e) => {
-						if (e == 0) {
-							taskArray.push(0);
-						} else if (e == 1) {
-							taskArray.push(4);
-						} else if (e == 2) {
-							taskArray.push(8);
-						} else if (e == 3) {
-							taskArray.push(12);
-						}
-					});
-
-					let groups = await getGroups("session", activeSession);
-					groups.forEach(async (group, index) => {
-						const groupFilter = { session: activeSession, groupName: group.groupName };
-						const groupUpdates = {
-							$set: { users: groupedPlayers[index], linje: linjeArray[index], task: taskArray[index] },
-						};
-						const res = await updateGroup({
-							filter: groupFilter,
-							updates: groupUpdates,
+						let groupedPlayers = [[], [], [], []];
+						let shuffeldUsers = shuffleArray(usersInSession);
+						shuffeldUsers.forEach((user, index) => {
+							groupedPlayers[`${(index + 1) % 4}`].push(user);
 						});
-						groupedPlayers[index].forEach(async (player) => {
-							console.log(res);
-							const playerFilter = { username: player };
-							const playerUpdates = { $set: { group: group._id } };
-							await updatePlayer({
-								filter: playerFilter,
-								updates: playerUpdates,
+
+						let linjeArray = shuffleArray([0, 1, 2, 3]);
+						let taskArray = [];
+						linjeArray.forEach((e) => {
+							if (e == 0) {
+								taskArray.push(0);
+							} else if (e == 1) {
+								taskArray.push(4);
+							} else if (e == 2) {
+								taskArray.push(8);
+							} else if (e == 3) {
+								taskArray.push(12);
+							}
+						});
+
+						let groups = await getGroups("session", activeSession);
+						groups.forEach(async (group, index) => {
+							const groupFilter = { session: activeSession, groupName: group.groupName };
+							const groupUpdates = {
+								$set: { users: groupedPlayers[index], linje: linjeArray[index], task: taskArray[index] },
+							};
+							const res = await updateGroup({
+								filter: groupFilter,
+								updates: groupUpdates,
+							});
+							groupedPlayers[index].forEach(async (player) => {
+
+								if(JSON.parse(getFromLS("user")).username == player){
+									let user = JSON.parse(getFromLS("user"));
+									user.group = group._id;
+									saveToLS("user", user);
+								}
+
+								console.log(res);
+								const playerFilter = { username: player };
+								const playerUpdates = { $set: { group: group._id } };
+								console.log(group._id);
+								await updateManyPlayers({
+									filter: playerFilter,
+									updates: playerUpdates,
+								});
 							});
 						});
-					});
-					let res = await updateSession({
-						filter: sessionFilter,
-						updates: sessionUpdates,
-					});
-					if (res.message == "Updated session") {
-						document.body.append(loadScreen(""));
-						window.location.href = "phase.html";
-					}
-				},
-				"Efter spelet har startat kan inte nya spelare gå med. Är du säker på att du vill fortsätta?"
-			)
-		);
+
+						
+						let res = await updateSession({
+							filter: sessionFilter,
+							updates: sessionUpdates,
+						});
+						if (res.message == "Updated session") {
+							document.body.append(loadScreen(""));
+							window.location.href = "phase.html";
+						}
+					},
+					"Efter spelet har startat kan inte nya spelare gå med. Är du säker på att du vill fortsätta?"
+				)
+			);
+		}
 	}
 }
 function shuffleArray(array) {
@@ -144,9 +170,10 @@ async function makeLobbyTwo(user, activeSession, session, usersInSession) {
 			createButton("Fortsätt", () => {
 				document.getElementById("videoWrapper").remove();
 				printTerminalText([
-					"Bevisa din värdighet.",
-					"Lös utmaningar för att samla bitar till en större gåta.",
-					"Första laget att knäcka koden belönas i slutspelet.",
+					"Bra jobbat, ni har hittat vart jag ligger gömd. ",
+					"Var inte rädda, jag bits inte. Jag har i många hundra år legat gömd här i Malmö stad, och har väntat på att äventyrliga människor ska våga ta sig på mina krafter. ",
+					"Ni kommer alldeles strax slumpmässigt delas in grupper där ni tar er till de utvalda koordinaterna, där signalen är som starkast, och göra de utmaningar som jag har förberett för er.",
+					"Jag vill att ni visar er värdiga för mina krafter, och därför har jag gjort dem lite utmanande. Klara så många utmaningar som möjligt innan tiden har runnit ut. ",
 					{
 						txt: "Fortsätt",
 						func: async () => {
@@ -174,6 +201,19 @@ async function makeLobbyTwo(user, activeSession, session, usersInSession) {
 					"Starta Spelet",
 					"Starta",
 					async () => {
+						let group = await getGroupById(JSON.parse(getFromLS("user")).group);
+						let session = await getSessions("sessionCode", group.session);
+						console.log(group);
+						if (session.phaseTwoTime == undefined) {
+							let date = new Date();
+							let time = date.getTime();
+							let hours = 1000 * 60 * 60;
+							time = time + hours * 3;
+							await updateSession({
+								filter: { sessionCode: session.sessionCode },
+								updates: { $set: { phaseTwoTime: time } },
+							});
+						}
 						let groups = await getGroups("session", activeSession);
 						console.log(groups);
 						groups.forEach(async (group) => {
@@ -212,9 +252,11 @@ async function makeLobbyThree(user, activeSession, session, usersInSession) {
 	const seen3 = JSON.parse(getFromLS("seenPhase3")).seen;
 	if (seen3 == null || !seen3) {
 		printTerminalText([
-			"Bevisa din värdighet.",
-			"Lös utmaningar för att samla bitar till en större gåta.",
-			"Första laget att knäcka koden belönas i slutspelet.",
+			"Jag vill att ni gör ett val.",
+			"Vill ni att aktivera mig och få mina utomjordiska krafter som kommer att göra er odödliga?",
+			"Till följd av det kommer resten av mänskligheten bli utplånade.",
+			"Eller vill ni hellre förstöra mig och låtsas som att detta bara var en enda stor mardröm?Detta val är individuellt.",
+			"Hur bra ni gjorde ifrån er i den förra fasen kommer att gynna er i denna.",
 			{
 				txt: "Fortsätt",
 				func: async () => {
@@ -259,6 +301,22 @@ async function makeLobbyThree(user, activeSession, session, usersInSession) {
 				"rädda",
 				async () => {
 					await joinTeam(player.username, "1", activeSession);
+					document.getElementsByTagName("section")[1].innerHTML = "";
+					document.getElementsByTagName("section")[0].innerHTML = "";
+					printTerminalText([
+						"Under den sista fasen ska du och ditt lag klara så många utmaningar ni kan innan tiden har runnit ut. ",
+						"Utmaningarna är uppdelade i tre svårighetsgrader.Du kan välja fritt mellan vilka utmaningar du vill göra.",
+						"Tänk smart och använd tiden väl.",
+						"Må bästa lag vinna.",
+						{
+							txt: "Fortsätt",
+							func: async () => {
+								document.body.append(loadScreen(""));
+
+								window.location.reload();
+							},
+						},
+					]);
 				},
 				"Är du säker? Du kan inte ångra dig"
 			);
@@ -267,6 +325,22 @@ async function makeLobbyThree(user, activeSession, session, usersInSession) {
 				"förstöra",
 				async () => {
 					await joinTeam(player.username, "2", activeSession);
+					document.getElementsByTagName("section")[1].innerHTML = "";
+					document.getElementsByTagName("section")[0].innerHTML = "";
+					printTerminalText([
+						"Under den sista fasen ska du och ditt lag klara så många utmaningar ni kan innan tiden har runnit ut. ",
+						"Utmaningarna är uppdelade i tre svårighetsgrader.Du kan välja fritt mellan vilka utmaningar du vill göra.",
+						"Tänk smart och använd tiden väl.",
+						"Må bästa lag vinna.",
+						{
+							txt: "Fortsätt",
+							func: async () => {
+								document.body.append(loadScreen(""));
+
+								window.location.reload();
+							},
+						},
+					]);
 				},
 				"Är du säker? Du kan inte ångra dig"
 			);

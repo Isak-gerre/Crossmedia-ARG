@@ -2,7 +2,7 @@
 
 // BUTTONS ----------------------------
 
-// createButton( "button text" ; func: callback)
+// createButton( "button text" ; func: callback, id)
 // return DOM
 
 // createConfirmButton( "button text" ; "button text after click" ; func: callback ; "warning text")
@@ -93,6 +93,8 @@
 
 // --------------------------------------------------------------------------------------
 
+let createChallengeInfo = 0;
+
 // EXEMPEL HUR TEXT OCH TEXTKNAPPAR SKAPAS
 let textArr = [
 	"Inga aktiva spelsessioner hittas i närområdet.",
@@ -117,24 +119,6 @@ let textArr = [
 			} catch (error) {
 				console.log(error);
 			}
-		},
-	},
-	"Eller",
-	{
-		txt: "Mata in spelkod",
-		func: () => {
-			document.querySelector("body").append(createInput("Mata in spelkod", "gamecode", "gamecode"));
-			document.querySelector("body").append(
-				createButton("gå med", async () => {
-					console.log("test");
-					let gamecode = document.getElementById("gamecode").value;
-					const sessions = await getSessions();
-					if (sessions.find((session) => session.sessionCode == gamecode)) {
-						await joinSession(gamecode);
-						window.location.href = "lobby.html";
-					}
-				})
-			);
 		},
 	},
 ];
@@ -193,7 +177,7 @@ function setBodyState(c) {
 
 function createElemAndClass(type, className, classNameTwo) {
 	let wrapper = document.createElement(type);
-	wrapper.classList.add(className);
+	if (className) wrapper.classList.add(className);
 	if (classNameTwo) wrapper.classList.add(classNameTwo);
 	return wrapper;
 }
@@ -214,11 +198,13 @@ function createSection(array) {
 	return section;
 }
 
-function createButton(text, callback) {
+function createButton(text, callback, id) {
 	let button = document.createElement("button");
 	if (text) button.textContent = text;
 
 	if (callback) button.addEventListener("click", callback);
+
+	if (id) button.setAttribute("id", "join-session");
 
 	// click animation, remove?
 	// button.addEventListener("click", ()=>{
@@ -242,7 +228,7 @@ function createConfirmButton(initTxt, ultTxt, callback, warningTxt) {
 
 	let confirmWrapper = createElemAndClass("section", "button-confirm-wrapper");
 
-	confirmWrapper.append(createButton(ultTxt, callback), createButton("cancel", close));
+	confirmWrapper.append(createButton(ultTxt, callback), createButton("avbryt", close));
 
 	const time = 200;
 
@@ -301,31 +287,21 @@ function createConditionalButton(txt, heardObj, condFunc, callback) {
 	// condFunc should check if condition is met.
 	//Returns true or false
 
-	heardObj.addEventListener("keyup", () => {
+	if (heardObj == false) {
 		if (condFunc()) {
 			button.classList.remove("button-disabled");
 		} else {
 			button.classList.add("button-disabled");
 		}
-	});
-
-	return button;
-}
-
-function createConditionalButton(txt, heardObj, condFunc, callback) {
-	let button = createButton(txt, callback);
-	button.classList.add("button-disabled");
-
-	// condFunc should check if condition is met.
-	//Returns true or false
-
-	heardObj.addEventListener("keyup", () => {
-		if (condFunc()) {
-			button.classList.remove("button-disabled");
-		} else {
-			button.classList.add("button-disabled");
-		}
-	});
+	} else {
+		heardObj.addEventListener("keyup", () => {
+			if (condFunc()) {
+				button.classList.remove("button-disabled");
+			} else {
+				button.classList.add("button-disabled");
+			}
+		});
+	}
 
 	return button;
 }
@@ -412,6 +388,10 @@ function createInput(labelText, id, name, value = false) {
 	label.textContent = labelText + ":";
 	label.setAttribute("for", id);
 
+	if (labelText !== "") {
+		wrapper.append(label);
+	}
+
 	let input = document.createElement("input");
 	input.setAttribute("type", "text");
 	input.setAttribute("id", id);
@@ -421,15 +401,17 @@ function createInput(labelText, id, name, value = false) {
 		input.setAttribute("value", value);
 	}
 
-	wrapper.append(label, input);
+	wrapper.append(input);
 
 	return wrapper;
 }
 
 function createTabs(tabArr) {
-	let wrapper = createElemAndClass("div", "tab-wrapper");
+	let wrapper = createElemAndClass("section", "tab-wrapper");
 
-	let tabHeadWrapper = createElemAndClass("section", "tab-head-wrapper", "header");
+	let header = createElemAndClass("div", "header");
+
+	let tabHeadWrapper = createElemAndClass("section", "tab-head-wrapper");
 
 	let tabContent = document.createElement("section");
 	tabContent.setAttribute("id", "tabContent");
@@ -458,23 +440,13 @@ function createTabs(tabArr) {
 			updateLineWidth(100);
 			tabContent.style.transform = "scaleY(0)";
 
-
-			setTimeout( ()=>{
-
-	
+			setTimeout(() => {
 				document.querySelector(".active").classList.remove("active");
-	
 				tabTitle.classList.add("active");
-	
-				
-				setTimeout( ()=>{
-					tabContent.innerHTML = ``;
-					tabContent.append(tab.content);
-					tabContent.style.transform = "scaleX(1)";
 
-				}, 200 )
+				updateLineWidth();
 
-				if( active == document.querySelector(".tab-head-wrapper >*:first-child") ){
+				if (active == document.querySelector(".tab-head-wrapper >*:first-child")) {
 					line.style.alignSelf = "flex-start";
 					tabTitle.style.transformOrigin = "bottom left";
 				} else {
@@ -482,9 +454,12 @@ function createTabs(tabArr) {
 					tabTitle.style.transformOrigin = "bottom right";
 				}
 
-				updateLineWidth();
-			}, 200 )
-			
+				setTimeout(() => {
+					tabContent.innerHTML = ``;
+					tabContent.append(tab.content);
+					tabContent.style.transform = "scaleX(1)";
+				}, 200);
+			}, 100);
 		});
 
 		count = "two";
@@ -495,23 +470,20 @@ function createTabs(tabArr) {
 
 	updateLineWidth();
 
-	
-	wrapper.append(tabHeadWrapper, line, lineTwo, tabContent);
+	header.append(tabHeadWrapper, line, lineTwo);
 
-	setTimeout(()=>{
+	wrapper.append(header, tabContent);
+
+	setTimeout(() => {
 		updateLineWidth();
-	}, 100)
+	}, 100);
 
 	return wrapper;
 
-	function updateLineWidth( w ){
-		let width = `calc(${ getComputedStyle(active).getPropertyValue('width') } + var(--l))`;
-
-		if(w){
-			width = "100%";
-		} 
-
-		document.documentElement.style.setProperty('--headerLineWidth', width);
+	function updateLineWidth(w) {
+		let width = `calc(${getComputedStyle(active).getPropertyValue("width")} + var(--xl))`;
+		if (w) width = "100%";
+		document.documentElement.style.setProperty("--headerLineWidth", width);
 	}
 }
 
@@ -1082,64 +1054,33 @@ function createChallengeGrid(challenges, progress, currentTime) {
 		let wrapper = createElemAndClass("section", "challenge-header");
 
 		let time = createElemAndClass("div", "timer");
-		time.innerHTML = currentTime;
+		time.innerHTML = "Utmaningar";
 
 		let difficultyWrapper = createElemAndClass("div", "button-confirm-wrapper", "button-confirm-gap");
 
-		const difficulties = ["lätt", "medel", "svår"];
-		let count = 1;
+		if (createChallengeInfo == 0) {
+			createChallengeInfo = 1;
 
-		difficulties.forEach((diff) => {
-			let currentDifficulty = count;
+			let info = createElemAndClass("div");
 
-			let text = "";
+			info.innerHTML = `
+			
+			Du har 10 minuter på att lösa så många utmaningar du kan, 
+			det finns tre nivåer. De svårare övningarna ger mer poäng!
+			Vinnade laget utses i slutet! 
+			`;
 
-			for (let i = 0; i < count; i++) {
-				text += "★";
-			}
+			let info2 = createString("Lycka till!");
 
-			let button = createButton(text, () => {
-				// if there already is a filter
-				if (gridWrapper.classList.contains("filter")) {
-					// if currently filtered is clicked
-					if (button.classList.contains("button-accent")) {
-						renderChallenges(challenges);
-						button.classList.remove("button-accent");
-						gridWrapper.classList.remove("filter", diff[0]);
-
-						return;
-					}
-
-					// if other filter is active
-					document.querySelector(".button-accent").classList.remove("button-accent");
-					button.classList.add("button-accent");
-
-					gridWrapper.classList.remove("l");
-					gridWrapper.classList.remove("s");
-					gridWrapper.classList.remove("m");
-
-					gridWrapper.classList.add(diff[0]);
-
-					filter = challenges.filter((challenge) => challenge.difficulty == currentDifficulty);
-					renderChallenges(filter);
-
-					return;
-				}
-
-				// if there is no filter
-				gridWrapper.classList.add("filter", diff[0]);
-
-				filter = challenges.filter((challenge) => challenge.difficulty == currentDifficulty);
-				renderChallenges(filter);
-
-				button.classList.add("button-accent");
+			let button = document.createElement("button");
+			button.innerHTML = "sätt igång";
+			button.addEventListener("click", () => {
+				infoDiv.remove();
 			});
+			button.style.zIndex = 300;
 
-			button.classList.add("button-small");
-			difficultyWrapper.append(button);
-
-			count++;
-		});
+			let infoDiv = createContentBlock("Utmaningar", "h1", [info, info2, button], "infoText");
+		}
 
 		wrapper.append(time, difficultyWrapper);
 		return wrapper;
@@ -1331,9 +1272,8 @@ function cipher(key, data) {
 	return data;
 }
 
-
-function updateWindowHeight(){
-	document.documentElement.style.setProperty('--windowHeight', window.innerHeight + "px");
+function updateWindowHeight() {
+	document.documentElement.style.setProperty("--window", window.innerHeight + "px");
 }
 
 updateWindowHeight();

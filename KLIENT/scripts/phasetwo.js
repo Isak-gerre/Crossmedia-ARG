@@ -10,12 +10,6 @@
 // 	}
 // });
 
-const ws = new WebSocket("ws://localhost:8002");
-
-ws.addEventListener("open", () => {
-	console.log("New Client Connected");
-});
-
 let challengeData = "";
 let timerOn = false;
 
@@ -30,20 +24,15 @@ fetch(`${localhost}challenges/phase2`)
 			let group = await getGroupById(JSON.parse(getFromLS("user")).group);
 			let session = await getSessions("sessionCode", group.session);
 			console.log(group);
-			if (group.completedChallenges.length == 16) {
-				ws.send("done");
-				if (timerOn) {
-					return;
-				}
-				if (session.phaseTwoTime == undefined) {
-					let date = new Date();
-					let time = date.getTime();
-					time = time + 1000 * 60 * 14;
-					await updateSession({
-						filter: { sessionCode: session.sessionCode },
-						updates: { $set: { phaseTwoTime: time } },
-					});
-				}
+			if (session.phaseTwoTime == undefined) {
+				let date = new Date();
+				let time = date.getTime();
+				let hours = 1000 * 60 * 60;
+				time = time + hours * 3;
+				await updateSession({
+					filter: { sessionCode: session.sessionCode },
+					updates: { $set: { phaseTwoTime: time } },
+				});
 			}
 			if (session.phaseTwoTime) {
 				let phaseTwoTime = session.phaseTwoTime;
@@ -57,24 +46,20 @@ fetch(`${localhost}challenges/phase2`)
 
 					let seconds = Math.round((difference / 1000) % 59);
 					let minutes = Math.round((difference / (1000 * 60)) % 60);
-					document.getElementById("timer").textContent = "You have: " + Math.round(difference / 1000) + " seconds left";
-					if (minutes < 0 && seconds < 0) {
+					document.getElementById("timer").textContent =
+						"You have: " + Math.round(difference / (1000 * 60)) + " minutes left";
+					if (Math.round(difference / (1000 * 60)) < 0) {
 						await updateSession({
 							filter: { sessionCode: session.sessionCode },
 							updates: { $set: { phaseTwoTime: 0 } },
 						});
 						clearInterval(timerInterval);
+						window.location.reload();
 					}
 				}, 1000);
 			}
 			timerOn = true;
 		};
-
-		ws.addEventListener("message", (data) => {
-			if (data.data == "timer") {
-				// areWeDone();
-			}
-		});
 
 		areWeDone();
 		async function checkChallenge(task, linje, position, lastPosition) {
@@ -217,7 +202,6 @@ fetch(`${localhost}challenges/phase2`)
 				return;
 			}
 
-			setBodyState(["body-space-between"]);
 			let distance = await getDiffrencePosition(position.latitude, position.longitude);
 
 			let startDistane = await getDiffrencePositionScanner(
@@ -366,11 +350,11 @@ fetch(`${localhost}challenges/phase2`)
 				lastPosition.longitude
 			);
 
-			scannerStrength = scannerDistance(startDistane, distance);
-
-			document.querySelector("p").innerHTML = scannerStrength;
+			scannerStrength = await scannerDistance(startDistane, distance);
+			if(document.querySelector("button").innerHTML != "jag är framme"){
+				document.querySelector("p").innerHTML = scannerStrength;
+			}
 			distance = 30;
-
 			if (distance <= 30) {
 				document.querySelector("button").innerHTML = "jag är framme";
 
@@ -387,20 +371,27 @@ fetch(`${localhost}challenges/phase2`)
 					});
 
 					document.querySelector("body").innerHTML = "";
-
 					printTerminalText("Väntar på alla grupper");
 
 					setInterval(async () => {
 						let allGroups = await getGroups("session", sessionCode);
-						allGroups.forEach((group) => {
+						allGroups.forEach(async (group) => {
 							if (!group.arrived) {
 								console.log("test");
 								return;
 							} else {
-								//Skicka till fas 3
+								const sessionFilter = { sessionCode: sessionCode };
+								const sessionUpdates = { $set: { lobby: true } };
+
+								await updateSession({
+									filter: sessionFilter,
+									updates: sessionUpdates,
+								});
+
+								window.location.href = "lobby.html";
 							}
 						});
-					}, 10000);
+					}, 5000);
 				});
 			}
 		}
