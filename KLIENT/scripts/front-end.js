@@ -102,6 +102,7 @@ let textArr = [
 			console.log("skapa nytt");
 			try {
 				const user = JSON.parse(getFromLS("user"));
+				console.log(true);
 				const session = await createSession(user.username);
 				const playerFilter = { username: user.username };
 				const playerUpdates = { $set: { session: session.sessionCode } };
@@ -109,6 +110,7 @@ let textArr = [
 					filter: playerFilter,
 					updates: playerUpdates,
 				});
+				console.log(false);
 				console.log(res);
 				saveToLS("user", res);
 				location.reload();
@@ -968,11 +970,7 @@ function createVideo(link) {
 	let video = createElemAndClass("iframe", "video");
 
 	wrapper.innerHTML = `
-	<iframe src="${link} &autoplay=1" 
-	title="YouTube video player" 
-	width="720" height="405"
-	frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-	allowfullscreen></iframe>
+	<iframe width="560" height="315" src="${link}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 	`;
 
 	return wrapper;
@@ -988,15 +986,12 @@ function createChallengeGrid(challenges, progress, currentTime) {
 	let gridWrapper = createElemAndClass("div", "challenges-grid");
 
 	let challangeGame = challenges.answers;
-	console.log(challangeGame);
-	console.log(challenges);
 	renderChallenges(challangeGame, progress);
 	wrapper.append(createChallengeHeader(), gridWrapper);
 
 	return wrapper;
 
 	function renderChallenges(chals, progress = []) {
-		console.log
 		gridWrapper.innerHTML = "";
 		chals.forEach((challenge) => {
 			createChallenge(challenge, progress);
@@ -1004,7 +999,6 @@ function createChallengeGrid(challenges, progress, currentTime) {
 	}
 
 	function createChallenge(challenge, progress) {
-		console.log(challenge);
 		let wrapper = document.createElement("section");
 		if (progress.includes(challenge.game)) wrapper.classList.add("completed");
 

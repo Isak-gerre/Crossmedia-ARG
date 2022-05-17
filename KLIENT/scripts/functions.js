@@ -133,6 +133,7 @@ async function createSession(userID) {
 		lobby: true,
 	};
 	let res = await fetch(`${localhost}sessions`, postData(postBody));
+	console.log("here");
 	if (res.ok) {
 		const data = await res.json();
 		let groupNames = ["Alpha", "Beta", "Gamma", "Omega"];
@@ -167,7 +168,6 @@ async function phaseCheck(phaseCheck, callbackfunction) {
 //--------------------------------------------------
 async function getGroups(query, value) {
 	let res = await fetch(`${localhost}groups?${query}=${value}`);
-	console.log(res);
 	if (res.ok) {
 		let data = await res.json();
 		return data;
@@ -185,12 +185,10 @@ async function getGroupById(id) {
 }
 
 async function updateGroup(update) {
-	console.log(localhost + "groups", postData(update, "PATCH"));
 	let res = await fetch(localhost + "groups", postData(update, "PATCH"));
 	return res.json();
 }
 async function joinGroup(update) {
-	console.log(localhost + "groups", postData(update, "PATCH"));
 	let res = await fetch(localhost + "groups", postData(update, "PATCH"));
 	return res.json();
 }
@@ -201,6 +199,7 @@ async function createGroup(groupName = "", sessionCode) {
 		task: "0",
 		linje: "0",
 		session: sessionCode,
+		completedChallenges: [],
 	};
 	let res = await fetch(`${localhost}groups`, postData(postBody));
 	if (res.ok) {
@@ -226,12 +225,10 @@ async function getTeamById(id) {
 }
 
 async function updateTeam(update) {
-	console.log(localhost + "teams", postData(update, "PATCH"));
 	let res = await fetch(localhost + "teams", postData(update, "PATCH"));
 	return res.json();
 }
 async function joinTeam(update) {
-	console.log(localhost + "teams", postData(update, "PATCH"));
 	let res = await fetch(localhost + "teams", postData(update, "PATCH"));
 	return res.json();
 }
@@ -310,8 +307,8 @@ async function challengeCheck() {
 	let task = {
 		task: group.task,
 		linje: group.linje,
+		completedChallenges: group.completedChallenges,
 	};
-	console.log(task);
 	return task;
 }
 
@@ -339,7 +336,7 @@ function scannerDistance(start, distance) {
 	}
 
 	if (start < distance) {
-		scannerStrength = "No signal return to last task!";
+		scannerStrength = "OJDÅ! Du verkar ha kommit fel och har ingen signal! Gå tillbaka till förra uppgiften!";
 	}
 
 	return scannerStrength;
@@ -361,7 +358,6 @@ function displayLoginErrorMessage(error) {
 async function getDiffrencePosition(latString, longString) {
 	let lat = parseFloat(latString);
 	let long = parseFloat(longString);
-	console.log(latString);
 	async function getMyCoords() {
 		const getCoords = async () => {
 			const pos = await new Promise((resolve, reject) => {
@@ -380,8 +376,6 @@ async function getDiffrencePosition(latString, longString) {
 
 	let coords = await getMyCoords();
 
-	console.log(coords);
-
 	coords.long = (coords.long * Math.PI) / 180;
 	long = (long * Math.PI) / 180;
 	coords.lat = (coords.lat * Math.PI) / 180;
@@ -396,7 +390,6 @@ async function getDiffrencePosition(latString, longString) {
 	let r = 6371000;
 
 	// calculate the result
-	console.log(c * r);
 
 	return c * r;
 }
@@ -421,7 +414,6 @@ async function getDiffrencePositionScanner(latStartString, longStartString, latG
 	let r = 6371000;
 
 	// calculate the result
-	console.log(c * r);
 
 	return c * r;
 }

@@ -1,16 +1,18 @@
 "use strict";
 
+
 let progress = [];
 
+renderPhase3();
+
 async function renderPhase3() {
+	console.count();
 	const sessionCode = JSON.parse(getFromLS("user")).session;
 	const player = JSON.parse(getFromLS("user"));
 	const activeSession = await getSessions("sessionCode", sessionCode);
 	if (activeSession.phase == 3) {
 		// createChallengeGrid();
 		renderGrid();
-		renderPhase3();
-
 	}
 }
 
@@ -33,6 +35,9 @@ async function renderGrid() {
 
 async function renderGame(gameID, style) {
 	const player = JSON.parse(getFromLS("user"));
+	const group = await getGroupById(JSON.parse(getFromLS("user")).group);
+	const power = group.power
+
 	let body = document.querySelector("body");
 	body.innerHTML = "";
 
@@ -49,7 +54,7 @@ async function renderGame(gameID, style) {
 		body.innerHTML = "";
 
 		const playerFilter = { username: player.username };
-		const playerUpdates = { $push: { points: points * player.power, completed: gameID } };
+		const playerUpdates = { $push: { points: points * power, completed: gameID } };
 
 		console.log(player.username, player.points);
 
