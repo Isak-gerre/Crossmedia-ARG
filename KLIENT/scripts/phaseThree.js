@@ -52,8 +52,8 @@ async function renderGame(gameID, style) {
 
 	div.classList.add("divCableParent", style);
 	div.setAttribute("id", getGame.game);
-	button.classList.add("cableButton");
 	button.setAttribute("game", gameID);
+	button.innerHTML = "gå vidare";
 	button.addEventListener("click", async (e) => {
 		console.log("Rättar")
 		let divs = document.querySelectorAll(".tile");
@@ -85,10 +85,9 @@ async function renderGame(gameID, style) {
 				filter: playerFilter,
 				updates: playerUpdates,
 			});
-	
+
 			renderGrid();
 		}
-
 	})
 	
 	document.querySelector("body").append(div);
@@ -97,6 +96,9 @@ async function renderGame(gameID, style) {
 	arrayOfDivs.forEach((element) => {
 		div.append(element);
 	});
+
+	renderGrid();
+
 }
 
 async function calculateTeamPoints() {

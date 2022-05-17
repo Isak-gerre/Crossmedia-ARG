@@ -93,6 +93,8 @@
 
 // --------------------------------------------------------------------------------------
 
+let createChallengeInfo = 0;
+
 // EXEMPEL HUR TEXT OCH TEXTKNAPPAR SKAPAS
 let textArr = [
 	"Inga aktiva spelsessioner hittas i närområdet.",
@@ -1082,64 +1084,36 @@ function createChallengeGrid(challenges, progress, currentTime) {
 		let wrapper = createElemAndClass("section", "challenge-header");
 
 		let time = createElemAndClass("div", "timer");
-		time.innerHTML = currentTime;
+		time.innerHTML = "Utmaningar";
 
 		let difficultyWrapper = createElemAndClass("div", "button-confirm-wrapper", "button-confirm-gap");
 
-		const difficulties = ["lätt", "medel", "svår"];
-		let count = 1;
+		if(createChallengeInfo == 0){
+			createChallengeInfo = 1;
 
-		difficulties.forEach((diff) => {
-			let currentDifficulty = count;
-
-			let text = "";
-
-			for (let i = 0; i < count; i++) {
-				text += "★";
-			}
-
-			let button = createButton(text, () => {
-				// if there already is a filter
-				if (gridWrapper.classList.contains("filter")) {
-					// if currently filtered is clicked
-					if (button.classList.contains("button-accent")) {
-						renderChallenges(challenges);
-						button.classList.remove("button-accent");
-						gridWrapper.classList.remove("filter", diff[0]);
-
-						return;
-					}
-
-					// if other filter is active
-					document.querySelector(".button-accent").classList.remove("button-accent");
-					button.classList.add("button-accent");
-
-					gridWrapper.classList.remove("l");
-					gridWrapper.classList.remove("s");
-					gridWrapper.classList.remove("m");
-
-					gridWrapper.classList.add(diff[0]);
-
-					filter = challenges.filter((challenge) => challenge.difficulty == currentDifficulty);
-					renderChallenges(filter);
-
-					return;
-				}
-
-				// if there is no filter
-				gridWrapper.classList.add("filter", diff[0]);
-
-				filter = challenges.filter((challenge) => challenge.difficulty == currentDifficulty);
-				renderChallenges(filter);
-
-				button.classList.add("button-accent");
+			let info = createElemAndClass("div")
+	
+			info.innerHTML = `
+			
+			Du har 10 minuter på att lösa så många utmaningar du kan, 
+			det finns tre nivåer. De svårare övningarna ger mer poäng!
+			Vinnade laget utses i slutet! 
+			`;
+	
+			let info2 = createString("Lycka till!");
+	
+			
+	
+			let button = document.createElement("button");
+			button.innerHTML = "sätt igång";
+			button.addEventListener("click", () => {
+				infoDiv.remove();
 			});
-
-			button.classList.add("button-small");
-			difficultyWrapper.append(button);
-
-			count++;
-		});
+			button.style.zIndex = 300;
+			
+			let infoDiv = createContentBlock("Utmaningar", "h1", [info,info2,button], "infoText");
+			
+		}
 
 		wrapper.append(time, difficultyWrapper);
 		return wrapper;

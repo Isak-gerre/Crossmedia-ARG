@@ -380,8 +380,8 @@ fetch(`${localhost}challenges/phase2`)
 								console.log("test");
 								return;
 							} else {
-								const sessionFilter = { session: sessionCode };
-								const sessionUpdates = { $set: { phase: 3, lobby: true } };
+								const sessionFilter = { sessionCode: sessionCode };
+								const sessionUpdates = { $set: { lobby: true } };
 
 								await updateSession({
 									filter: sessionFilter,
