@@ -54,6 +54,7 @@ fetch(`${localhost}challenges/phase2`)
 							updates: { $set: { phaseTwoTime: 0 } },
 						});
 						clearInterval(timerInterval);
+						window.location.reload();
 					}
 				}, 1000);
 			}
