@@ -41,13 +41,14 @@ export const getTeamId = async (req, res) => {
 
 export const createTeam = async (req, res) => {
 	const client = await main();
-	const Team = req.body;
+	let team = req.body;
+	team.points = [];
 	const foundTeam = await client.db("CrossmediaARG").collection("teams").findOne({ _id: req.body._id });
 	if (foundTeam != null) {
 		res.status(400).send({ message: "Team already exists" });
 	} else {
 		try {
-			await client.db("CrossmediaARG").collection("teams").insertOne(Team);
+			await client.db("CrossmediaARG").collection("teams").insertOne(team);
 			res.status(201).send({ message: "created" });
 		} catch (error) {
 			res.status(400).send({ message: "Something went wrong", error: error });
