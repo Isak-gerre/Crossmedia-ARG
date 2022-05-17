@@ -425,9 +425,11 @@ function createInput(labelText, id, name, value = false) {
 }
 
 function createTabs(tabArr) {
-	let wrapper = createElemAndClass("div", "tab-wrapper");
+	let wrapper = createElemAndClass("section", "tab-wrapper");
 
-	let tabHeadWrapper = createElemAndClass("section", "tab-head-wrapper", "header");
+	let header = createElemAndClass("div", "header");
+
+	let tabHeadWrapper = createElemAndClass("section", "tab-head-wrapper");
 
 	let tabContent = document.createElement("section");
 	tabContent.setAttribute("id", "tabContent");
@@ -456,14 +458,10 @@ function createTabs(tabArr) {
 			updateLineWidth(100);
 			tabContent.style.transform = "scaleY(0)";
 
-
 			setTimeout( ()=>{
-
-	
 				document.querySelector(".active").classList.remove("active");
 	
 				tabTitle.classList.add("active");
-	
 				
 				setTimeout( ()=>{
 					tabContent.innerHTML = ``;
@@ -493,8 +491,10 @@ function createTabs(tabArr) {
 
 	updateLineWidth();
 
+	header.append( tabHeadWrapper, line, lineTwo )
+
 	
-	wrapper.append(tabHeadWrapper, line, lineTwo, tabContent);
+	wrapper.append(header, tabContent);
 
 	setTimeout(()=>{
 		updateLineWidth();
@@ -503,12 +503,8 @@ function createTabs(tabArr) {
 	return wrapper;
 
 	function updateLineWidth( w ){
-		let width = `calc(${ getComputedStyle(active).getPropertyValue('width') } + var(--l))`;
-
-		if(w){
-			width = "100%";
-		} 
-
+		let width = `calc(${ getComputedStyle(active).getPropertyValue('width') } + var(--xl))`;
+		if(w) width = "100%"; 
 		document.documentElement.style.setProperty('--headerLineWidth', width);
 	}
 }
@@ -1335,7 +1331,7 @@ function cipher(key, data) {
 
 
 function updateWindowHeight(){
-	document.documentElement.style.setProperty('--windowHeight', window.innerHeight + "px");
+	document.documentElement.style.setProperty('--window', window.innerHeight + "px");
 }
 
 updateWindowHeight();

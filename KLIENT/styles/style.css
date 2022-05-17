@@ -115,10 +115,12 @@ h2{ font-size: var(--l); margin: var(--xl) 0 var(--m);}
 form{
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
 }
 
 form > *:last-child{
     margin-top: var(--l);
+    align-self: flex-end;
 }
 
 /* SECTION ANVÄNDS SOM WRAPPERS. GER INGEN PADDING ELLER MARGIN */
@@ -137,19 +139,22 @@ label{
     margin-bottom: var(--s);
 }
 
-.header{
+.tab-wrapper{
+    min-height: calc( var(--windowHeight) - (var(--s) *2) );
+
+}
+
+.tab-wrapper .header{
     margin-bottom: var(--m);
     margin-top: var(--l);
+    display: flex;
+    flex-direction: column;
 }
 
 .tab-head-wrapper{
     display: flex;
     justify-content: space-between;
-}
-
-.tab-wrapper{
-    display: flex;
-    flex-direction: column;
+    padding-bottom: var(--xs);
 }
 
 .tab-header{
@@ -179,12 +184,12 @@ label{
     border-top: 1px solid var(--white);
     width: 100%;
     padding-bottom: var(--xxl);
-    /* transition: width var(--transFast); */
 }
 
 .input-wrapper {
    display: flex;
    flex-direction: column;
+   margin-bottom: var(--m);
 }
 
 label, li{
@@ -194,6 +199,7 @@ label, li{
 input{
     background: none;
     border: 1px solid var(--white);
+    padding: var(--xs);
 }
 
 .box-input-wrapper{
