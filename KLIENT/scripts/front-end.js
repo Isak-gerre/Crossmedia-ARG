@@ -102,6 +102,7 @@ let textArr = [
 			console.log("skapa nytt");
 			try {
 				const user = JSON.parse(getFromLS("user"));
+				console.log(true);
 				const session = await createSession(user.username);
 				const playerFilter = { username: user.username };
 				const playerUpdates = { $set: { session: session.sessionCode } };
@@ -109,6 +110,7 @@ let textArr = [
 					filter: playerFilter,
 					updates: playerUpdates,
 				});
+				console.log(false);
 				console.log(res);
 				saveToLS("user", res);
 				location.reload();
@@ -696,7 +698,7 @@ function createProgressionSection(data, max) {
 
 		let prog = document.createElement("span");
 		prog.style.textAlign = "right";
-		percent = (team[2] / max) * 100;
+		percent = (team[1] / max) * 100;
 
 		prog.textContent = Math.floor(percent) + "%";
 

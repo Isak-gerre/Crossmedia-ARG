@@ -133,6 +133,7 @@ async function createSession(userID) {
 		lobby: true,
 	};
 	let res = await fetch(`${localhost}sessions`, postData(postBody));
+	console.log("here");
 	if (res.ok) {
 		const data = await res.json();
 		let groupNames = ["Alpha", "Beta", "Gamma", "Omega"];

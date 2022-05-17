@@ -43,6 +43,7 @@ export const getGroupId = async (req, res) => {
 export const createGroup = async (req, res) => {
 	const client = await main();
 	const group = req.body;
+	group.completedChallenges = [];
 	const foundGroup = await client.db("CrossmediaARG").collection("groups").findOne({ _id: req.body._id });
 	if (foundGroup != null) {
 		res.status(400).send({ message: "Group already exists" });

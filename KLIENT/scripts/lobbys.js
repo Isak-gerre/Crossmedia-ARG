@@ -48,6 +48,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 function makeLobbyOne(user, activeSession, session, usersInSession) {
 	sessionH1.innerText = activeSession;
 	lobbyDiv.append(createList(usersInSession, 8));
+	saveToLS("seenPhase2", { seen: false });
+	saveToLS("seenPhase3", { seen: false });
 
 	if (user.username == session.creator) {
 		document.body.append(
@@ -207,51 +209,69 @@ async function makeLobbyTwo(user, activeSession, session, usersInSession) {
 }
 async function makeLobbyThree(user, activeSession, session, usersInSession) {
 	sessionH1.innerText = "Fas 3";
-	if (JSON.parse(getFromLS("user")).team != "0") {
-		let teams = await getTeam("session", activeSession);
-		teams.forEach((team) => {
-			let list = createList(team.users, 2);
-			lobbyDiv.append(createAccordion(team.team, list));
-		});
-		if (user.username == session.creator) {
-			document.body.append(
-				createConfirmButton(
-					"Starta Spelet",
-					"Starta",
-					async () => {
-						const sessionFilter = { sessionCode: activeSession };
-						const sessionUpdates = { $set: { phase: 3, lobby: false } };
-						let res = await updateSession({
-							filter: sessionFilter,
-							updates: sessionUpdates,
-						});
-						if (res.message == "Updated session") {
-							document.body.append(loadScreen(""));
-							window.location.href = "phase.html";
-						}
-					},
-					"Se till att alla spelare är redo innan ni börjar nästa fas. Är du säker på att du vill fortsätta?"
-				)
-			);
-		}
+	const seen3 = JSON.parse(getFromLS("seenPhase3")).seen;
+	if (seen3 == null || !seen3) {
+		printTerminalText([
+			"Bevisa din värdighet.",
+			"Lös utmaningar för att samla bitar till en större gåta.",
+			"Första laget att knäcka koden belönas i slutspelet.",
+			{
+				txt: "Fortsätt",
+				func: async () => {
+					saveToLS("seenPhase3", { seen: true });
+					document.body.append(loadScreen(""));
+
+					window.location.reload();
+				},
+			},
+		]);
 	} else {
-		let save = createConfirmButton(
-			"Rädda världen",
-			"rädda",
-			async () => {
-				await joinTeam(player.username, "1", activeSession);
-			},
-			"Är du säker? Du kan inte ångra dig"
-		);
-		let destroy = createConfirmButton(
-			"Förstöra världen",
-			"förstöra",
-			async () => {
-				await joinTeam(player.username, "2", activeSession);
-			},
-			"Är du säker? Du kan inte ångra dig"
-		);
-		lobbyDiv.append(save, destroy);
+		if (JSON.parse(getFromLS("user")).team != "0") {
+			let teams = await getTeam("session", activeSession);
+			teams.forEach((team) => {
+				let list = createList(team.users, 2);
+				lobbyDiv.append(createAccordion(team.team, list));
+			});
+			if (user.username == session.creator) {
+				document.body.append(
+					createConfirmButton(
+						"Starta Spelet",
+						"Starta",
+						async () => {
+							const sessionFilter = { sessionCode: activeSession };
+							const sessionUpdates = { $set: { phase: 3, lobby: false } };
+							let res = await updateSession({
+								filter: sessionFilter,
+								updates: sessionUpdates,
+							});
+							if (res.message == "Updated session") {
+								document.body.append(loadScreen(""));
+								window.location.href = "phase.html";
+							}
+						},
+						"Se till att alla spelare är redo innan ni börjar nästa fas. Är du säker på att du vill fortsätta?"
+					)
+				);
+			}
+		} else {
+			let save = createConfirmButton(
+				"Rädda världen",
+				"rädda",
+				async () => {
+					await joinTeam(player.username, "1", activeSession);
+				},
+				"Är du säker? Du kan inte ångra dig"
+			);
+			let destroy = createConfirmButton(
+				"Förstöra världen",
+				"förstöra",
+				async () => {
+					await joinTeam(player.username, "2", activeSession);
+				},
+				"Är du säker? Du kan inte ångra dig"
+			);
+			lobbyDiv.append(save, destroy);
+		}
 	}
 }
 
