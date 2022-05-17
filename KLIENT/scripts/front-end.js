@@ -1332,3 +1332,10 @@ function cipher(key, data) {
 
 	return data;
 }
+
+
+function updateWindowHeight(){
+	document.documentElement.style.setProperty('--windowHeight', window.innerHeight + "px");
+}
+
+updateWindowHeight();
