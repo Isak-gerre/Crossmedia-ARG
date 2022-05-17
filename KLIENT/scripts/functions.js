@@ -66,7 +66,7 @@ async function createPlayer() {
 		saveToLS("user", data.player);
 		return data;
 	} else {
-		displayLoginErrorMessage("A user with that username already exits!");
+		displayLoginErrorMessage("En användare med samma namn finns redan!");
 	}
 }
 async function updatePlayer(update) {

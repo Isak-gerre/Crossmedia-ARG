@@ -17,7 +17,7 @@ async function renderChallenge_1() {
 	console.log(challengeData);
 
 	let info = createContentBlock(text[1], "h3", "");
-	let button = createButton("I am here", async () => {
+	let button = createButton("jag är här", async () => {
 		let distance = await getDiffrencePosition(position.latitude, position.longitude);
 
 		if (distance < 20000) {
@@ -30,13 +30,13 @@ async function renderChallenge_1() {
 			let block6 = createContentBlock("", "h1", text[6]);
 			let block7 = createContentBlock("", "h1", text[7]);
 
-			let button2 = createButton("I found it", async () => {
+			let button2 = createButton("jag har hittat kuben", async () => {
 				let distance = await getDiffrencePosition(position.latitude, position.longitude);
 
 				if (distance < 20000) {
 					document.getElementById("phase-one-div").innerHTML = "";
 					let block = createContentBlock("Du hittade Kuben", "h1", text[8]);
-					let button3 = createButton("Next", async () => {
+					let button3 = createButton("nästa", async () => {
 						const user = JSON.parse(getFromLS("user"));
 						const activeSession = user.session;
 						const sessionFilter = { sessionCode: activeSession };
@@ -50,13 +50,13 @@ async function renderChallenge_1() {
 					});
 					document.getElementById("phase-one-div").append(block, button3);
 				} else {
-					alert("Wrong");
+					alert("fel");
 				}
 			});
 
 			document.getElementById("phase-one-div").append(block2, block3, block4, block5, block6, block7, button2);
 		} else {
-			alert("Wrong");
+			alert("fel");
 		}
 	});
 	document.getElementById("phase-one-div").append(info, button);
