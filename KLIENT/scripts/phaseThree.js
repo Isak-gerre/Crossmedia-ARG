@@ -6,13 +6,12 @@ renderPhase3();
 
 async function renderPhase3() {
 	const sessionCode = JSON.parse(getFromLS("user")).session;
-	const player = JSON.parse(getFromLS("user"));
 	const activeSession = await getSessions("sessionCode", sessionCode);
 	if (activeSession.phase == 3) {
-		renderTimer(activeSession);
 		if (activeSession.phaseThreeTime == 0) {
 			// KÖR CALCULATE POINTS HÄR
 		} else {
+			renderTimer(activeSession);
 			renderGrid();
 		}
 	}
@@ -25,26 +24,26 @@ async function renderTimer(activeSession) {
 		let minutes = 1000 * 60;
 		time = time + minutes * 10;
 		await updateSession({
-			filter: { sessionCode: session.sessionCode },
+			filter: { sessionCode: activeSession.sessionCode },
 			updates: { $set: { phaseThreeTime: time } },
 		});
 		window.location.reload();
 	}
-	if (session.phaseThreeTime) {
-		let phaseTwoTime = session.phaseTwoTime;
+	if (activeSession.phaseThreeTime) {
+		let phaseThreeTime = activeSession.phaseThreeTime;
 		let timerDiv = createElemAndClass("div", "timer");
 		timerDiv.setAttribute("id", "timer");
 		document.body.prepend(timerDiv);
 		const timerInterval = setInterval(async () => {
 			let date = new Date();
 			let currentTime = date.getTime();
-			let difference = phaseTwoTime - currentTime;
+			let difference = phaseThreeTime - currentTime;
 
 			document.getElementById("timer").textContent = "You have: " + Math.round(difference / 1000) + " seconds left";
 			if (Math.round(difference / 1000) < 0) {
 				await updateSession({
-					filter: { sessionCode: session.sessionCode },
-					updates: { $set: { phaseTwoTime: 0 } },
+					filter: { sessionCode: activeSession.sessionCode },
+					updates: { $set: { phaseThreeTime: 0 } },
 				});
 				clearInterval(timerInterval);
 				window.location.reload();
