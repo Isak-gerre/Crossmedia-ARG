@@ -1,5 +1,6 @@
 "use strict";
 
+
 let progress = [];
 
 renderPhase3();
@@ -34,6 +35,9 @@ async function renderGrid() {
 
 async function renderGame(gameID, style) {
 	const player = JSON.parse(getFromLS("user"));
+	const group = await getGroupById(JSON.parse(getFromLS("user")).group);
+	const power = group.power
+
 	let body = document.querySelector("body");
 	body.innerHTML = "";
 
@@ -50,7 +54,7 @@ async function renderGame(gameID, style) {
 		body.innerHTML = "";
 
 		const playerFilter = { username: player.username };
-		const playerUpdates = { $push: { points: points * player.power, completed: gameID } };
+		const playerUpdates = { $push: { points: points * power, completed: gameID } };
 
 		console.log(player.username, player.points);
 

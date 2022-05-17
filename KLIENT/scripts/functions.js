@@ -335,7 +335,7 @@ function scannerDistance(start, distance) {
 	}
 
 	if (start < distance) {
-		scannerStrength = "No signal return to last task!";
+		scannerStrength = "OJDÅ! Du verkar ha kommit fel och har ingen signal! Gå tillbaka till förra uppgiften!";
 	}
 
 	return scannerStrength;

@@ -10,20 +10,23 @@
 // 	}
 // });
 
-var challengeData = "";
-(async () => {
-	await fetch(`${localhost}challenges/phase2`)
-		.then((response) => response.json())
-		.then((data) => (challengeData = data));
-})();
-// checkLoggedInPlayer();
+let challengeData = "";
 
+
+fetch(`${localhost}challenges/phase2`)
+.then((response) => response.json())
+.then(async (data) => {
+	
+challengeData = data;
+console.log(challengeData);
+let challenge = await challengeCheck();
+// checkLoggedInPlayer();
+console.log("hej", challenge.completedChallenges.length);
 const areWeDone = async () => {
 	let group = await getGroupById(JSON.parse(getFromLS("user")).group);
 	let session = await getSessions("sessionCode", group.session);
 	console.log(group);
 	if (group.completedChallenges.length == 15) {
-		console.log("BAJJSSJKORV");
 		console.log(session);
 		if (session.phaseTwoTime == undefined) {
 			let date = new Date();
@@ -71,13 +74,12 @@ async function checkChallenge(task, linje, position, lastPosition) {
 phaseCheck(2, async () => {
 	let session = await getSessions("sessionCode", JSON.parse(getFromLS("user")).session);
 	console.log(session);
-	if (session.phaseTwoTime == 0) {
-		printTerminalText(["Denna fasen är över, återvänd till kuben"]);
-		//SCANNER HÄR
-		return;
-	}
-	let challenge = await challengeCheck();
-	let task = challenge.completedChallenges.length;
+
+	let task = challenge.task;
+
+	let completed = challenge.completedChallenges.length;
+	console.log("TASK", completed)
+
 	let linje = challenge.linje;
 	let position = challengeData[task].position;
 	let lastPosition;
@@ -113,45 +115,45 @@ phaseCheck(2, async () => {
 			func: () => {},
 		},
 	];
-	const currentTask = (task, id) => {
-		task++;
+	const currentTask = (completed, id) => {
+		completed++;
 		let roof = id * 4;
-		if (roof < task) {
+		if (roof < completed) {
 			return 4;
 		}
-		if (task < roof - 4 && roof > task) {
+		if (completed < roof - 4 && roof > completed) {
 			return 0;
 		}
-		if (roof > task) {
+		if (roof > completed) {
 			return task % 4;
 		}
-		if (roof == task) {
+		if (roof == completed) {
 			return 3;
 		}
 	};
-	const isStarted = (task, id) => {
-		return currentTask(task, id) != 0 ? true : false;
+	const isStarted = (completed, id) => {
+		return currentTask(completed, id) != 0 ? true : false;
 	};
 	let progress = [
 		{
 			id: 1,
-			prog: currentTask(task, 1) != 4 && currentTask(task, 1) != 0 ? currentTask(task, 1) - 1 : currentTask(task, 1),
+			prog: currentTask(completed, 1) != 4 && currentTask(completed, 1) != 0 ? currentTask(completed, 1) - 1 : currentTask(completed, 1),
 			started: true,
 		},
 		{
 			id: 2,
-			prog: currentTask(task, 2) != 4 && currentTask(task, 2) != 0 ? currentTask(task, 2) - 1 : currentTask(task, 2),
-			started: isStarted(task, 2),
+			prog: currentTask(completed, 2) != 4 && currentTask(completed, 2) != 0 ? currentTask(completed, 2) - 1 : currentTask(completed, 2),
+			started: isStarted(completed, 2),
 		},
 		{
 			id: 3,
-			prog: currentTask(task, 3) != 4 && currentTask(task, 3) != 0 ? currentTask(task, 3) - 1 : currentTask(task, 3),
-			started: isStarted(task, 3),
+			prog: currentTask(completed, 3) != 4 && currentTask(completed, 3) != 0 ? currentTask(completed, 3) - 1 : currentTask(completed, 3),
+			started: isStarted(completed, 3),
 		},
 		{
 			id: 4,
-			prog: currentTask(task, 4) != 4 && currentTask(task, 4) != 0 ? currentTask(task, 4) - 1 : currentTask(task, 4),
-			started: isStarted(task, 4),
+			prog: currentTask(completed, 4) != 4 && currentTask(completed, 4) != 0 ? currentTask(completed, 4) - 1 : currentTask(completed, 4),
+			started: isStarted(completed, 4),
 		},
 	];
 	let challengeEntries = createChallengeEntries(challenges, progress);
@@ -177,6 +179,21 @@ phaseCheck(2, async () => {
 });
 
 async function renderChallenge(number, clueNumber, position, lastPosition, linje = "0") {
+	
+	let group = await getGroupById(JSON.parse(getFromLS("user")).group);
+	let session = await getSessions("sessionCode", group.session);
+	if (session.phaseTwoTime == 0) {
+		await phaseOver(lastPosition);
+		document.querySelector("button").addEventListener("click", async () => { 
+			console.log("hej")
+			phaseOverLoad(lastPosition);
+		})
+		//SCANNER HÄR
+		return;
+	}
+
+	
+
 	setBodyState(["body-space-between"]);
 	let distance = await getDiffrencePosition(position.latitude, position.longitude);
 
@@ -189,7 +206,7 @@ async function renderChallenge(number, clueNumber, position, lastPosition, linje
 
 	let scannerStrength = scannerDistance(startDistane, distance);
 
-	let scannerArray = [createString(scannerStrength), "För att kunna gå vidare måste signal styrkan vara minst -30dBm"];
+	let scannerArray = [createString(scannerStrength), "För att kunna gå vidare måste signalstyrkan vara minst -30dBm"];
 
 	let scannerButton = createButton("Skanna", () => {
 		document.querySelector(".scannerContent p").innerHTML = scannerDistance(startDistane, distance);
@@ -215,19 +232,22 @@ async function renderChallenge(number, clueNumber, position, lastPosition, linje
 	let button = createButton("skicka", async () => {
 		let guess = checkAnswerBox();
 		let answer = await checkAnswer("phase2", `${clueNumber}`, `${guess}`);
-		if (distance < 250000) {
+		if (distance < 100) {
 			if (answer) {
 				let group = JSON.parse(getFromLS("user")).group;
 
 				let task = (clueNumber + 1) % 15;
-
+				
 				const groupFilter = { _id: group };
 				let groupUpdates = { $push: { completedChallenges: String(task) }, $set: { task: String(task) } };
 
+				let updates = 1;
+
 				if (task == 4 || task == 8 || task == 12 || task == 16) {
+					updates += updates + 0.25
 					groupUpdates = {
 						$push: { completedChallenges: String(task) },
-						$set: { task: String(task), linje: String((linje + 1) % 4) },
+						$set: { task: String(task), linje: String((linje + 1) % 4), power: updates},
 					};
 				}
 
@@ -252,6 +272,115 @@ async function renderChallenge(number, clueNumber, position, lastPosition, linje
 		}
 	});
 	let div = document.createElement("div");
-	div.append(clue, input, button, scanner);
+	div.append(clue, input, button, scanner);	
 	return div;
 }
+
+async function phaseOver(lastPosition){
+
+	let body = document.querySelector("body");
+
+	body.innerHTML = "";
+
+	let cube = {
+		latitude: 55.58865042339298,
+		longitude: 12.992876839769947
+	}
+
+	let scannerStrength;
+
+	let distance = await getDiffrencePosition(cube.latitude, cube.longitude);
+	let startDistane = await getDiffrencePositionScanner(
+		cube.latitude,
+		cube.longitude,
+		lastPosition.latitude,
+		lastPosition.longitude
+	);
+
+	scannerStrength = scannerDistance(startDistane, distance);
+
+	let scannerArray = [createString(scannerStrength), "För att kunna gå vidare måste signalstyrkan vara minst -30dBm"];
+
+	let scannerButton = createButton("Skanna", () => {
+		document.querySelector(".scannerContent p").innerHTML = scannerDistance(startDistane, distance);
+	});
+
+	scannerArray.push(scannerButton);
+
+	let scanner = createContentBlock("Skanner", "h1", scannerArray, "scannerContent");
+
+	let infoArray = ["Fas 2 är över!", "Använd Skannern för att hitta tillbaka till kuben", "Spelet kommer att fortsätta när alla är samlade"];
+
+
+
+	if(distance >= 30){
+		console.log("he")
+		//Update Group Here
+	}
+	body.append(createContentBlock("Fas 2 är slut", "h1", infoArray,), scanner);
+
+}
+
+
+async function phaseOverLoad (lastPosition){
+
+	let cube = {
+		latitude: 55.58865042339298,
+		longitude: 12.992876839769947
+	}
+
+	let scannerStrength;
+
+	let distance = await getDiffrencePosition(cube.latitude, cube.longitude);
+	let startDistane = await getDiffrencePositionScanner(
+		cube.latitude,
+		cube.longitude,
+		lastPosition.latitude,
+		lastPosition.longitude
+	);
+
+	scannerStrength = scannerDistance(startDistane, distance);
+
+	document.querySelector("p").innerHTML = scannerStrength;
+	distance = 30;
+
+	if(distance <= 30){
+
+		document.querySelector("button").innerHTML = "jag är framme";
+
+		document.querySelector("button").addEventListener("click", async () => {
+			let id = JSON.parse(getFromLS("user")).group;
+			let sessionCode = JSON.parse(getFromLS("sessions")).sessionCode;
+	
+			const groupFilter = { _id: id};
+			const groupUpdates = { $set: { arrived: true} };
+	
+			await updateGroup({
+				filter: groupFilter,
+				updates: groupUpdates
+			});
+	
+	
+			document.querySelector("body").innerHTML = "";
+	
+			printTerminalText("Väntar på alla grupper");
+	
+			setInterval(async () => {
+				let allGroups = await getGroups("session", sessionCode);
+				allGroups.forEach((group) => {
+					if(!group.arrived){
+						console.log("test");
+						return
+					}
+					else{
+						//Skicka till fas 3
+					}
+				});
+	
+			}, 10000);
+		});
+	}
+}
+
+});
+
