@@ -48,7 +48,7 @@ fetch(`${localhost}challenges/phase2`)
 					let minutes = Math.round((difference / (1000 * 60)) % 60);
 					document.getElementById("timer").textContent =
 						"You have: " + Math.round(difference / (1000 * 60)) + " minutes left";
-					if (minutes < 0 && seconds < 0) {
+					if (Math.round(difference / (1000 * 60)) < 0) {
 						await updateSession({
 							filter: { sessionCode: session.sessionCode },
 							updates: { $set: { phaseTwoTime: 0 } },
@@ -201,7 +201,6 @@ fetch(`${localhost}challenges/phase2`)
 				return;
 			}
 
-			setBodyState(["body-space-between"]);
 			let distance = await getDiffrencePosition(position.latitude, position.longitude);
 
 			let startDistane = await getDiffrencePositionScanner(
