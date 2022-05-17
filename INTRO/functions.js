@@ -2,16 +2,15 @@
 
 document.body.append(loadScreen(""));
 document.addEventListener("DOMContentLoaded", async () => {
-	// window.location.href = "https://intelligenstest.isakgerre.se/";
 	setTimeout(() => {
 		unloadScreen();
 	}, 2000);
 });
 //LOCALSTORAGE FUNCTIONS
 //--------------------------------------------------
-if (getFromLS("user") == null && window.location.pathname != "/KLIENT/index.html") {
-	window.location.pathname = "/KLIENT/index.html";
-}
+// if (getFromLS("user") == null && window.location.pathname != "/KLIENT/index.html") {
+// 	window.location.pathname = "/KLIENT/index.html";
+// }
 function saveToLS(getter, setter) {
 	if (typeof setter == "string") {
 		localStorage.setItem(getter, setter);
