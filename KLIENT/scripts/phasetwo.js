@@ -242,7 +242,7 @@ fetch(`${localhost}challenges/phase2`)
 			let button = createButton("skicka", async () => {
 				let guess = checkAnswerBox();
 				let answer = await checkAnswer("phase2", `${clueNumber}`, `${guess}`);
-				if (distance < 100) {
+				if (distance < 70000) {
 					if (answer) {
 						let group = JSON.parse(getFromLS("user")).group;
 
@@ -351,7 +351,7 @@ fetch(`${localhost}challenges/phase2`)
 			);
 
 			scannerStrength = await scannerDistance(startDistane, distance);
-			if(document.querySelector("button").innerHTML != "jag är framme"){
+			if (document.querySelector("button").innerHTML != "jag är framme") {
 				document.querySelector("p").innerHTML = scannerStrength;
 			}
 			distance = 30;

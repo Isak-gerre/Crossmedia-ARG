@@ -13,6 +13,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 	if (getFromLS("seenPhase3") == null) {
 		saveToLS("seenPhase3", { seen: false });
 	}
+	if (getFromLS("user") != null) {
+		let user = JSON.parse(getFromLS("user")).username;
+		let player = await getPlayer("username", user);
+		if (player) {
+			saveToLS("user", player);
+		}
+	}
+
 	setTimeout(() => {
 		unloadScreen();
 	}, 2000);
@@ -103,6 +111,8 @@ async function getPlayer(query, value) {
 		let player = await res.json();
 		console.log(player);
 		return player;
+	} else {
+		return false;
 	}
 }
 

@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function makeLobbyOne(user, activeSession, session, usersInSession) {
-	sessionH1.innerText = activeSession;
+	sessionH1.innerText = activeSession + "- Uppdatera för att se alla användare";
 	const seen = JSON.parse(getFromLS("seenPhase1")).seen;
 	if (seen == null || !seen) {
 		printTerminalText([
@@ -109,8 +109,7 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 								updates: groupUpdates,
 							});
 							groupedPlayers[index].forEach(async (player) => {
-
-								if(JSON.parse(getFromLS("user")).username == player){
+								if (JSON.parse(getFromLS("user")).username == player) {
 									let user = JSON.parse(getFromLS("user"));
 									user.group = group._id;
 									saveToLS("user", user);
@@ -127,7 +126,6 @@ function makeLobbyOne(user, activeSession, session, usersInSession) {
 							});
 						});
 
-						
 						let res = await updateSession({
 							filter: sessionFilter,
 							updates: sessionUpdates,

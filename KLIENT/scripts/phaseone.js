@@ -20,7 +20,7 @@ async function renderChallenge_1() {
 	let button = createButton("jag är här", async () => {
 		let distance = await getDiffrencePosition(position.latitude, position.longitude);
 
-		if (distance < 20000) {
+		if (distance < 70000) {
 			document.getElementById("phase-one-div").innerHTML = "";
 
 			let block2 = createContentBlock("", "h1", text[2]);
@@ -33,7 +33,7 @@ async function renderChallenge_1() {
 			let button2 = createButton("jag har hittat kuben", async () => {
 				let distance = await getDiffrencePosition(position.latitude, position.longitude);
 
-				if (distance < 30) {
+				if (distance < 70000) {
 					document.getElementById("phase-one-div").innerHTML = "";
 					let block = createContentBlock("Du hittade Kuben", "h1", text[8]);
 					let button3 = createButton("nästa", async () => {
