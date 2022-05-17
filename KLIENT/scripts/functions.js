@@ -216,6 +216,14 @@ async function getTeam(query, value) {
 	}
 }
 
+async function getAllTeams() {
+	let res = await fetch(`${localhost}teams/`);
+	if (res.ok) {
+		let data = await res.json();
+		return data;
+	}
+}
+
 async function getTeamById(id) {
 	let res = await fetch(`${localhost}teams/id/${id}`);
 	if (res.ok) {
