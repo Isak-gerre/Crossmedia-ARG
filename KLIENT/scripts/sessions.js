@@ -60,33 +60,42 @@ function checkPlayerInSession(sessions) {
 
 function makeSessionButton(sessionsJSON) {
 	let arrayOfSessions = typeof sessionsJSON == "string" ? JSON.parse(sessionsJSON) : sessionsJSON;
+
+	let button = createButton(
+		"gå med session", 
+		async () => {
+		const selectedSession = document.querySelectorAll(".selected-session");
+		if (selectedSession.length != 1) return;
+
+		const sessionCode = selectedSession[0].innerText;
+
+		if (await joinSession(sessionCode)) {
+			console.log(true);
+			window.location.href = "lobby.html";
+		}
+		},
+		"session-button"
+	);
+
 	arrayOfSessions.forEach((element) => {
 		let p = document.createElement("p");
 		p.className = "session-code";
 		p.innerText = element.sessionCode;
 		if (element.phase != 0) {
 			p.className += " started";
-			p.innerText += " (Alredy Started)";
+			p.innerText += " (spel har redan startat)";
 		} else {
 			p.addEventListener("click", () => {
-				document.querySelectorAll(".selected-session").forEach((selectedSession) => {
-					selectedSession.classList.remove("selected-session");
-				});
+				if( document.querySelector(".selected-session") ){
+					button.parentElement.removeChild(button);
+				} else {
+					document.body.append( button );
+				}
+
 				p.classList.toggle("selected-session");
-				document.getElementById("join-session").disabled = false;
 			});
 		}
-		document.getElementById("session-div").append(p);
+		document.body.append(p);
 	});
+
 }
-
-document.getElementById("join-session").addEventListener("click", async () => {
-	const selectedSession = document.querySelectorAll(".selected-session");
-	if (selectedSession.length != 1) return;
-
-	const sessionCode = selectedSession[0].innerText;
-	if (await joinSession(sessionCode)) {
-		console.log(true);
-		window.location.href = "lobby.html";
-	}
-});
