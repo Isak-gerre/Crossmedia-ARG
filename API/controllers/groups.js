@@ -31,7 +31,7 @@ export const getGroup = async (req, res) => {
 
 export const getGroupId = async (req, res) => {
 	const client = await main();
-
+	
 	const foundGroup = await client.db("CrossmediaARG").collection("groups").findOne(ObjectId(req.params.id));
 	res.send(foundGroup);
 	await client.close();

@@ -101,33 +101,31 @@ async function renderGame(gameID, style) {
 
 }
 
-async function calculateTeamPoints() {
-	const player = JSON.parse(getFromLS("user"));
-	let teams = await getTeam("session", player.session);
-	console.log(teams);
-	let team1;
-	let team2
-	teams.forEach((team) => {
-		let allPlayersTotalPoints = 0;
-		team.points.forEach((pointArray) => {
-			allPlayersTotalPoints += pointArray.reduce((a,b) => a + b, 0);
-		});
-		let teamPoints = allPlayersTotalPoints/team.points.length;
-		if(team.team == 1){
-			team1 = teamPoints;
-		}
-		else{
-			team2 = teamPoints;
-		}
-	});
+// async function calculateTeamPoints() {
+// 	const player = JSON.parse(getFromLS("user"));
+// 	let teams = await getTeam("session", player.session);
+// 	console.log(teams);
+// 	let team1;
+// 	let team2
+// 	teams.forEach((team) => {
+// 		let allPlayersTotalPoints = 0;
+// 		team.points.forEach((pointArray) => {
+// 			allPlayersTotalPoints += pointArray.reduce((a,b) => a + b, 0);
+// 		});
+// 		let teamPoints = allPlayersTotalPoints/team.points.length;
+// 		if(team.team == 1){
+// 			team1 = teamPoints;
+// 		}
+// 		else{
+// 			team2 = teamPoints;
+// 		}
+// 	});
 
-	if(team1 > team2){
-		//Goda vinner
-	}
-	else{
-		//Onda vinner
-	}
+// 	if(team1 > team2){
+// 		//Goda vinner
+// 	}
+// 	else{
+// 		//Onda vinner
+// 	}
 
-}
-
-// calculateTeamPoints();
+// }
