@@ -252,7 +252,7 @@ fetch(`${localhost}challenges/phase2`)
 			let button = createButton("skicka", async () => {
 				let guess = checkAnswerBox();
 				let answer = await checkAnswer("phase2", `${clueNumber}`, `${guess}`);
-				if (distance < 100) {
+				if (distance < 31) {
 					if (answer) {
 						let group = JSON.parse(getFromLS("user")).group;
 
