@@ -101,10 +101,10 @@ let textArr = [
 	{
 		txt: "Skapa nytt spel",
 		func: async () => {
-			console.log("skapa nytt");
+
 			try {
 				const user = JSON.parse(getFromLS("user"));
-				console.log(true);
+
 				const session = await createSession(user.username);
 				const playerFilter = { username: user.username };
 				const playerUpdates = { $set: { session: session.sessionCode } };
@@ -112,12 +112,11 @@ let textArr = [
 					filter: playerFilter,
 					updates: playerUpdates,
 				});
-				console.log(false);
-				console.log(res);
+
 				saveToLS("user", res);
 				location.reload();
 			} catch (error) {
-				console.log(error);
+
 			}
 		},
 	},
@@ -154,7 +153,7 @@ let omega = ["barry", "marinaskovnikov", "collin", "holly"];
 let users = alpha.concat(beta, delta, omega);
 
 function test() {
-	console.log("click");
+
 
 	document.body.style.backgroundColor = "var(--supp)";
 
@@ -367,7 +366,7 @@ function createReadyButton(initTxt, id, activeTxt, sessionCode) {
 		const sessionFilter = { sessionCode: sessionC };
 		const sessionUpdates = { $inc: { readyPlayers: 1 } };
 
-		console.log(sessionFilter);
+
 		let sUpdated = await updateSession({
 			filter: sessionFilter,
 			updates: sessionUpdates,
@@ -526,7 +525,7 @@ function unloadScreen() {
 }
 
 function loadButton(obj) {
-	console.log(obj);
+
 	obj.setAttribute("id", "loadButton");
 
 	obj.style.pointerEvents = "none";
@@ -541,7 +540,7 @@ function unloadButton(txt) {
 	obj.style.pointerEvents = "auto";
 	obj.classList.remove("gradient");
 
-	console.log(intID);
+
 
 	intID.forEach((elem) => {
 		clearInterval(elem);
@@ -702,7 +701,7 @@ function createProgressionSection(data, max) {
 	let wrapper = document.createElement("div");
 
 	data.forEach((team) => {
-		console.log(team);
+
 		let wrap = createElemAndClass("div", "progress-wrapper");
 
 		let name = document.createElement("span");
@@ -891,7 +890,7 @@ const CHALL = [
 		type: "kabel",
 		difficulty: 1,
 		func: () => {
-			console.log("yes");
+
 		},
 	},
 	{
@@ -899,7 +898,7 @@ const CHALL = [
 		type: "kod",
 		difficulty: 2,
 		func: () => {
-			console.log("yes");
+
 		},
 	},
 	{
@@ -907,7 +906,7 @@ const CHALL = [
 		type: "kod",
 		difficulty: 2,
 		func: () => {
-			console.log("yes");
+
 		},
 	},
 	{
@@ -915,7 +914,7 @@ const CHALL = [
 		type: "kabel",
 		difficulty: 1,
 		func: () => {
-			console.log("yes");
+
 		},
 	},
 	{
@@ -923,7 +922,7 @@ const CHALL = [
 		type: "kod",
 		difficulty: 3,
 		func: () => {
-			console.log("yes");
+
 		},
 	},
 	{
@@ -931,7 +930,7 @@ const CHALL = [
 		type: "kabel",
 		difficulty: 3,
 		func: () => {
-			console.log("yes");
+
 		},
 	},
 	{
@@ -939,7 +938,7 @@ const CHALL = [
 		type: "kabel",
 		difficulty: 1,
 		func: () => {
-			console.log("yes");
+
 		},
 	},
 	{
@@ -947,7 +946,7 @@ const CHALL = [
 		type: "kod",
 		difficulty: 2,
 		func: () => {
-			console.log("yes");
+
 		},
 	},
 	{
@@ -955,7 +954,7 @@ const CHALL = [
 		type: "kod",
 		difficulty: 2,
 		func: () => {
-			console.log("yes");
+
 		},
 	},
 	{
@@ -963,7 +962,7 @@ const CHALL = [
 		type: "kabel",
 		difficulty: 1,
 		func: () => {
-			console.log("yes");
+
 		},
 	},
 	{
@@ -971,7 +970,7 @@ const CHALL = [
 		type: "kod",
 		difficulty: 3,
 		func: () => {
-			console.log("yes");
+
 		},
 	},
 	{
@@ -979,7 +978,7 @@ const CHALL = [
 		type: "kabel",
 		difficulty: 3,
 		func: () => {
-			console.log("yes");
+
 		},
 	},
 ];
