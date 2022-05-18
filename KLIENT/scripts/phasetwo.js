@@ -244,32 +244,38 @@ fetch(`${localhost}challenges/phase2`)
 
 			let clue = createContentBlock(challengeData[number].title, "h1", content, "center");
 			let button = createButton("skicka", async () => {
-				let guess = checkAnswerBox();
-				let answer = await checkAnswer("phase2", `${clueNumber}`, `${guess}`);
-					if (answer) {
-						let group = JSON.parse(getFromLS("user")).group;
+				let group = JSON.parse(getFromLS("user")).group;
+				let dataGroup = await getGroupById(group);
+				if(!dataGroup.completedChallenges.includes(task)){
+					let guess = checkAnswerBox();
+					let answer = await checkAnswer("phase2", `${clueNumber}`, `${guess}`);
+						if (answer) {
+							
+	
+							let task = (clueNumber + 1) % 16;
+	
+							const groupFilter = { _id: group };
+							let groupUpdates = { $push: { completedChallenges: String(task) }, $set: { task: String(task) } };
+	
+							let updates = 1;
+	
+							if (task == 4 || task == 8 || task == 12 || task == 16) {
+								updates += updates + 0.25;
+								groupUpdates = {
+									$push: { completedChallenges: String(task) },
+									$set: { task: String(task), linje: String((linje + 1) % 4), power: updates },
+								};
+							}
+	
+							let res = await updateGroup({
+								filter: groupFilter,
+								updates: groupUpdates,
+							});
+	
+							let newGroup = await getGroupById(group);
+				}
 
-						let task = (clueNumber + 1) % 16;
-
-						const groupFilter = { _id: group };
-						let groupUpdates = { $push: { completedChallenges: String(task) }, $set: { task: String(task) } };
-
-						let updates = 1;
-
-						if (task == 4 || task == 8 || task == 12 || task == 16) {
-							updates += updates + 0.25;
-							groupUpdates = {
-								$push: { completedChallenges: String(task) },
-								$set: { task: String(task), linje: String((linje + 1) % 4), power: updates },
-							};
-						}
-
-						let res = await updateGroup({
-							filter: groupFilter,
-							updates: groupUpdates,
-						});
-
-						let newGroup = await getGroupById(group);
+				
 
 						window.location.href = "phase.html";
 					} else {
