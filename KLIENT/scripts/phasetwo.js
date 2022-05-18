@@ -83,13 +83,9 @@ fetch(`${localhost}challenges/phase2`)
 					"De andra lagen har nu kortare tid på sig att lösa uppdragen",
 					"När tiden runnit ut kan vi återsamlas vid kuben",
 				]);
-				let date = new Date();
-				let time = date.getTime();
-				let minutes = 1000 * 20;
-				time = time + minutes;
 				await updateSession({
 					filter: { sessionCode: session.sessionCode },
-					updates: { $set: { phaseTwoTime: time, oneGroupDone: true } },
+					updates: { $set: { oneGroupDone: true } },
 				});
 				return;
 			}
@@ -218,7 +214,6 @@ fetch(`${localhost}challenges/phase2`)
 			if (session.phaseTwoTime == 0) {
 				await phaseOver(lastPosition);
 				document.querySelector("button").addEventListener("click", async () => {
-					console.log("hej");
 					phaseOverLoad(lastPosition);
 				});
 				//SCANNER HÄR
