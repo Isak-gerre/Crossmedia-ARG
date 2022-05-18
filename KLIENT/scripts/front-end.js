@@ -536,10 +536,11 @@ function loadButton(obj) {
 }
 
 function unloadButton(txt) {
+	
 	let obj = document.getElementById("loadButton");
 	obj.style.pointerEvents = "auto";
 	obj.classList.remove("gradient");
-
+	
 
 
 	intID.forEach((elem) => {
