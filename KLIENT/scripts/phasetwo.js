@@ -23,6 +23,9 @@ fetch(`${localhost}challenges/phase2`)
 		const areWeDone = async () => {
 			let group = await getGroupById(JSON.parse(getFromLS("user")).group);
 			let session = await getSessions("sessionCode", group.session);
+			if (session.phase != 2) {
+				return;
+			}
 			console.log(group);
 			if (session.phaseTwoTime == undefined) {
 				let date = new Date();
