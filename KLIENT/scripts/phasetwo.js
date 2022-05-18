@@ -227,22 +227,29 @@ fetch(`${localhost}challenges/phase2`)
 
 			let distance = await getDiffrencePosition(position.latitude, position.longitude);
 
-			let startDistane = await getDiffrencePositionScanner(
-				position.latitude,
-				position.longitude,
-				lastPosition.latitude,
-				lastPosition.longitude
-			);
+			// let startDistane = await getDiffrencePositionScanner(
+			// 	position.latitude,
+			// 	position.longitude,
+			// 	lastPosition.latitude,
+			// 	lastPosition.longitude
+			// );
 
-			let scannerStrength = scannerDistance(startDistane, distance);
+			// let scannerStrength = scannerDistance(startDistane, distance);
 
 			let scannerArray = [
-				createString(scannerStrength),
+				createString(`-${Math.round(await getDiffrencePosition(position.latitude, position.longitude))}dBm`),
 				"För att kunna gå vidare måste signalstyrkan vara minst -30dBm",
 			];
 
-			let scannerButton = createButton("Skanna", () => {
-				document.querySelector(".scannerContent p").innerHTML = scannerDistance(startDistane, distance);
+			let scannerButton = createButton("Skanna", async (e) => {
+				loadButton(e.target);
+				
+				document.querySelector(".scannerContent p").innerHTML = `-${Math.round(await getDiffrencePosition(position.latitude, position.longitude))}dBm`;
+
+				setTimeout(() => {
+					unloadButton("Skanna");
+				}, 2000)
+				
 			});
 
 			scannerArray.push(scannerButton);
@@ -325,22 +332,24 @@ fetch(`${localhost}challenges/phase2`)
 			let scannerStrength;
 
 			let distance = await getDiffrencePosition(cube.latitude, cube.longitude);
-			let startDistane = await getDiffrencePositionScanner(
-				cube.latitude,
-				cube.longitude,
-				lastPosition.latitude,
-				lastPosition.longitude
-			);
-
-			scannerStrength = scannerDistance(startDistane, distance);
+			// let startDistane = await getDiffrencePositionScanner(
+			// 	cube.latitude,
+			// 	cube.longitude,
+			// 	lastPosition.latitude,
+			// 	lastPosition.longitude
+			// );
 
 			let scannerArray = [
-				createString(scannerStrength),
+				createString(`-${Math.round(distance)}dBm`),
 				"För att kunna gå vidare måste signalstyrkan vara minst -30dBm",
 			];
 
-			let scannerButton = createButton("Skanna", () => {
-				document.querySelector(".scannerContent p").innerHTML = scannerDistance(startDistane, distance);
+			let scannerButton = createButton("Skanna", async (e) => {
+				loadButton(e.target);
+				document.querySelector(".scannerContent p").innerHTML = `-${Math.round(await getDiffrencePosition(position.latitude, position.longitude))}dBm`;
+				setTimeout(() => {
+					unloadButton("Skanna");
+				}, 2000)
 			});
 
 			scannerArray.push(scannerButton);
