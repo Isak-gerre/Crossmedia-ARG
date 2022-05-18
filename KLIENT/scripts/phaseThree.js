@@ -9,7 +9,7 @@ async function renderPhase3() {
 	const activeSession = await getSessions("sessionCode", sessionCode);
 	if (activeSession.phase == 3) {
 		if (activeSession.phaseThreeTime == 0) {
-			// KÖR CALCULATE POINTS HÄR
+			calculateTeamPoints();
 		} else {
 			renderTimer(activeSession);
 			renderGrid();
@@ -143,22 +143,25 @@ async function calculateTeamPoints() {
 	let team2;
 	teams.forEach((team) => {
 		let allPlayersTotalPoints = 0;
-		team.points.forEach((pointArray) => {
-			allPlayersTotalPoints += pointArray.reduce((a, b) => a + b, 0);
-		});
-		let teamPoints = allPlayersTotalPoints / team.points.length;
-		if (team.team == 1) {
-			team1 = teamPoints;
-		} else {
-			team2 = teamPoints;
+		if(team.points.length > 0){
+			team.points.forEach((pointArray) => {
+				allPlayersTotalPoints += pointArray.reduce((a, b) => a + b, 0);
+			});
+			let teamPoints = allPlayersTotalPoints / team.points.length;
+			if (team.team == 1) {
+				team1 = teamPoints;
+				console.log(team1)
+			} else {
+				team2 = teamPoints;
+				console.log(team2)
+			}
 		}
 	});
 
 	if (team1 > team2) {
-		//Goda vinner
+		console.log("vinner", team1)
 	} else {
-		//Onda vinner
+		console.log("vinner", team2)
 	}
 }
 
-// calculateTeamPoints();
