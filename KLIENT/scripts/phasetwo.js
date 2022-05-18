@@ -145,37 +145,26 @@ fetch(`${localhost}challenges/phase2`)
 			const isStarted = (completed, id) => {
 				return currentTask(completed, id) != 0 ? true : false;
 			};
+			const groups = await getGroups("session", session.sessionCode);
 			let progress = [
 				{
 					id: 1,
-					prog:
-						currentTask(completed, 1) != 4 && currentTask(completed, 1) != 0
-							? currentTask(completed, 1) - 1
-							: currentTask(completed, 1),
+					prog: Math.round(groups[0].completedChallenges.length / 16),
 					started: true,
 				},
 				{
 					id: 2,
-					prog:
-						currentTask(completed, 2) != 4 && currentTask(completed, 2) != 0
-							? currentTask(completed, 2) - 1
-							: currentTask(completed, 2),
+					prog: Math.round(groups[1].completedChallenges.length / 16),
 					started: isStarted(completed, 2),
 				},
 				{
 					id: 3,
-					prog:
-						currentTask(completed, 3) != 4 && currentTask(completed, 3) != 0
-							? currentTask(completed, 3) - 1
-							: currentTask(completed, 3),
+					prog: Math.round(groups[2].completedChallenges.length / 16),
 					started: isStarted(completed, 3),
 				},
 				{
 					id: 4,
-					prog:
-						currentTask(completed, 4) != 4 && currentTask(completed, 4) != 0
-							? currentTask(completed, 4) - 1
-							: currentTask(completed, 4),
+					prog: Math.round(groups[3].completedChallenges.length / 16),
 					started: isStarted(completed, 4),
 				},
 			];
