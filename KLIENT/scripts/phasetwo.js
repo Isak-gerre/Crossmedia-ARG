@@ -128,19 +128,18 @@ fetch(`${localhost}challenges/phase2`)
 				},
 			];
 			const currentTask = (completed, id) => {
-				completed++;
 				let roof = id * 4;
 				if (roof < completed) {
 					return 4;
 				}
-				if (completed < roof - 4 && roof > completed) {
+				if (completed <= roof - 4 && roof >= completed) {
 					return 0;
 				}
 				if (roof > completed) {
 					return task % 4;
 				}
 				if (roof == completed) {
-					return 3;
+					return 4;
 				}
 			};
 			const isStarted = (completed, id) => {
@@ -150,34 +149,22 @@ fetch(`${localhost}challenges/phase2`)
 			let progress = [
 				{
 					id: 1,
-					prog:
-						currentTask(completed, 1) != 4 && currentTask(completed, 1) != 0
-							? currentTask(completed, 1) - 1
-							: currentTask(completed, 1),
+					prog: currentTask(completed, 1),
 					started: true,
 				},
 				{
 					id: 2,
-					prog:
-						currentTask(completed, 2) != 4 && currentTask(completed, 2) != 0
-							? currentTask(completed, 2) - 1
-							: currentTask(completed, 2),
+					prog: currentTask(completed, 2),
 					started: isStarted(completed, 2),
 				},
 				{
 					id: 3,
-					prog:
-						currentTask(completed, 3) != 4 && currentTask(completed, 3) != 0
-							? currentTask(completed, 3) - 1
-							: currentTask(completed, 3),
+					prog: currentTask(completed, 3),
 					started: isStarted(completed, 3),
 				},
 				{
 					id: 4,
-					prog:
-						currentTask(completed, 4) != 4 && currentTask(completed, 4) != 0
-							? currentTask(completed, 4) - 1
-							: currentTask(completed, 4),
+					prog: currentTask(completed, 4),
 					started: isStarted(completed, 4),
 				},
 			];
