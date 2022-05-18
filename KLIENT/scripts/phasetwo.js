@@ -13,9 +13,6 @@
 let challengeData = "";
 let timerOn = false;
 
-
-
-
 fetch(`${localhost}challenges/phase2`)
 	.then((response) => response.json())
 	.then(async (data) => {
@@ -61,11 +58,10 @@ fetch(`${localhost}challenges/phase2`)
 		};
 
 		phaseCheck(2, () => {
-			console.log("vi är på fas 2")
+			console.log("vi är på fas 2");
 			areWeDone();
-		})
+		});
 
-		
 		async function checkChallenge(task, linje, position, lastPosition) {
 			for (let i = 0; i <= 15; i++) {
 				if (task == i) {
@@ -154,22 +150,34 @@ fetch(`${localhost}challenges/phase2`)
 			let progress = [
 				{
 					id: 1,
-					prog: Math.round(groups[0].completedChallenges.length / 16),
+					prog:
+						currentTask(completed, 1) != 4 && currentTask(completed, 1) != 0
+							? currentTask(completed, 1) - 1
+							: currentTask(completed, 1),
 					started: true,
 				},
 				{
 					id: 2,
-					prog: Math.round(groups[1].completedChallenges.length / 16),
+					prog:
+						currentTask(completed, 2) != 4 && currentTask(completed, 2) != 0
+							? currentTask(completed, 2) - 1
+							: currentTask(completed, 2),
 					started: isStarted(completed, 2),
 				},
 				{
 					id: 3,
-					prog: Math.round(groups[2].completedChallenges.length / 16),
+					prog:
+						currentTask(completed, 3) != 4 && currentTask(completed, 3) != 0
+							? currentTask(completed, 3) - 1
+							: currentTask(completed, 3),
 					started: isStarted(completed, 3),
 				},
 				{
 					id: 4,
-					prog: Math.round(groups[3].completedChallenges.length / 16),
+					prog:
+						currentTask(completed, 4) != 4 && currentTask(completed, 4) != 0
+							? currentTask(completed, 4) - 1
+							: currentTask(completed, 4),
 					started: isStarted(completed, 4),
 				},
 			];
