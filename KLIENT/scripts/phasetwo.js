@@ -17,13 +17,11 @@ fetch(`${localhost}challenges/phase2`)
 	.then((response) => response.json())
 	.then(async (data) => {
 		challengeData = data;
-		console.log(challengeData);
 		let challenge = await challengeCheck();
 		// checkLoggedInPlayer();
 		const areWeDone = async () => {
 			let group = await getGroupById(JSON.parse(getFromLS("user")).group);
 			let session = await getSessions("sessionCode", group.session);
-			console.log(group);
 			if (session.phaseTwoTime == undefined) {
 				let date = new Date();
 				let time = date.getTime();
@@ -45,7 +43,7 @@ fetch(`${localhost}challenges/phase2`)
 					let difference = phaseTwoTime - currentTime;
 
 					document.getElementById("timer").textContent =
-						"You have: " + Math.round(difference / (1000 * 60)) + " minutes left";
+						"Du har: " + Math.round(difference / (1000 * 60)) + " minuter kvar";
 					if (Math.round(difference / (1000 * 60)) < 0) {
 						await updateSession({
 							filter: { sessionCode: session.sessionCode },
@@ -59,7 +57,11 @@ fetch(`${localhost}challenges/phase2`)
 			timerOn = true;
 		};
 
-		areWeDone();
+		phaseCheck(2, () => {
+			console.log("vi är på fas 2");
+			areWeDone();
+		});
+
 		async function checkChallenge(task, linje, position, lastPosition) {
 			for (let i = 0; i <= 15; i++) {
 				if (task == i) {
@@ -70,11 +72,11 @@ fetch(`${localhost}challenges/phase2`)
 
 		phaseCheck(2, async () => {
 			let session = await getSessions("sessionCode", JSON.parse(getFromLS("user")).session);
-			console.log(session);
 
 			let task = challenge.task;
 
 			let completed = challenge.completedChallenges.length;
+			console.log(challenge.completedChallenges.length);
 			if (completed >= 16) {
 				document.getElementById("phase-one-div").innerHTML = "";
 				printTerminalText([
@@ -89,7 +91,6 @@ fetch(`${localhost}challenges/phase2`)
 				});
 				return;
 			}
-			console.log("TASK", completed);
 
 			let linje = challenge.linje;
 			let position = challengeData[task].position;
@@ -127,19 +128,18 @@ fetch(`${localhost}challenges/phase2`)
 				},
 			];
 			const currentTask = (completed, id) => {
-				completed++;
 				let roof = id * 4;
 				if (roof < completed) {
 					return 4;
 				}
-				if (completed < roof - 4 && roof > completed) {
+				if (completed <= roof - 4 && roof >= completed) {
 					return 0;
 				}
 				if (roof > completed) {
 					return task % 4;
 				}
 				if (roof == completed) {
-					return 3;
+					return 4;
 				}
 			};
 			const isStarted = (completed, id) => {
@@ -149,37 +149,28 @@ fetch(`${localhost}challenges/phase2`)
 			let progress = [
 				{
 					id: 1,
-					prog:
-						currentTask(completed, 1) != 4 && currentTask(completed, 1) != 0
-							? currentTask(completed, 1) - 1
-							: currentTask(completed, 1),
+					prog: currentTask(completed, 1),
 					started: true,
 				},
 				{
 					id: 2,
-					prog:
-						currentTask(completed, 2) != 4 && currentTask(completed, 2) != 0
-							? currentTask(completed, 2) - 1
-							: currentTask(completed, 2),
+					prog: currentTask(completed, 2),
 					started: isStarted(completed, 2),
 				},
 				{
 					id: 3,
-					prog:
-						currentTask(completed, 3) != 4 && currentTask(completed, 3) != 0
-							? currentTask(completed, 3) - 1
-							: currentTask(completed, 3),
+					prog: currentTask(completed, 3),
 					started: isStarted(completed, 3),
 				},
 				{
 					id: 4,
-					prog:
-						currentTask(completed, 4) != 4 && currentTask(completed, 4) != 0
-							? currentTask(completed, 4) - 1
-							: currentTask(completed, 4),
+					prog: currentTask(completed, 4),
 					started: isStarted(completed, 4),
 				},
 			];
+
+			console.log(challenges, progress);
+
 			let challengeEntries = createChallengeEntries(challenges, progress);
 
 			const groupInfo = await getGroups("session", JSON.parse(getFromLS("user")).session);
@@ -350,7 +341,6 @@ fetch(`${localhost}challenges/phase2`)
 			];
 
 			if (distance >= 30) {
-				console.log("he");
 				//Update Group Here
 			}
 			body.append(createContentBlock("Fas 2 är slut", "h1", infoArray), scanner);
@@ -399,7 +389,6 @@ fetch(`${localhost}challenges/phase2`)
 						let allGroups = await getGroups("session", sessionCode);
 						allGroups.forEach(async (group) => {
 							if (!group.arrived) {
-								console.log("test");
 								return;
 							} else {
 								const sessionFilter = { sessionCode: sessionCode };

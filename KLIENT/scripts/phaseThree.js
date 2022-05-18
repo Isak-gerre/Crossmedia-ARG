@@ -177,10 +177,22 @@ async function calculateTeamPoints() {
 		}
 	});
 
+	let teamUpdate;
+
+	let sessionFilter = { sessionCode: player.session};
+	let sessionUpdates = { $set: teamUpdate };
+
+	
+
+	await updateSession({
+		filter: sessionFilter,
+		updates: sessionUpdates,
+	});
+
 	if (team1 > team2) {
-		console.log("vinner team 1");
+		teamUpdate = { winningTeam: 1}
 	} else {
-		console.log("vinner team 2");
+		teamUpdate = { winningTeam: 2}
 	}
 }
 
