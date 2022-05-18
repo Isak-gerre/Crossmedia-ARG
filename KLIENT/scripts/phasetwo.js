@@ -224,24 +224,11 @@ fetch(`${localhost}challenges/phase2`)
 			// let scannerStrength = scannerDistance(startDistane, distance);
 
 			let scannerArray = [
-				createString(`-${Math.round(await getDiffrencePosition(position.latitude, position.longitude))}dBm`),
-				"För att kunna gå vidare måste signalstyrkan vara minst -30dBm",
+				createString(`lat:${(position.latitude)} long:${(position.longitude)}`),
+				"Bege dig till kordinaterna innan du löser nästa gåta",
 			];
 
-			let scannerButton = createButton("Skanna", async (e) => {
-				loadButton(e.target);
-				
-				document.querySelector(".scannerContent p").innerHTML = `-${Math.round(await getDiffrencePosition(position.latitude, position.longitude))}dBm`;
-
-				setTimeout(() => {
-					unloadButton("Skanna");
-				}, 2000)
-				
-			});
-
-			scannerArray.push(scannerButton);
-
-			let scanner = createContentBlock("Skanner", "h1", scannerArray, "scannerContent");
+			let scanner = createContentBlock("Nästa Plats", "h1", scannerArray, "scannerContent");
 
 			let content = [];
 
@@ -259,7 +246,6 @@ fetch(`${localhost}challenges/phase2`)
 			let button = createButton("skicka", async () => {
 				let guess = checkAnswerBox();
 				let answer = await checkAnswer("phase2", `${clueNumber}`, `${guess}`);
-				if (distance < 100) {
 					if (answer) {
 						let group = JSON.parse(getFromLS("user")).group;
 
@@ -297,9 +283,6 @@ fetch(`${localhost}challenges/phase2`)
 							button.style.pointerEvents = "unset";
 						}, 1000);
 					}
-				} else {
-					alert("You are not close enought to the antenna");
-				}
 			});
 			let div = document.createElement("div");
 			div.append(clue, input, button, scanner);
@@ -331,16 +314,6 @@ fetch(`${localhost}challenges/phase2`)
 				"För att kunna gå vidare måste signalstyrkan vara minst -30dBm",
 			];
 
-			let scannerButton = createButton("Skanna", async (e) => {
-				loadButton(e.target);
-				document.querySelector(".scannerContent p").innerHTML = `-${Math.round(await getDiffrencePosition(position.latitude, position.longitude))}dBm`;
-				setTimeout(() => {
-					unloadButton("Skanna");
-				}, 2000)
-			});
-
-			scannerArray.push(scannerButton);
-
 			let scanner = createContentBlock("Skanner", "h1", scannerArray, "scannerContent");
 
 			let infoArray = [
@@ -349,9 +322,6 @@ fetch(`${localhost}challenges/phase2`)
 				"Spelet kommer att fortsätta när alla är samlade",
 			];
 
-			if (distance >= 30) {
-				//Update Group Here
-			}
 			body.append(createContentBlock("Fas 2 är slut", "h1", infoArray), scanner);
 		}
 
