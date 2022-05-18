@@ -2,8 +2,6 @@
 
 document.body.append(loadScreen(""));
 document.addEventListener("DOMContentLoaded", async () => {
-	// window.location.href = "https://intelligenstest.isakgerre.se/";
-
 	if (getFromLS("seenPhase1") == null) {
 		saveToLS("seenPhase1", { seen: false });
 	}
@@ -13,22 +11,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 	if (getFromLS("seenPhase3") == null) {
 		saveToLS("seenPhase3", { seen: false });
 	}
-	if (getFromLS("user") != null) {
-		let user = JSON.parse(getFromLS("user")).username;
-		let player = await getPlayer("username", user);
-		if (player) {
-			saveToLS("user", player);
-		}
-	}
-
 	setTimeout(() => {
 		unloadScreen();
 	}, 2000);
 });
 //LOCALSTORAGE FUNCTIONS
 //--------------------------------------------------
-if (getFromLS("user") == null && window.location.pathname != "/index.html") {
-	window.location.pathname = "/index.html";
+if (getFromLS("user") == null && window.location.pathname != "/KLIENT/index.html") {
+	window.location.pathname = "/KLIENT/index.html";
 }
 function saveToLS(getter, setter) {
 	if (typeof setter == "string") {
@@ -111,8 +101,6 @@ async function getPlayer(query, value) {
 		let player = await res.json();
 		console.log(player);
 		return player;
-	} else {
-		return false;
 	}
 }
 
@@ -481,4 +469,11 @@ function getCurrentTime() {
 	}
 
 	return `${hours}:${minutes}:${seconds}`;
+}
+function getLocation() {
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(showPosition);
+	} else {
+		return "Geolocation is not supported by this browser.";
+	}
 }
