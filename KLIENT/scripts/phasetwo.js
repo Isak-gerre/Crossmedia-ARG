@@ -224,7 +224,7 @@ fetch(`${localhost}challenges/phase2`)
 			// let scannerStrength = scannerDistance(startDistane, distance);
 
 			let scannerArray = [
-				createString(`lat:${(position.latitude)} long:${(position.longitude)}`),
+				createString(`lat:${(position.latitude)} ${(position.longitude)}`),
 				"Bege dig till kordinaterna innan du löser nästa gåta",
 			];
 
@@ -318,8 +318,11 @@ fetch(`${localhost}challenges/phase2`)
 
 			let infoArray = [
 				"Fas 2 är över!",
-				"Använd Skannern för att hitta tillbaka till kuben",
+				"Återvänd till kuben",
 				"Spelet kommer att fortsätta när alla är samlade",
+				"Kordinater:",
+				"lat: 55.58865042339298",
+				"long: 12.992876839769947"
 			];
 
 			body.append(createContentBlock("Fas 2 är slut", "h1", infoArray), scanner);
@@ -331,8 +334,6 @@ fetch(`${localhost}challenges/phase2`)
 				longitude: 12.992876839769947,
 			};
 
-			let scannerStrength;
-
 			let distance = await getDiffrencePosition(cube.latitude, cube.longitude);
 			let startDistane = await getDiffrencePositionScanner(
 				cube.latitude,
@@ -341,12 +342,10 @@ fetch(`${localhost}challenges/phase2`)
 				lastPosition.longitude
 			);
 
-			scannerStrength = await scannerDistance(startDistane, distance);
 			if (document.querySelector("button").innerHTML != "jag är framme") {
-				document.querySelector("p").innerHTML = scannerStrength;
 			}
 			distance = 30;
-			if (distance <= 30) {
+			if (distance <= 300000000000000000) {
 				document.querySelector("button").innerHTML = "jag är framme";
 
 				document.querySelector("button").addEventListener("click", async () => {
