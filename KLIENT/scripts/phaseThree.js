@@ -184,15 +184,18 @@ async function calculateTeamPoints() {
 
 	
 
+	if (team1 > team2) {
+		teamUpdate = { winningTeam: 1}
+	} else {
+		teamUpdate = { winningTeam: 2}
+		
+	}
+
 	await updateSession({
 		filter: sessionFilter,
 		updates: sessionUpdates,
 	});
 
-	if (team1 > team2) {
-		teamUpdate = { winningTeam: 1}
-	} else {
-		teamUpdate = { winningTeam: 2}
-	}
+	window.location.href = "outro.html";
 }
 
