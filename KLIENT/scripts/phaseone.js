@@ -50,7 +50,7 @@ async function renderChallenge_1() {
 					});
 					document.getElementById("phase-one-div").append(block, button3);
 				} else {
-					alert("fel");
+					alert("Du befinner dig för långt borta");
 				}
 			});
 

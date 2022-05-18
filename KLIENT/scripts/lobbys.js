@@ -251,9 +251,9 @@ async function makeLobbyThree(user, activeSession, session, usersInSession) {
 	if (seen3 == null || !seen3) {
 		printTerminalText([
 			"Jag vill att ni gör ett val.",
-			"Vill ni att aktivera mig och få mina utomjordiska krafter som kommer att göra er odödliga?",
+			"Vill ni aktivera mig och få mina utomjordiska krafter som kommer att göra er odödliga?",
 			"Till följd av det kommer resten av mänskligheten bli utplånade.",
-			"Eller vill ni hellre förstöra mig och låtsas som att detta bara var en enda stor mardröm?Detta val är individuellt.",
+			"Eller vill ni hellre förstöra mig och låtsas som att detta bara var en enda stor mardröm? Detta val är individuellt.",
 			"Hur bra ni gjorde ifrån er i den förra fasen kommer att gynna er i denna.",
 			{
 				txt: "Fortsätt",

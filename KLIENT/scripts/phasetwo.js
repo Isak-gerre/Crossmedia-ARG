@@ -44,8 +44,6 @@ fetch(`${localhost}challenges/phase2`)
 					let currentTime = date.getTime();
 					let difference = phaseTwoTime - currentTime;
 
-					let seconds = Math.round((difference / 1000) % 59);
-					let minutes = Math.round((difference / (1000 * 60)) % 60);
 					document.getElementById("timer").textContent =
 						"You have: " + Math.round(difference / (1000 * 60)) + " minutes left";
 					if (Math.round(difference / (1000 * 60)) < 0) {
@@ -77,6 +75,20 @@ fetch(`${localhost}challenges/phase2`)
 			let task = challenge.task;
 
 			let completed = challenge.completedChallenges.length;
+			if (completed >= 16) {
+				document.getElementById("phase-one-div").innerHTML = "";
+				printTerminalText([
+					"Du har lyckats lösa alla Uppdrag!",
+					"Bra jobbat!!",
+					"De andra lagen har nu kortare tid på sig att lösa uppdragen",
+					"När tiden runnit ut kan vi återsamlas vid kuben",
+				]);
+				await updateSession({
+					filter: { sessionCode: session.sessionCode },
+					updates: { $set: { oneGroupDone: true } },
+				});
+				return;
+			}
 			console.log("TASK", completed);
 
 			let linje = challenge.linje;
@@ -179,7 +191,14 @@ fetch(`${localhost}challenges/phase2`)
 			});
 			const progressInfo = createProgressionSection(groupInfoArray, 16);
 			challengeEntries.prepend(createString(userGroupname));
-			challengeEntries.append(progressInfo);
+			if (session.oneGroupDone === true) {
+				challengeEntries.append(
+					createString("En annan grupp är har klarat alla uppdrag! Skynda er för att hinna lösa så många ni kan!"),
+					progressInfo
+				);
+			} else {
+				challengeEntries.append(progressInfo);
+			}
 
 			const tabs = createTabs([
 				{ header: "Overview", content: challengeEntries },
@@ -195,7 +214,6 @@ fetch(`${localhost}challenges/phase2`)
 			if (session.phaseTwoTime == 0) {
 				await phaseOver(lastPosition);
 				document.querySelector("button").addEventListener("click", async () => {
-					console.log("hej");
 					phaseOverLoad(lastPosition);
 				});
 				//SCANNER HÄR
@@ -246,7 +264,7 @@ fetch(`${localhost}challenges/phase2`)
 					if (answer) {
 						let group = JSON.parse(getFromLS("user")).group;
 
-						let task = (clueNumber + 1) % 15;
+						let task = (clueNumber + 1) % 16;
 
 						const groupFilter = { _id: group };
 						let groupUpdates = { $push: { completedChallenges: String(task) }, $set: { task: String(task) } };
@@ -265,6 +283,9 @@ fetch(`${localhost}challenges/phase2`)
 							filter: groupFilter,
 							updates: groupUpdates,
 						});
+
+						let newGroup = await getGroupById(group);
+
 						window.location.href = "phase.html";
 					} else {
 						button.textContent = "Fel svar, testa igen";

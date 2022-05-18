@@ -702,6 +702,7 @@ function createProgressionSection(data, max) {
 	let wrapper = document.createElement("div");
 
 	data.forEach((team) => {
+		console.log(team);
 		let wrap = createElemAndClass("div", "progress-wrapper");
 
 		let name = document.createElement("span");
@@ -717,7 +718,7 @@ function createProgressionSection(data, max) {
 
 		let prog = document.createElement("span");
 		prog.style.textAlign = "right";
-		percent = (team[1] / max) * 100;
+		percent = (team[2] / max) * 100;
 
 		prog.textContent = Math.floor(percent) + "%";
 

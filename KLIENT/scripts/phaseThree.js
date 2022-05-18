@@ -9,7 +9,7 @@ async function renderPhase3() {
 	const activeSession = await getSessions("sessionCode", sessionCode);
 	if (activeSession.phase == 3) {
 		if (activeSession.phaseThreeTime == 0) {
-			// KÖR CALCULATE POINTS HÄR
+			calculateTeamPoints();
 		} else {
 			renderTimer(activeSession);
 			renderGrid();
@@ -101,10 +101,10 @@ async function renderGame(gameID, style) {
 		if (answer == true) {
 			let points = 100;
 			if (gameID.includes("M")) {
-				points = 200;
+				points = 400;
 			}
 			if (gameID.includes("H")) {
-				points = 300;
+				points = 800;
 			}
 			body.innerHTML = "";
 
@@ -136,29 +136,51 @@ async function renderGame(gameID, style) {
 }
 
 async function calculateTeamPoints() {
+
 	const player = JSON.parse(getFromLS("user"));
+
+	const teamFilter = { session: player.session, team: player.team };
+	const teamUpdates = { $push: { points: player.points} };
+
+	
+
+	await updateTeam({
+		filter: teamFilter,
+		updates: teamUpdates,
+	});
+
+	console.log()
+
 	let teams = await getTeam("session", player.session);
 	console.log(teams);
 	let team1;
 	let team2;
 	teams.forEach((team) => {
 		let allPlayersTotalPoints = 0;
-		team.points.forEach((pointArray) => {
-			allPlayersTotalPoints += pointArray.reduce((a, b) => a + b, 0);
-		});
-		let teamPoints = allPlayersTotalPoints / team.points.length;
-		if (team.team == 1) {
-			team1 = teamPoints;
-		} else {
-			team2 = teamPoints;
+		if(team.points.length > 0){
+			team.points.forEach((pointArray) => {
+				allPlayersTotalPoints += pointArray.reduce((a, b) => a + b, 0);
+			});
+			let teamPoints = allPlayersTotalPoints / team.points.length;
+
+			if(team.points.length == 0){
+				teamPoints = 3500;
+			}
+
+			if (team.team == 1) {
+				team1 = teamPoints;
+				console.log(team1)
+			} else {
+				team2 = teamPoints;
+				console.log(team2)
+			}
 		}
 	});
 
 	if (team1 > team2) {
-		//Goda vinner
+		console.log("vinner team 1");
 	} else {
-		//Onda vinner
+		console.log("vinner team 2");
 	}
 }
 
-// calculateTeamPoints();
