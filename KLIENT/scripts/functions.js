@@ -391,7 +391,12 @@ async function getDiffrencePosition(latString, longString) {
 	async function getMyCoords() {
 		const getCoords = async () => {
 			const pos = await new Promise((resolve, reject) => {
-				navigator.geolocation.getCurrentPosition(resolve, reject);
+				let options = {
+					enableHighAccuracy: true,
+  					timeout: 30000,
+  					maximumAge: 0
+				} 
+				navigator.geolocation.getCurrentPosition(resolve, reject, options);
 			});
 
 			return {
@@ -405,6 +410,8 @@ async function getDiffrencePosition(latString, longString) {
 	}
 
 	let coords = await getMyCoords();
+
+	console.log(coords);
 
 	coords.long = (coords.long * Math.PI) / 180;
 	long = (long * Math.PI) / 180;
