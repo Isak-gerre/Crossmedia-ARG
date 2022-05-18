@@ -14,9 +14,7 @@ async function main() {
 	try {
 		await client.connect();
 		return client;
-	} catch (error) {
-
-	}
+	} catch (error) {}
 }
 //----------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------
@@ -31,7 +29,7 @@ export const getGroup = async (req, res) => {
 
 export const getGroupId = async (req, res) => {
 	const client = await main();
-	
+
 	const foundGroup = await client.db("CrossmediaARG").collection("groups").findOne(ObjectId(req.params.id));
 	res.send(foundGroup);
 	await client.close();
@@ -69,14 +67,11 @@ export const updateGroup = async (req, res) => {
 	}
 	const updates = req.body.updates;
 
-
 	try {
 		let group = await client.db("CrossmediaARG").collection("groups").updateOne(filter, updates);
 
 		res.status(201).send(group);
-	} catch (error) {
-
-	}
+	} catch (error) {}
 
 	await client.close();
 };
@@ -93,11 +88,9 @@ export const updatePlayers = async (req, res) => {
 				const filter = { username: user };
 				const updates = { $set: { group: group._id } };
 				let updated = await client.db("CrossmediaARG").collection("groups").updateOne(filter, updates);
-
 			});
 		});
-	} catch (error) {
-	}
+	} catch (error) {}
 
 	await client.close();
 };
