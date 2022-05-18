@@ -23,9 +23,6 @@ fetch(`${localhost}challenges/phase2`)
 		const areWeDone = async () => {
 			let group = await getGroupById(JSON.parse(getFromLS("user")).group);
 			let session = await getSessions("sessionCode", group.session);
-			if (session.phase != 2) {
-				return;
-			}
 			console.log(group);
 			if (session.phaseTwoTime == undefined) {
 				let date = new Date();
@@ -57,7 +54,7 @@ fetch(`${localhost}challenges/phase2`)
 						clearInterval(timerInterval);
 						window.location.reload();
 					}
-				}, 10000);
+				}, 1000);
 			}
 			timerOn = true;
 		};
@@ -152,22 +149,34 @@ fetch(`${localhost}challenges/phase2`)
 			let progress = [
 				{
 					id: 1,
-					prog: Math.round(groups[0].completedChallenges.length / 16),
+					prog:
+						currentTask(completed, 1) != 4 && currentTask(completed, 1) != 0
+							? currentTask(completed, 1) - 1
+							: currentTask(completed, 1),
 					started: true,
 				},
 				{
 					id: 2,
-					prog: Math.round(groups[1].completedChallenges.length / 16),
+					prog:
+						currentTask(completed, 2) != 4 && currentTask(completed, 2) != 0
+							? currentTask(completed, 2) - 1
+							: currentTask(completed, 2),
 					started: isStarted(completed, 2),
 				},
 				{
 					id: 3,
-					prog: Math.round(groups[2].completedChallenges.length / 16),
+					prog:
+						currentTask(completed, 3) != 4 && currentTask(completed, 3) != 0
+							? currentTask(completed, 3) - 1
+							: currentTask(completed, 3),
 					started: isStarted(completed, 3),
 				},
 				{
 					id: 4,
-					prog: Math.round(groups[3].completedChallenges.length / 16),
+					prog:
+						currentTask(completed, 4) != 4 && currentTask(completed, 4) != 0
+							? currentTask(completed, 4) - 1
+							: currentTask(completed, 4),
 					started: isStarted(completed, 4),
 				},
 			];
@@ -252,7 +261,7 @@ fetch(`${localhost}challenges/phase2`)
 			let button = createButton("skicka", async () => {
 				let guess = checkAnswerBox();
 				let answer = await checkAnswer("phase2", `${clueNumber}`, `${guess}`);
-				if (distance < 70000) {
+				if (distance < 100) {
 					if (answer) {
 						let group = JSON.parse(getFromLS("user")).group;
 
